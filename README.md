@@ -40,6 +40,3 @@ All files fefore commit are formatted by Prettier.
 
 ### production
 In a production mode, the app construction is based on Nestjs API which is backend for whole ecosystem and also serves static files which have been built during React build process. Static frontend app files are served from ```./client/build``` folder. API (Nestjs app) operates on port 80, API is based on Nest production code from folder ```./API/dist```.  Production image is as small as possible, client folder contains build subfolder only, API folder contains dist and node_moduled subfolders (just with production dependencies).
-
-
----
