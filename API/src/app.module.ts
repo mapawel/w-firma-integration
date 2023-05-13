@@ -4,13 +4,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_FILTER } from '@nestjs/core';
-import { MainExceptionFilter } from './exception-filters/main-exception.filter';
+import { AuthModule } from './auth/Auth.module';
+import { MainExceptionFilter } from './exceptionFilters/mainException.filter';
+import { InvoiceModule } from './invoice/invoice.module';
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: ['.env'],
+            envFilePath: ['.env', '.env.auth'],
         }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', '..', 'client', 'build'),
@@ -30,6 +32,8 @@ import { MainExceptionFilter } from './exception-filters/main-exception.filter';
             }),
             inject: [ConfigService],
         }),
+        AuthModule,
+        InvoiceModule,
     ],
     controllers: [],
     providers: [

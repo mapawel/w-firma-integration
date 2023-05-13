@@ -1,0 +1,16 @@
+{
+    "invoice": {
+        "number": {
+            "minLength": 4,
+            "maxLength": 24
+        },
+        "sellerName": {
+            "minLength": 4,
+            "maxLength": 96
+        },
+        "addedBy": {
+            "minLength": 4,
+            "maxLength": 96
+        }
+    }
+}
