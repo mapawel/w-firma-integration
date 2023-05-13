@@ -7,14 +7,18 @@ import {
     LoggerService,
     BadRequestException,
     NotFoundException,
+    UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
+import { Routes } from 'src/routes/Routes.enum';
 
 @Catch()
 export class MainExceptionFilter implements ExceptionFilter {
     private readonly logger: LoggerService = new Logger(
         MainExceptionFilter.name,
     );
+    private readonly configService: ConfigService = new ConfigService();
 
     catch(exception: Error, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
@@ -23,6 +27,13 @@ export class MainExceptionFilter implements ExceptionFilter {
             exception instanceof HttpException ? exception.getStatus() : 500;
 
         this.logger.error(this.buildFullExceptionMessage(exception));
+
+        if (exception instanceof UnauthorizedException)
+            return response.redirect(
+                this.configService.get<string>('BASE_URL', '') +
+                    Routes.BASE_API_ROUTE +
+                    Routes.AUTH_ROUTE,
+            );
 
         if (exception instanceof NotFoundException)
             return response.status(status).json(exception.getResponse());
