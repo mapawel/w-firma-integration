@@ -3,4 +3,5 @@ export enum Routes {
     INVOICES_ROUTE = '/invoices',
     AUTH_ROUTE = '/auth',
     AUTH_CALLBACK_ROUTE = '/callback',
+    AUTH_GETUSER_ROUTE = '/user',
 }

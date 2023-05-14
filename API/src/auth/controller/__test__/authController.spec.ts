@@ -10,6 +10,7 @@ describe('authController', () => {
 
     const responseMock: Response = {
         redirect: jest.fn((url: string) => url),
+        cookie: jest.fn(() => responseMock),
     } as unknown as Response;
 
     beforeEach(async () => {
@@ -54,7 +55,7 @@ describe('authController', () => {
     });
 
     describe('getToken', () => {
-        it('should return object with message and token. Token returned from connected service method', async () => {
+        it('should return return redirect', async () => {
             // given
             const exampleToken = 'access_token';
             const getTokenSpy = jest
@@ -62,15 +63,10 @@ describe('authController', () => {
                 .mockResolvedValue(exampleToken);
 
             //when
-            const response: { message: string; token: string } =
-                await authController.getToken('code');
+            await authController.getToken('code', responseMock);
 
             //then
             expect(getTokenSpy).toBeCalledTimes(1);
-            expect(response).toEqual({
-                message: 'User logged in',
-                token: exampleToken,
-            });
         });
     });
 });

@@ -1,10 +1,11 @@
-import { Controller, Get, Query, Res } from '@nestjs/common';
+import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from '../service/Auth.service';
 import { Routes } from '../../routes/Routes.enum';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { UserData } from '../../decorators/user-data.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
-// TO REMOVE AFTER DEVELOPMENT AND IF TOKEN FLOW IMPLEMENTED IN FRONT
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.AUTH_ROUTE}`)
 export class AuthController {
     constructor(
@@ -28,5 +29,11 @@ export class AuthController {
             httpOnly: true,
             signed: true,
         }).redirect(this.configService.get<string>('BASE_URL', ''));
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get(Routes.AUTH_GETUSER_ROUTE)
+    public getUser(@UserData() user: { name: string; roles: string[] }) {
+        return user;
     }
 }
