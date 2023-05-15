@@ -1,8 +1,8 @@
-import useAuth, { IState } from '@/providers/auth/use-auth';
+import useAuth, { IUser } from '@/providers/auth/use-auth';
 import { FC } from 'react';
 
 const Navbar: FC = (): JSX.Element => {
-    const { user }: IState = useAuth();
+    const user: IUser | null = useAuth();
     return (
         <div>
             {user?.name ? (

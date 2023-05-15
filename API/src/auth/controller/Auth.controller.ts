@@ -35,7 +35,6 @@ export class AuthController {
     @UseGuards(AuthGuard('jwt'))
     @Get(Routes.AUTH_GETUSER_ROUTE)
     public getUser(@UserData() user: { name: string; roles: string[] }) {
-        console.log(' ----> GET USER !!!!!!');
         return user;
     }
 
