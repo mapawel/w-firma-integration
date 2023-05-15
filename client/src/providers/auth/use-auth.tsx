@@ -1,73 +1,103 @@
+import { useReducer, useEffect, useCallback } from 'react';
 import {
-    useState,
-    useEffect,
-    useContext,
-    createContext,
-    FC,
-    useCallback,
-} from 'react';
+    startLoading,
+    stopLoading,
+    setAppError,
+} from '@/providers/app-status/use-app-status';
 import axios from 'axios';
 
 export interface IUser {
-    name: string;
-    roled: string[];
+    name: string | null;
+    roles: string[];
 }
 
-export interface IAuth {
+export interface IState {
     user: IUser | null;
-    getuser: () => Promise<IUser | null>;
-    signout: () => Promise<boolean>;
 }
 
-const authContext = createContext<IAuth>({
+enum ActionType {
+    SETUSER = 'setUser',
+}
+
+interface IAction {
+    type: ActionType;
+    payload: IUser | null;
+}
+
+interface IStore {
+    isReady: boolean;
+    dispatch: (action: IAction) => void;
+}
+
+const store: IStore = {
+    isReady: false,
+    dispatch: () => {},
+};
+
+const initialState: IState = {
     user: null,
-    getuser: async () => null,
-    signout: async () => false,
-});
-
-type Props = {
-    children?: React.ReactNode;
 };
 
-export const ProvideAuth: FC<Props> = ({ children }) => {
-    const auth = useProvideAuth();
-    return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+function reducer(state: IState, { type, payload }: IAction): IState {
+    switch (type) {
+        case ActionType.SETUSER:
+            return { ...state, user: payload };
+        default:
+            throw new Error('error indise reducer in useLoadingAndInfo');
+    }
+}
+
+const useAuth = () => {
+    const [state, dispatch] = useReducer<
+        (state: IState, action: IAction) => IState
+    >(reducer, initialState);
+
+    useEffect(() => {
+        if (!store.isReady) {
+            store.isReady = true;
+            store.dispatch = (action: IAction) => dispatch(action);
+        }
+        return () => {
+            store.isReady = false;
+        };
+    }, [dispatch]);
+    return state;
 };
 
-export const useAuth = () => {
-    return useContext(authContext);
-};
+export const useFetchUser = () => {
+    const { user }: IState = useAuth();
 
-const useProvideAuth = () => {
-    const [user, setUser] = useState<IUser | null>(null);
-
-    const signout = async (): Promise<boolean> => {
-        console.log('signout ----> ', signout);
-        return true;
-    };
-
-    const getuser = useCallback(async (): Promise<IUser | null> => {
+    const fetchUser = useCallback(async (): Promise<IUser | null> => {
         try {
+            startLoading();
             const { data }: { data: IUser } = await axios.get(
                 `${process.env.REACT_APP_API_URL}/auth/user`,
             );
 
+            stopLoading();
             return data;
         } catch {
+            stopLoading();
+            setAppError({
+                mainError: "Couldn't fetch user!",
+                detailsArr: [],
+            });
             return null;
         }
     }, []);
 
     useEffect(() => {
-        (async () => {
-            const fetchedUser: IUser | null = await getuser();
-            setUser(fetchedUser);
-        })();
-    }, [getuser]);
+        const initFetch = async () => {
+            const fetchedUser: IUser | null = await fetchUser();
+            setuser(fetchedUser);
+        };
+        if (!user?.name) initFetch();
+    }, [fetchUser, user?.name]);
 
-    return {
-        user,
-        getuser,
-        signout,
-    };
+    return true;
 };
+
+export const setuser = (user: IUser | null) =>
+    store.dispatch({ type: ActionType.SETUSER, payload: user });
+
+export default useAuth;

@@ -28,13 +28,6 @@ export class MainExceptionFilter implements ExceptionFilter {
 
         this.logger.error(this.buildFullExceptionMessage(exception));
 
-        if (exception instanceof UnauthorizedException)
-            return response.redirect(
-                this.configService.get<string>('BASE_URL', '') +
-                    Routes.BASE_API_ROUTE +
-                    Routes.AUTH_ROUTE,
-            );
-
         if (exception instanceof NotFoundException)
             return response.status(status).json(exception.getResponse());
 

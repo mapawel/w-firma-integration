@@ -5,6 +5,7 @@ import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { UserData } from '../../decorators/user-data.decorator';
 import { AuthGuard } from '@nestjs/passport';
+import { UserId } from 'src/decorators/user-id.decorator';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.AUTH_ROUTE}`)
 export class AuthController {
@@ -34,6 +35,23 @@ export class AuthController {
     @UseGuards(AuthGuard('jwt'))
     @Get(Routes.AUTH_GETUSER_ROUTE)
     public getUser(@UserData() user: { name: string; roles: string[] }) {
+        console.log(' ----> GET USER !!!!!!');
         return user;
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get(Routes.AUTH_LOGOUT_ROUTE)
+    public logOut(@Res() res: Response) {
+        return res
+            .cookie('access_token', {
+                httpOnly: true,
+                signed: true,
+            })
+            .redirect(this.authService.logOut());
+    }
+
+    @Get('/ddd')
+    public async test() {
+        return { test: 'test' };
     }
 }

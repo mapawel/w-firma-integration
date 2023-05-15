@@ -44,7 +44,6 @@ export class AuthService {
         this.AUTH0_SCOPE = this.configService.get<string>('AUTH0_SCOPE', '');
     }
 
-    // TO REMOVE AFTER DEVELOPMENT AND IF TOKEN FLOW IMPLEMENTED IN FRONT
     public getAuthUrl(): string {
         const queryParams: URLSearchParams = new URLSearchParams({
             audience: this.AUTH0_AUTH_API_AUDIENCE,
@@ -56,7 +55,6 @@ export class AuthService {
         return `${this.AUTH0_BASE_URL}${this.AUTH0_AUTHORIZE_ROUTE}?${queryParams}`;
     }
 
-    // TO REMOVE AFTER DEVELOPMENT AND IF TOKEN FLOW IMPLEMENTED IN FRONT
     public async getToken(code: string): Promise<string> {
         try {
             const response: AxiosResponse = await axios({
@@ -82,27 +80,40 @@ export class AuthService {
         }
     }
 
-    // TO REMOVE IF TOKEN FLOW IMPLEMENTED IN FRONT, AT THIS MOMENT NOT USED
-    // public async refreshToken(refreshToken: string): Promise<void> {
-    //     try {
-    //         const response: AxiosResponse = await axios({
-    //             method: 'POST',
-    //             url: `${this.AUTH0_BASE_URL}${this.AUTH0_GET_TOKEN_ROUTE}`,
-    //             headers: {
-    //                 'Content-Type': 'application/x-www-form-urlencoded',
-    //             },
-    //             data: {
-    //                 grant_type: 'refresh_token',
-    //                 client_id: this.AUTH0_CLIENT_ID,
-    //                 client_secret: this.AUTH0_CLIENT_SECRET,
-    //                 refresh_token: refreshToken,
-    //             },
-    //         });
-    //         console.log('data ----> ', response.data);
-    //     } catch (err: any) {
-    //         throw new AuthException('Error while refreshing an auth token', {
-    //             cause: err,
-    //         });
-    //     }
-    // }
+    public async refreshToken(refreshToken: string): Promise<void> {
+        try {
+            const response: AxiosResponse = await axios({
+                method: 'POST',
+                url: `${this.AUTH0_BASE_URL}${this.AUTH0_GET_TOKEN_ROUTE}`,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                data: {
+                    grant_type: 'refresh_token',
+                    client_id: this.AUTH0_CLIENT_ID,
+                    client_secret: this.AUTH0_CLIENT_SECRET,
+                    refresh_token: refreshToken,
+                },
+            });
+        } catch (err: any) {
+            throw new AuthException('Error while refreshing an auth token', {
+                cause: err,
+            });
+        }
+    }
+
+    public logOut(): string {
+        try {
+            const queryParams: URLSearchParams = new URLSearchParams({
+                client_id: this.AUTH0_CLIENT_ID,
+                returnTo: 'http://localhost:3005',
+            });
+
+            return `${this.AUTH0_BASE_URL}/v2/logout?${queryParams}`;
+        } catch (err: any) {
+            throw new AuthException('Error while logging out', {
+                cause: err,
+            });
+        }
+    }
 }
