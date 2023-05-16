@@ -8,7 +8,7 @@ function Root(): JSX.Element {
             <AuthProvider>
                 <Navbar />
                 <h1>React 18 Alpha</h1>
-                <h1 className="text-4xl font-bold">Hello world!</h1>
+                <h1 className="bg-slate-400 text-base">Hello world!</h1>
             </AuthProvider>
         </AppStatusProvider>
     );
