@@ -48,9 +48,4 @@ export class AuthController {
             })
             .redirect(this.authService.logOut());
     }
-
-    @Get('/ddd')
-    public async test() {
-        return { test: 'test' };
-    }
 }

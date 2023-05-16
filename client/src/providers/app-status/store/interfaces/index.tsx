@@ -1,4 +1,4 @@
-import { IInfo, IError } from "@/providers/app-status/interfaces";
+import { IInfo, IError } from '@/providers/app-status/interfaces';
 
 export enum ActionType {
     LOADING = 'loading',

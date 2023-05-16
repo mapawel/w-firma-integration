@@ -1,4 +1,8 @@
-import { IState, IAction, ActionType } from '@/providers/app-status/store/interfaces';
+import {
+    IState,
+    IAction,
+    ActionType,
+} from '@/providers/app-status/store/interfaces';
 import { initialState } from '@/providers/app-status/store/app-store-initial.state';
 
 export function reducer(state: IState, { type, payload }: IAction): IState {

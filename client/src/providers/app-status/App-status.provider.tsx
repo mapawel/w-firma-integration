@@ -8,7 +8,7 @@ interface IProps {
     children: React.ReactNode;
 }
 
-const ProvideAppStatus: FC<IProps> = ({ children }) => {
+const AppStatusProvider: FC<IProps> = ({ children }) => {
     const { isLoading, info, error } = useAppStatus();
 
     return (
@@ -60,4 +60,4 @@ const ProvideAppStatus: FC<IProps> = ({ children }) => {
     );
 };
 
-export default ProvideAppStatus;
+export default AppStatusProvider;

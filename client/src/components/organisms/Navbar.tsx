@@ -1,5 +1,7 @@
-import useAuth, { IUser } from '@/providers/auth/use-auth';
 import { FC } from 'react';
+import useAuth from '@/providers/auth/use-auth';
+import { IUser } from '@/providers/auth/interfaces';
+import { APIRoutes } from '@/routes/api';
 
 const Navbar: FC = (): JSX.Element => {
     const user: IUser | null = useAuth();
@@ -8,10 +10,10 @@ const Navbar: FC = (): JSX.Element => {
             {user?.name ? (
                 <>
                     <h2> {user.name}</h2>
-                    <a href="/api/auth/logout">Logout</a>
+                    <a href={APIRoutes.AUTH_LOGOUT}>Logout</a>
                 </>
             ) : (
-                <a href="/api/auth">Login</a>
+                <a href={APIRoutes.AUTH_LOGIN}>Login</a>
             )}
         </div>
     );
