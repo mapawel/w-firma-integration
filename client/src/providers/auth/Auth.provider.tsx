@@ -9,11 +9,18 @@ import { IUser } from '@/providers/auth/interfaces';
 import { authContext } from '@/providers/auth/interfaces/auth.context';
 import { APIRoutes } from '@/routes/api';
 
+// FOR DEVELOPMENT !!!
+const mockUser: IUser = {
+    name: 'JohnDoeLongEmail@google.com',
+    roles: ['admin'],
+};
+
 interface IProps {
     children: React.ReactNode;
 }
 const AuthProvider: FC<IProps> = ({ children }) => {
-    const [user, setUser] = useState<IUser | null>(null);
+    //TODO FOR DEVELOPMENT
+    const [user, setUser] = useState<IUser | null>(mockUser);
 
     const fetchUser = useCallback(async (): Promise<IUser | null> => {
         try {
@@ -26,10 +33,13 @@ const AuthProvider: FC<IProps> = ({ children }) => {
             return data;
         } catch {
             stopLoading();
-            setAppError({
-                mainError: "Couldn't fetch user!",
-                detailsArr: [],
-            });
+
+            //TODO FOR DEVELOPMENT
+
+            // setAppError({
+            //     mainError: "Couldn't fetch user!",
+            //     detailsArr: [],
+            // });
             return null;
         }
     }, []);

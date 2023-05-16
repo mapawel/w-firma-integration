@@ -47,6 +47,7 @@
   },
   "cracoConfig": "craco.config.js",
   "devDependencies": {
-    "@types/react-portal": "^4.0.4"
+    "@types/react-portal": "^4.0.4",
+    "tailwindcss": "^3.3.2"
   }
 }
