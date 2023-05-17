@@ -21,78 +21,88 @@ const LoadView: FC = () => {
                     <form action="" className="space-y-6">
                         <legend className="sr-only">Suppliers</legend>
 
-                        <div>
-                            <input
-                                type="radio"
-                                name="Supplier"
-                                value="AB"
-                                id="AB"
-                                className="peer hidden [&:checked_+_label_svg]:block"
-                                checked
-                            />
+                        <div className="columns-2">
+                            <div>
+                                <input
+                                    type="radio"
+                                    name="Supplier"
+                                    value="AB"
+                                    id="AB"
+                                    className="peer hidden [&:checked_+_label_svg]:block"
+                                    checked
+                                />
 
-                            <label
-                                htmlFor="AB"
-                                className="block cursor-pointer rounded-lg border border-secondaryLight p-4 text-sm font-medium shadow-sm hover:border-secondary peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary"
-                            >
-                                <div className="flex items-center justify-between">
-                                    <p>AB S.A.</p>
+                                <label
+                                    htmlFor="AB"
+                                    className="block cursor-pointer rounded-lg border border-secondaryLight p-4 text-sm font-medium shadow-sm hover:border-secondary peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary"
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <p>AB S.A.</p>
 
-                                    <svg
-                                        className="hidden h-5 w-5 text-primary"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </div>
-                            </label>
+                                        <svg
+                                            className="hidden h-5 w-5 text-primary"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div>
+                                <input
+                                    type="radio"
+                                    name="Supplier"
+                                    value="Other"
+                                    id="Other"
+                                    disabled={true}
+                                    className="peer hidden [&:checked_+_label_svg]:block"
+                                />
+
+                                <label
+                                    htmlFor="Other"
+                                    className="block cursor-pointer rounded-lg border border-secondaryLight p-4 text-sm font-medium shadow-sm hover:border-secondary peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary"
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <p>Other</p>
+
+                                        <svg
+                                            className="hidden h-5 w-5 text-primary"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                    </div>
+                                </label>
+                            </div>
                         </div>
 
                         <div>
                             <input
-                                type="radio"
-                                name="Supplier"
-                                value="Other"
-                                id="Other"
-                                disabled={true}
-                                className="peer hidden [&:checked_+_label_svg]:block"
+                                type="file"
+                                className="hidden"
+                                name="File"
+                                id="File"
                             />
-
                             <label
-                                htmlFor="Other"
-                                className="block cursor-pointer rounded-lg border border-secondaryLight p-4 text-sm font-medium shadow-sm hover:border-secondary peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary"
+                                htmlFor="File"
+                                className="block cursor-pointer rounded-lg bg-primary px-5 py-3 font-medium text-white transition hover:bg-primaryHover focus:outline-none sm:w-auto"
                             >
-                                <div className="flex items-center justify-between">
-                                    <p>Other</p>
-
-                                    <svg
-                                        className="hidden h-5 w-5 text-primary"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </div>
+                                <p>Wybierz plik ...</p>
                             </label>
                         </div>
-
-                        <button
-                            type="button"
-                            className="inline-block w-full rounded-lg bg-primary px-5 py-3 font-medium text-white transition hover:bg-primaryHover focus:outline-none sm:w-auto"
-                        >
-                            Wybierz plik ...
-                        </button>
                     </form>
                 </div>
             </div>
