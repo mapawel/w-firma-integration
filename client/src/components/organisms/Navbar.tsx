@@ -7,17 +7,18 @@ import { Logo } from '@/assets/logo/logoBig';
 const Navbar: FC = (): JSX.Element => {
     const user: IUser | null = useAuth();
     return (
-        <div className="mx-auto mb-10 max-w-screen-xl px-4 sm:px-6 lg:mb-1 lg:mb-20">
-            <div className="flex h-16 items-center justify-between">
-                <div className="md:flex md:items-center md:gap-12">
-                    <a className="block text-teal-600" href="/">
-                        <Logo />
-                    </a>
-                </div>
-                <div className="ml-8 mr-auto mt-2 hidden sm:block">
+        <div className="mx-auto mb-10 max-w-screen-xl px-4 sm:px-6 lg:mb-20">
+            <div className="flex h-20 items-center justify-between">
+                <a className="mb-2 block" href="/">
+                    <Logo />
+                </a>
+                <div className="ml-6 mr-auto hidden md:block">
                     <h1 className="mr-auto text-xl font-[600] text-secondaryLight">
                         W-Firma Integratition App
                     </h1>
+                </div>
+                <div className="ml-auto mr-8 hidden sm:block">
+                    <p className="font-[600] text-secondary">{user?.name}</p>
                 </div>
 
                 <a
