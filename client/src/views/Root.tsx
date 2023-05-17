@@ -1,14 +1,12 @@
 import AppStatusProvider from '@/providers/app-status/App-status.provider';
 import AuthProvider from '@/providers/auth/Auth.provider';
-import Navbar from '@/components/organisms/Navbar';
+import Home from '@/views/Home';
 
 function Root(): JSX.Element {
     return (
         <AppStatusProvider>
             <AuthProvider>
-                <Navbar />
-                <h1>React 18 Alpha</h1>
-                <h1 className="bg-slate-400 text-base">Hello world!</h1>
+                <Home />
             </AuthProvider>
         </AppStatusProvider>
     );
