@@ -4,7 +4,7 @@ import NavTemplate from '@/components/templates/Nav-template';
 const Home: FC = () => {
     return (
         <NavTemplate>
-          <p>Hello main</p>
+            <p>Hello main</p>
         </NavTemplate>
     );
 };
