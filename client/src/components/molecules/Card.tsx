@@ -14,7 +14,7 @@ const Card: FC<IProps> = ({ title, description, link, icon }) => {
         >
             <div className="px-2 py-4">
                 {icon}
-                <h2 className="my-6 mt-8 text-xl md:text-2xl font-bold">
+                <h2 className="my-6 mt-8 text-xl font-bold md:text-2xl">
                     {title}
                 </h2>
                 <p className="mt-4 text-sm text-secondary">{description}</p>
