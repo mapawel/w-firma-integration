@@ -8,7 +8,7 @@ module.exports = {
                 serif: ['Source Serif Pro', 'serif'],
               },
               fontSize: {
-                sm: '1rem',
+                sm: '1.2rem',
                 base: '1.5rem',
                 xl: '1.8rem',
                 '2xl': '2.3rem',
@@ -20,6 +20,7 @@ module.exports = {
                 white: '#FFFFFF',
                 black: '#000000',
                 primary: '#4F8CBA',
+                primaryHover: '#407299',
                 primaryLight: '#D7E5EF',
                 secondary: '#5F5F5F',
                 secondaryLight: '#B1B1B1',

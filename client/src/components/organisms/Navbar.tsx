@@ -2,7 +2,7 @@ import { FC } from 'react';
 import useAuth from '@/providers/auth/use-auth';
 import { IUser } from '@/providers/auth/interfaces';
 import { APIRoutes } from '@/routes/api';
-import { Logo } from '@/assets/logo/logoBig';
+import { ReactComponent as Logo } from '@/assets/logo/logo.svg';
 
 const Navbar: FC = (): JSX.Element => {
     const user: IUser | null = useAuth();
