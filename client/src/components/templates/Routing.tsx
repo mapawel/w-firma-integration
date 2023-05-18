@@ -2,7 +2,8 @@ import { FC } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import useAuth from '@/providers/auth/use-auth';
 import { IUser } from '@/providers/auth/interfaces';
-import { navigationData, NavigationDataItem } from '@/navigation/data';
+import { navigationData } from '@/navigation/data';
+import { NavigationDataItem } from '@/navigation/navigation-item.type';
 import Navbar from '../organisms/Navbar';
 
 const router = createBrowserRouter(

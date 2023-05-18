@@ -2,7 +2,8 @@ import { FC } from 'react';
 import NavTemplate from '@/components/templates/Nav-template';
 import Card from '@/components/molecules/Card';
 import GridTemplate from '@/components/templates/Grid-template';
-import { NavigationDataItem, navigationData } from '@/navigation/data';
+import { navigationData } from '@/navigation/data';
+import { NavigationDataItem } from '@/navigation/navigation-item.type';
 
 const HomeView: FC = () => {
     return (

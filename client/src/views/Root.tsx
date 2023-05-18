@@ -1,6 +1,5 @@
 import AppStatusProvider from '@/providers/app-status/App-status.provider';
 import AuthProvider from '@/providers/auth/Auth.provider';
-import { navigationData, NavigationDataItem } from '@/navigation/data';
 import Routing from '@/components/templates/Routing';
 
 function Root(): JSX.Element {
