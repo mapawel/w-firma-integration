@@ -11,10 +11,9 @@ export const Label: FC<LabelProps> = ({ htmlFor, label }) => (
         htmlFor={htmlFor}
         className="block cursor-pointer rounded-lg border border-secondaryLight p-4 text-sm font-medium shadow-sm hover:border-secondary peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary"
     >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between ">
             <p>{label}</p>
-
-            <Checked />
+            <Checked className="hidden h-7 w-7 text-primary" />
         </div>
     </label>
 );

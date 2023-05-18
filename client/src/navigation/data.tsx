@@ -1,6 +1,6 @@
 import { ClientRoutes } from '@/routes/client';
 import HomeView from '@/views/Home';
-import LoadView from '@/views/Load';
+import LoadView from '@/views/Load/Load';
 import InvoicesView from '@/views/Invoices';
 import SettingsView from '@/views/Settings';
 import { NavigationDataItem } from './navigation-item.type';

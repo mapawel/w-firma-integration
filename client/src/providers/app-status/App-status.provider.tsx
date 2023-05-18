@@ -16,7 +16,7 @@ const AppStatusProvider: FC<IProps> = ({ children }) => {
             {children}
             {isLoading ? (
                 <Portal>
-                    <div>
+                    <div className="absolute left-0 top-0 h-max w-max bg-slate-400">
                         <h1>loading...</h1>
                     </div>
                 </Portal>
