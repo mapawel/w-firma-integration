@@ -4,6 +4,7 @@ import { Label } from '@/components/atoms/Label';
 import { submitUpladForm } from '@/actions/submit-upload-form';
 import { Input } from '@/views/Load/Input.enum';
 import { Supplier } from '@/views/Load/Supplier.enum';
+import { Cur } from './Cur.enum';
 import { uploadInstruction } from '@/assets/text/upload-instruction.text';
 
 const LoadView: FC = () => {
@@ -22,7 +23,7 @@ const LoadView: FC = () => {
 
                 <div className="rounded-lg border border-gray-100 p-8 shadow-md lg:col-span-3 lg:p-12">
                     <form ref={formRef} className="space-y-6">
-                        <legend className="sr-only">Suppliers</legend>
+                        <legend className="sr-only">Puchase params:</legend>
 
                         <div className="columns-3">
                             <div>
@@ -67,6 +68,33 @@ const LoadView: FC = () => {
                                     htmlFor={Supplier.OTHER}
                                     label="not existing yet ..."
                                 />
+                            </div>
+                        </div>
+
+                        <div className="columns-2">
+                            <div>
+                                <input
+                                    type="radio"
+                                    name={Input.CUR}
+                                    value={Cur.PLN}
+                                    id={Cur.PLN}
+                                    className="peer hidden [&:checked_+_label_svg]:block"
+                                    defaultChecked={true}
+                                />
+
+                                <Label htmlFor={Cur.PLN} label="PLN" />
+                            </div>
+
+                            <div>
+                                <input
+                                    type="radio"
+                                    name={Input.CUR}
+                                    value={Cur.EUR}
+                                    id={Cur.EUR}
+                                    className="peer hidden [&:checked_+_label_svg]:block"
+                                />
+
+                                <Label htmlFor={Cur.EUR} label="EUR" />
                             </div>
                         </div>
 

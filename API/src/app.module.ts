@@ -7,7 +7,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AuthModule } from './auth/Auth.module';
 import { MainExceptionFilter } from './exception-filters/main-exception.filter';
 import { InvoiceModule } from './invoice/invoice.module';
-import { FileModule } from './file/file.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
     imports: [
@@ -35,7 +35,7 @@ import { FileModule } from './file/file.module';
         }),
         AuthModule,
         InvoiceModule,
-        FileModule,
+        UploadModule,
     ],
     controllers: [],
     providers: [
