@@ -27,7 +27,7 @@ module.exports = {
                 cta: '#BA6361',
                 ctaHover: '#7c3836',
                 lightGlass: '#4F8CBA1A',
-                darkGlass: '#4F8CBAD4',
+                darkGlass: '#001015A4',
               },
               fontWeight: {
                 light: '300',

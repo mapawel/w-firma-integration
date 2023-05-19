@@ -1,12 +1,10 @@
-import { IInfo, IError } from '@/providers/app-status/interfaces';
+import { IData } from '@/providers/app-status/interfaces';
 
 export enum ActionType {
     LOADING = 'loading',
     LOADED = 'loaded',
-    SET_INFO = 'setInfo',
-    CLEAN_INFO = 'cleanInfo',
-    SET_ERROR = 'setError',
-    CLEAN_ERROR = 'cleanError',
+    SET_DATA = 'setData',
+    CLEAN_DATA = 'cleanData',
 }
 export interface IStore {
     isReady: boolean;
@@ -20,6 +18,5 @@ export interface IAction {
 
 export interface IState {
     isLoading: boolean;
-    info: IInfo;
-    error: IError;
+    data: IData;
 }

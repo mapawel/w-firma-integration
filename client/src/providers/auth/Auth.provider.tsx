@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
     startLoading,
     stopLoading,
-    setAppError,
+    setAppData,
 } from '@/providers/app-status/use-app-status';
 import { IUser } from '@/providers/auth/interfaces';
 import { authContext } from '@/providers/auth/interfaces/auth.context';
@@ -36,8 +36,8 @@ const AuthProvider: FC<IProps> = ({ children }) => {
 
             //TODO FOR DEVELOPMENT
 
-            // setAppError({
-            //     mainError: "Couldn't fetch user!",
+            // setAppData({
+            //     mainInfo: "Couldn't fetch user!",
             //     detailsArr: [],
             // });
             return null;

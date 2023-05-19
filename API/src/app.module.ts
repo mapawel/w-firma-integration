@@ -16,7 +16,7 @@ import { UploadModule } from './upload/upload.module';
             envFilePath: ['.env', '.env.auth'],
         }),
         ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '..', '..', 'client', 'build'),
+            rootPath: join(__dirname, '..', '..', '..', 'client', 'build'),
         }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],

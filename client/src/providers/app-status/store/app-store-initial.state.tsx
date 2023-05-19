@@ -2,14 +2,9 @@ import { IState } from '@/providers/app-status/store/interfaces';
 
 export const initialState: IState = {
     isLoading: false,
-    info: {
+    data: {
         mainInfo: null,
         detailsArr: [],
         callbackClearInfo: () => {},
-    },
-    error: {
-        mainError: null,
-        detailsArr: [],
-        callbackClearError: () => {},
     },
 };

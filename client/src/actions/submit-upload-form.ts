@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-    setAppError,
+    setAppData,
     startLoading,
     stopLoading,
 } from '@/providers/app-status/use-app-status';
@@ -10,15 +10,15 @@ export const submitUpladForm = async (f: React.RefObject<HTMLFormElement>) => {
     try {
         startLoading();
         if (!f.current)
-            return setAppError({
-                mainError: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
+            return setAppData({
+                mainInfo: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
                 detailsArr: [],
             });
 
         const form: FormData = new FormData(f.current);
         if (!form.get(Input.FILE) || !form.get(Input.SUPPLIER))
-            return setAppError({
-                mainError: 'Nie wybrano pliku lub dostawcy.',
+            return setAppData({
+                mainInfo: 'Nie wybrano pliku lub dostawcy.',
                 detailsArr: [],
             });
         const r = await axios.post('/api/upload', form, {
@@ -31,11 +31,17 @@ export const submitUpladForm = async (f: React.RefObject<HTMLFormElement>) => {
         f.current.reset();
         console.log('r ----> ', r);
     } catch (err: any) {
-        console.log('err ----> ', err);
+        f.current?.reset();
         stopLoading();
-        setAppError({
-            mainError: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
-            detailsArr: [err.message],
+        if (err.response.status === 400)
+            return setAppData({
+                mainInfo:
+                    'Coś nie tak z plikiem lub ustawieniami, w jaki sposób plik ma być czytany. Wskazówki:',
+                detailsArr: err.response.data.message,
+            });
+        setAppData({
+            mainInfo: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
+            detailsArr: [],
         });
     }
 };

@@ -1,59 +1,33 @@
 import { FC } from 'react';
 import { Portal } from 'react-portal';
 import useAppStatus from '@/providers/app-status/use-app-status';
-import { store } from '@/providers/app-status/store/app-status-store';
-import { ActionType } from '@/providers/app-status/store/interfaces';
+import ModalTemplate from '@/components/templates/Modal-template';
 
 interface IProps {
     children: React.ReactNode;
 }
 
 const AppStatusProvider: FC<IProps> = ({ children }) => {
-    const { isLoading, info, error } = useAppStatus();
+    const { isLoading, data } = useAppStatus();
 
     return (
         <>
             {children}
             {isLoading ? (
                 <Portal>
-                    <div className="absolute left-0 top-0 h-max w-max bg-slate-400">
-                        <h1>loading...</h1>
+                    <div className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center overflow-hidden bg-darkGlass">
+                        <div>
+                            <h1 className="text-2xl text-white md:text-3xl">
+                                loading...
+                            </h1>
+                        </div>
                     </div>
                 </Portal>
             ) : null}
-            {info?.mainInfo && (
+
+            {data?.mainInfo && (
                 <Portal>
-                    <div>
-                        <p>{info.mainInfo}</p>
-                        <p>{info.detailsArr}</p>
-                    </div>
-                </Portal>
-            )}
-            {error?.mainError && (
-                <Portal>
-                    <div
-                        style={{
-                            backgroundColor: '#00000010',
-                            position: 'absolute',
-                            top: '0',
-                            left: '0',
-                        }}
-                    >
-                        <p>{error.mainError}</p>
-                        <p>{error.detailsArr}</p>
-                        <button
-                            onClick={
-                                error.callbackClearError
-                                    ? error.callbackClearError
-                                    : () =>
-                                          store.dispatch({
-                                              type: ActionType.CLEAN_ERROR,
-                                          })
-                            }
-                        >
-                            CLEAN ERROR !
-                        </button>
-                    </div>
+                    <ModalTemplate data={data} />
                 </Portal>
             )}
         </>

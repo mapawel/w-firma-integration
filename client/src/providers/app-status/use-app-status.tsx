@@ -1,5 +1,5 @@
 import { useReducer, useEffect } from 'react';
-import { IInfo, IError } from '@/providers/app-status/interfaces';
+import { IData } from '@/providers/app-status/interfaces';
 import {
     IState,
     IAction,
@@ -35,29 +35,16 @@ export const stopLoading = (timer?: any) => {
     store.dispatch({ type: ActionType.LOADED });
 };
 
-export const setAppInfo = (info: IInfo) => {
+export const setAppData = (data: IData) => {
     store.dispatch({
-        type: ActionType.SET_INFO,
-        payload: info,
+        type: ActionType.SET_DATA,
+        payload: data,
     });
 };
 
-export const cleanAppInfo = () => {
+export const cleanAppData = () => {
     store.dispatch({
-        type: ActionType.CLEAN_INFO,
-    });
-};
-
-export const setAppError = (error: IError) => {
-    store.dispatch({
-        type: ActionType.SET_ERROR,
-        payload: error,
-    });
-};
-
-export const cleanAppError = () => {
-    store.dispatch({
-        type: ActionType.CLEAN_ERROR,
+        type: ActionType.CLEAN_DATA,
     });
 };
 
