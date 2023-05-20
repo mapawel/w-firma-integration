@@ -1,3 +1,2 @@
-export const toFixedNum = (num: number, precision: number) => num.toFixed(precision);
-
-
+export const toFixedNum = (num: number, precision: number) =>
+    num.toFixed(precision);

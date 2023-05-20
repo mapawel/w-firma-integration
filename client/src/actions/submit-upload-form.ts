@@ -8,6 +8,7 @@ import { Input } from '@/views/Upload/Input.enum';
 import { APIRoutes } from '@/routes/api';
 import { ClientRoutes } from '@/routes/client';
 import { NavigateFunction } from 'react-router-dom';
+import { UploadResDTO } from '@/views/Upload/Result/Upload-result.type';
 
 export const submitUpladForm = async (
     formRef: React.RefObject<HTMLFormElement>,
@@ -30,17 +31,21 @@ export const submitUpladForm = async (
                 detailsArr: [],
             });
 
-        const { data } = await axios.post(APIRoutes.UPLOAD_POST_FILE, form, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
+        const { data }: { data: UploadResDTO } = await axios.post(
+            APIRoutes.UPLOAD_POST_FILE,
+            form,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             },
-        });
+        );
         formRef.current.reset();
         stopLoading();
 
         return navigate(ClientRoutes.UPLOAD_RESULT, {
             state: {
-                data,
+                uploadResult: data,
             },
         });
     } catch (err: any) {

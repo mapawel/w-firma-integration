@@ -3,6 +3,7 @@ import NavTemplate from '@/components/templates/Nav-template';
 import { ProductType } from './Product.type';
 import ProductTable from '@/components/organisms/Product-table';
 import { useLocation, Navigate } from 'react-router-dom';
+import { UploadResDTO } from './Upload-result.type';
 
 const mockData: ProductType[] = [
     {
@@ -40,12 +41,21 @@ const mockData: ProductType[] = [
 ];
 
 const ResultView: FC = () => {
-    const { state }: { state: { data: ProductType[] } } = useLocation();
+    const { state }: { state: { uploadResult: UploadResDTO } } = useLocation();
     return (
         <>
-            {!state?.data && <Navigate to="/upload" replace={true} />}
+            {!state?.uploadResult && <Navigate to="/upload" replace={true} />}
             <NavTemplate>
-                <ProductTable data={state?.data} />
+                <h1 className="text-2xl font-semibold">
+                    {state?.uploadResult.totalPositions}
+                </h1>
+                <h1 className="text-2xl font-semibold">
+                    {state?.uploadResult.totalQty}
+                </h1>
+                <h1 className="text-2xl font-semibold">
+                    {state?.uploadResult.totalValue}
+                </h1>
+                <ProductTable data={state?.uploadResult.data} />
             </NavTemplate>
         </>
     );

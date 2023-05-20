@@ -11,8 +11,8 @@ import { UploadService } from '../service/upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadDTO } from '../dto/upload.dto';
 import { ParseFilePipe } from '@nestjs/common';
-import { ProductCreateDTO } from '../../product/dto/product-create.dto';
 import { Routes } from '../../routes/Routes.enum';
+import { UploadResDTO } from '../dto/upload-res.dto';
 
 @Controller()
 export class FileController {
@@ -31,13 +31,11 @@ export class FileController {
             }),
         )
         file: Express.Multer.File,
-    ): Promise<ProductCreateDTO[]> {
-        const data: ProductCreateDTO[] =
-            await this.uploadService.getAppDataFromFile(
-                file,
-                body.supplier,
-                body.cur,
-            );
-        return data;
+    ): Promise<UploadResDTO> {
+        return await this.uploadService.getAppDataFromFile(
+            file,
+            body.supplier,
+            body.cur,
+        );
     }
 }

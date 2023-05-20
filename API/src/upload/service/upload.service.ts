@@ -9,6 +9,7 @@ import { RowData } from '../types';
 import { ProductCreateDtoMapper } from '../mapper/upload-dto.mapper';
 import { createUploadSettings } from '../settings/create-upload.settings';
 import { ProductCreateDtoValidator } from '../validator/upoad-dto.validator';
+import { UploadResDTO } from '../dto/upload-res.dto';
 
 @Injectable()
 export class UploadService {
@@ -29,11 +30,14 @@ export class UploadService {
     private async proceedFileByRows(
         file: Express.Multer.File,
         cur: string,
-    ): Promise<ProductCreateDTO[]> {
+    ): Promise<UploadResDTO> {
         const settings = createUploadSettings(
             this.currentSupplierUserSetHeadings,
         );
         const data: ProductCreateDTO[] = [];
+        let totalValue = 0;
+        let totalQty = 0;
+        let totalPositions = 0;
 
         await csv(settings)
             .fromString(file.buffer.toString())
@@ -54,6 +58,11 @@ export class UploadService {
                         productLineNo,
                     );
 
+                totalValue +=
+                    createProductDTO.quantity * createProductDTO.netPrice;
+                totalQty += createProductDTO.quantity;
+                totalPositions += 1;
+
                 data.push(createProductDTO);
             })
             .on('error', () => {
@@ -62,6 +71,11 @@ export class UploadService {
 
         if (data.length === 0) throw new Error('No data in file found!');
 
-        return data;
+        return {
+            totalValue,
+            totalQty,
+            totalPositions,
+            data,
+        };
     }
 }
