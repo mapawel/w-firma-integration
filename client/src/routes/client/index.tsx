@@ -1,6 +1,7 @@
 export enum ClientRoutes {
     HOME = '/',
-    LOAD = '/load',
+    UPLOAD = '/upload',
+    UPLOAD_RESULT = '/upload/result',
     INVOICES = '/invoices',
     SETTINGS = '/settings',
 }

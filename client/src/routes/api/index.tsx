@@ -3,4 +3,5 @@ export enum APIRoutes {
     AUTH_LOGIN = '/api/auth',
     AUTH_LOGOUT = '/api/auth/logout',
     AUTH_GET_USER = '/api/auth/user',
+    UPLOAD_POST_FILE = '/api/upload',
 }

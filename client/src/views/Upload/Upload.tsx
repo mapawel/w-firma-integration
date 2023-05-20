@@ -2,13 +2,15 @@ import { FC, useRef } from 'react';
 import NavTemplate from '@/components/templates/Nav-template';
 import { Label } from '@/components/atoms/Label';
 import { submitUpladForm } from '@/actions/submit-upload-form';
-import { Input } from '@/views/Load/Input.enum';
-import { Supplier } from '@/views/Load/Supplier.enum';
+import { Input } from '@/views/Upload/Input.enum';
+import { Supplier } from '@/views/Upload/Supplier.enum';
 import { Cur } from './Cur.enum';
 import { uploadInstruction } from '@/assets/text/upload-instruction.text';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 
-const LoadView: FC = () => {
+const UploadView: FC = () => {
     const formRef = useRef<HTMLFormElement>(null);
+    const navigate: NavigateFunction = useNavigate();
 
     return (
         <NavTemplate>
@@ -104,7 +106,9 @@ const LoadView: FC = () => {
                                 className="hidden"
                                 name={Input.FILE}
                                 id={Input.FILE}
-                                onChange={() => submitUpladForm(formRef)}
+                                onChange={() =>
+                                    submitUpladForm(formRef, navigate)
+                                }
                             />
                             <label
                                 htmlFor={Input.FILE}
@@ -120,4 +124,4 @@ const LoadView: FC = () => {
     );
 };
 
-export default LoadView;
+export default UploadView;

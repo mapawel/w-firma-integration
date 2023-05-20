@@ -1,6 +1,7 @@
 import { ClientRoutes } from '@/routes/client';
 import HomeView from '@/views/Home';
-import LoadView from '@/views/Load/Load';
+import UploadView from '@/views/Upload/Upload';
+import ResultView from '@/views/Upload/Result/Result';
 import InvoicesView from '@/views/Invoices';
 import SettingsView from '@/views/Settings';
 import { NavigationDataItem } from './navigation-item.type';
@@ -20,10 +21,10 @@ export const navigationData: NavigationDataItem[] = [
     },
     {
         cardData: loaderCardData,
-        path: ClientRoutes.LOAD,
+        path: ClientRoutes.UPLOAD,
         restrictedForLogged: false,
         restrictedForRoles: null,
-        element: <LoadView />,
+        element: <UploadView />,
     },
     {
         cardData: invoicesCardData,
@@ -38,5 +39,12 @@ export const navigationData: NavigationDataItem[] = [
         restrictedForLogged: false,
         restrictedForRoles: null,
         element: <SettingsView />,
+    },
+    {
+        cardData: null,
+        path: ClientRoutes.UPLOAD_RESULT,
+        restrictedForLogged: false,
+        restrictedForRoles: null,
+        element: <ResultView />,
     },
 ];

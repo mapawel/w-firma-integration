@@ -9,7 +9,7 @@ export const loaderCardData: CardData = {
     description:
         'Załaduj plik z fakturą zakupu w celu dodania towaru do systemu. Opcja powoduje wprowadzenie towaru na magazyn.',
     icon: <Upload className="w-20 fill-secondaryLight" />,
-    path: ClientRoutes.LOAD,
+    path: ClientRoutes.UPLOAD,
 };
 
 export const invoicesCardData: CardData = {
