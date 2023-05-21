@@ -11,7 +11,7 @@ export class Product {
     @Column()
     quantity: number;
 
-    @Column()
+    @Column('float')
     netPrice: number;
 
     @Column()
