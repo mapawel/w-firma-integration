@@ -6,6 +6,7 @@ import { ProductType } from './Product.type';
 import { UploadResDTO } from './Upload-result.type';
 import { toFixedNum } from '@/helpers/to-fixed-num';
 import { ClientRoutes } from '@/routes/client';
+import { submitUpladedData } from '@/actions/submit-uploaded-data';
 
 const mockData: ProductType[] = [
     {
@@ -88,7 +89,14 @@ const ResultView: FC = () => {
                 <div className="mb-10 flex gap-4">
                     <button
                         className="rounded-md bg-primary px-5 py-2.5 text-sm text-white transition duration-150 hover:bg-primaryHover"
-                        onClick={() => alert(1)}
+                        onClick={() =>
+                            submitUpladedData({
+                                data,
+                                totalPositions,
+                                totalQty,
+                                totalValue,
+                            })
+                        }
                     >
                         ŁADUJ DO W-FIRMY!
                     </button>
