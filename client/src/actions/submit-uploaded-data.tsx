@@ -28,8 +28,7 @@ export const submitUpladedData = async (data: UploadResDTO) => {
 
         if (err.response.status === 400)
             return setAppData({
-                mainInfo:
-                    'Coś nie tak z wysłanymi danymi. Wskazówki:',
+                mainInfo: 'Coś nie tak z wysłanymi danymi. Wskazówki:',
                 detailsArr: err.response.data.message,
             });
         setAppData({
