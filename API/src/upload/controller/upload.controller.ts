@@ -14,11 +14,11 @@ import { ParseFilePipe } from '@nestjs/common';
 import { Routes } from '../../routes/Routes.enum';
 import { UploadResDTO } from '../dto/upload-res.dto';
 
-@Controller()
+@Controller(Routes.BASE_API_ROUTE)
 export class FileController {
     constructor(private readonly uploadService: UploadService) {}
 
-    @Post(`${Routes.BASE_API_ROUTE}${Routes.UPLOAD_ROUTE}`)
+    @Post(Routes.UPLOAD_ROUTE)
     @UseInterceptors(FileInterceptor('file'))
     public async upload(
         @Body() body: UploadDTO,

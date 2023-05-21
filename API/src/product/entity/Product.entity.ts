@@ -17,5 +17,6 @@ export class Product {
     @Column()
     currency: string;
 
-    // invoiceNumber: string;
+    @Column()
+    invoiceNumber: string;
 }

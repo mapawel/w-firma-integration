@@ -8,6 +8,7 @@ import { AuthModule } from './auth/Auth.module';
 import { MainExceptionFilter } from './exception-filters/main-exception.filter';
 import { InvoiceModule } from './invoice/invoice.module';
 import { UploadModule } from './upload/upload.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
     imports: [
@@ -36,6 +37,7 @@ import { UploadModule } from './upload/upload.module';
         AuthModule,
         InvoiceModule,
         UploadModule,
+        ProductModule,
     ],
     controllers: [],
     providers: [

@@ -7,16 +7,16 @@ import {
 import { APIRoutes } from '@/routes/api';
 import { UploadResDTO } from '@/views/Upload/Result/Upload-result.type';
 
-export const submitUpladedData = async (data: UploadResDTO) => {
+export const submitUpladedData = async (uploadData: UploadResDTO) => {
     try {
         startLoading();
 
         const { data: responseData }: { data: any } = await axios.post(
             APIRoutes.UPLOAD_POST_PRODUCTS,
-            data,
+            uploadData.data,
             {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'application/json',
                 },
             },
         );
