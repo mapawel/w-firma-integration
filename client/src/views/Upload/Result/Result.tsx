@@ -29,11 +29,15 @@ const ResultView: FC = () => {
                 </h1>
                 <div className="mb-8 flex gap-10">
                     <div>
+                        <h3 className="text-xl">Dostawca:</h3>
                         <h3 className="text-xl">Ilość pozycji:</h3>
                         <h3 className="text-xl">Ilość szt:</h3>
                         <h3 className="text-xl">Wartość:</h3>
                     </div>
                     <div>
+                        <p className="text-right text-xl font-semibold">
+                            {data?.[0].supplier.toUpperCase()}
+                        </p>
                         <p className="text-right text-xl font-semibold">
                             {toFixedNum(totalPositions, 0)}
                         </p>

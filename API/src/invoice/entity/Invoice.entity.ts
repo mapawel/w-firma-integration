@@ -9,7 +9,7 @@ export class Invoice {
     number: string;
 
     @Column()
-    sellerName: string;
+    supplier: string;
 
     @Column()
     addedBy: string;

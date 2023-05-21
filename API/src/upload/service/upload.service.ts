@@ -10,27 +10,29 @@ import { ProductCreateDtoMapper } from '../mapper/upload-dto.mapper';
 import { createUploadSettings } from '../settings/create-upload.settings';
 import { ProductCreateDtoValidator } from '../validator/upoad-dto.validator';
 import { UploadResDTO } from '../dto/upload-res.dto';
+import { Status } from 'src/product/status/status.enum';
+import { ProceedFileReqDTO } from '../dto/proceed-file-req.dto';
 
 @Injectable()
 export class UploadService {
     private currentSupplierUserSetHeddingsTranslation: Record<string, string>;
     private currentSupplierUserSetHeadings: Record<string, string>;
 
-    public async getAppDataFromFile(
-        file: Express.Multer.File,
-        supplier: string,
-        cur: string,
-    ) {
+    public async proceedFile(proceedFileData: ProceedFileReqDTO) {
         this.currentSupplierUserSetHeddingsTranslation =
             temporaryAbUserSetHeddingsTranslation; //TODO take from DB by supplier
         this.currentSupplierUserSetHeadings = temporaryAbUserSetHeadings; //TODO take from DB by supplier
-        return await this.proceedFileByRows(file, cur);
+        return await this.proceedFileByRows(proceedFileData);
     }
 
     private async proceedFileByRows(
-        file: Express.Multer.File,
-        cur: string,
+        proceedFileData: ProceedFileReqDTO,
     ): Promise<UploadResDTO> {
+        const {
+            file,
+            params: { currency, supplier },
+        } = proceedFileData;
+
         const settings = createUploadSettings(
             this.currentSupplierUserSetHeadings,
         );
@@ -53,7 +55,8 @@ export class UploadService {
                         ProductCreateDTO,
                         {
                             ...productRow,
-                            currency: cur,
+                            currency,
+                            supplier,
                         },
                         productLineNo,
                     );
@@ -76,6 +79,7 @@ export class UploadService {
             totalQty,
             totalPositions,
             data,
+            status: Status.NEW,
         };
     }
 }

@@ -4,7 +4,7 @@ import { InvoiceResDTO } from './invoiceRes.dto';
 export const invoiceResDtoMapper = (invoiceEntity: Invoice): InvoiceResDTO => ({
     id: invoiceEntity.id,
     number: invoiceEntity.number,
-    sellerName: invoiceEntity.sellerName,
+    supplier: invoiceEntity.supplier,
     addedBy: invoiceEntity.addedBy,
     addedAt: invoiceEntity.addedAt,
     updatedBy: invoiceEntity.updatedBy,

@@ -3,5 +3,6 @@ export type ProductType = {
     quantity: number;
     netPrice: number;
     currency: string;
+    supplier: string;
     invoiceNumber: string;
 };

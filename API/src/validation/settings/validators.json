@@ -4,7 +4,7 @@
             "minLength": 4,
             "maxLength": 24
         },
-        "sellerName": {
+        "supplier": {
             "minLength": 4,
             "maxLength": 96
         },

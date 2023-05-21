@@ -21,9 +21,9 @@ export class InvoiceCreateDTO {
 
     @IsString()
     @Length(
-        getInvoiceValidatorParam('sellerName', 'minLength') || 4,
-        getInvoiceValidatorParam('sellerName', 'maxLength') || 36,
+        getInvoiceValidatorParam('supplier', 'minLength') || 4,
+        getInvoiceValidatorParam('supplier', 'maxLength') || 36,
     )
     @Transform(trimTransformer)
-    sellerName: string;
+    supplier: string;
 }

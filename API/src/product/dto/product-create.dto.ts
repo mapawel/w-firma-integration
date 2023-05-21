@@ -26,4 +26,7 @@ export class ProductCreateDTO {
 
     @IsString()
     invoiceNumber: string;
+
+    @IsString()
+    supplier: string;
 }

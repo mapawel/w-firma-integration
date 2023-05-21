@@ -3,7 +3,6 @@ import axios from 'axios';
 import {
     startLoading,
     stopLoading,
-    setAppData,
 } from '@/providers/app-status/use-app-status';
 import { IUser } from '@/providers/auth/interfaces';
 import { authContext } from '@/providers/auth/interfaces/auth.context';

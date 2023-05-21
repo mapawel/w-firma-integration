@@ -1,7 +1,7 @@
 export class InvoiceResDTO {
     id: number;
     number: string;
-    sellerName: string;
+    supplier: string;
     addedBy: string;
     addedAt: Date;
     updatedBy: string;

@@ -32,10 +32,12 @@ export class FileController {
         )
         file: Express.Multer.File,
     ): Promise<UploadResDTO> {
-        return await this.uploadService.getAppDataFromFile(
+        return await this.uploadService.proceedFile({
             file,
-            body.supplier,
-            body.cur,
-        );
+            params: {
+                supplier: body.supplier,
+                currency: body.cur,
+            },
+        });
     }
 }
