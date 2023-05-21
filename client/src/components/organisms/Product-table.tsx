@@ -20,15 +20,20 @@ const ProductTable: FC<IProps> = ({ data }) => (
             </thead>
             <tbody>
                 {data?.map(
-                    ({
-                        id,
-                        supplierIndex,
-                        quantity,
-                        netPrice,
-                        currency,
-                        invoiceNumber,
-                    }: ProductType) => (
-                        <tr key={id} className="border-t-[1px] border-primary">
+                    (
+                        {
+                            supplierIndex,
+                            quantity,
+                            netPrice,
+                            currency,
+                            invoiceNumber,
+                        }: ProductType,
+                        index: number,
+                    ) => (
+                        <tr
+                            key={index}
+                            className="border-t-[1px] border-primary"
+                        >
                             <td className="px-5 py-1">{invoiceNumber}</td>
                             <td className="border-l-[1px] border-primary px-5 py-1">
                                 {supplierIndex}

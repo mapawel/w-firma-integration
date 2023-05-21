@@ -2,46 +2,10 @@ import ProductTable from '@/components/organisms/Product-table';
 import NavTemplate from '@/components/templates/Nav-template';
 import { FC } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { ProductType } from './Product.type';
 import { UploadResDTO } from './Upload-result.type';
 import { toFixedNum } from '@/helpers/to-fixed-num';
 import { ClientRoutes } from '@/routes/client';
 import { submitUpladedData } from '@/actions/submit-uploaded-data';
-
-const mockData: ProductType[] = [
-    {
-        id: 1,
-        supplierIndex: 'AK4WOK00137',
-        quantity: 1,
-        netPrice: 111.56,
-        currency: 'EUR',
-        invoiceNumber: 'A1556815',
-    },
-    {
-        id: 2,
-        supplierIndex: 'SFSAMMDG6400004',
-        quantity: 2,
-        netPrice: 11,
-        currency: 'EUR',
-        invoiceNumber: 'A1556815',
-    },
-    {
-        id: 3,
-        supplierIndex: 'SFSAMMDG6400004',
-        quantity: 1000,
-        netPrice: 100,
-        currency: 'EUR',
-        invoiceNumber: 'A1556815',
-    },
-    {
-        id: 4,
-        supplierIndex: 'SFSAMMDG6400004',
-        quantity: 500,
-        netPrice: 50.5,
-        currency: 'EUR',
-        invoiceNumber: 'A1556815',
-    },
-];
 
 const ResultView: FC = () => {
     const navigate = useNavigate();
