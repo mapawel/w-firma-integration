@@ -2,10 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Invoice } from '../entity/Invoice.entity';
-import { InvoiceResDTO } from '../dto/invoiceRes.dto';
-import { InvoiceCreateDTO } from '../dto/invoiceCreate.dto';
-import { InvoiceUpdateDTO } from '../dto/invoiceUpdate.dto';
-import { invoiceResDtoMapper } from '../dto/invoiceResDto.mapper';
+import { InvoiceResDTO } from '../dto/invoice-res.dto';
+import { InvoiceCreateDTO } from '../dto/invoice-create.dto';
+import { InvoiceUpdateDTO } from '../dto/invoice-update.dto';
+import { invoiceResDtoMapper } from '../dto/invoice-res-dto.mapper';
 import { InvoiceRepoException } from '../exceptions/invoice-repo.exception';
 
 @Injectable()
@@ -17,7 +17,11 @@ export class InvoiceService {
 
     public async getAllInvoices(): Promise<InvoiceResDTO[]> {
         try {
-            const allInvoices: Invoice[] = await this.invoiceRepository.find();
+            const allInvoices: Invoice[] = await this.invoiceRepository.find({
+                relations: {
+                    products: true,
+                },
+            });
             return allInvoices.map((invoice: Invoice) =>
                 invoiceResDtoMapper(invoice),
             );
@@ -43,6 +47,27 @@ export class InvoiceService {
             if (error instanceof NotFoundException) throw error;
             throw new InvoiceRepoException(
                 `Error while getting invoice with passed id: ${invoiceId}`,
+                { cause: error },
+            );
+        }
+    }
+
+    public async getInvoiceByNumber(iNubmer: string): Promise<InvoiceResDTO[]> {
+        try {
+            const invoices: Invoice[] | null =
+                await this.invoiceRepository.find({
+                    where: { number: iNubmer },
+                });
+            if (!invoices.length) {
+                throw new NotFoundException('Invoice not found.');
+            }
+            return invoices.map((invoice: Invoice) =>
+                invoiceResDtoMapper(invoice),
+            );
+        } catch (error) {
+            if (error instanceof NotFoundException) throw error;
+            throw new InvoiceRepoException(
+                `Error while getting invoice with passed id: ${iNubmer}`,
                 { cause: error },
             );
         }

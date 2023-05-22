@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Product } from '../../product/entity/Product.entity';
 
 @Entity()
 export class Invoice {
@@ -8,8 +9,11 @@ export class Invoice {
     @Column()
     number: string;
 
-    @Column()
-    supplier: string;
+    // @Column()
+    // supplier: string;
+
+    @OneToMany(() => Product, (product) => product.invoice)
+    products: Product[];
 
     @Column()
     addedBy: string;
