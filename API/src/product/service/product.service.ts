@@ -16,46 +16,46 @@ export class ProductService {
         @InjectRepository(Invoice)
         private readonly invoiceRepository: Repository<Invoice>,
     ) {}
-    private test = 0;
     public async uploadBulkProducts(
         productsArray: ProductCreateDTO[],
         userId: string,
     ): Promise<ProductResDTO[]> {
         const productResDtos: ProductResDTO[] = [];
+        const productsEntityOneInvoice: Product[] = [];
         let currentInvoiceEntity: Invoice | null = null;
+
         productsArray.sort((a, b) =>
             a.invoiceNumber.localeCompare(b.invoiceNumber),
         );
 
         for (const product of productsArray) {
             if (!currentInvoiceEntity) {
-                currentInvoiceEntity = await this.findOrCreateInvoice(
+                currentInvoiceEntity = await this.findOrCreateInvoiceEntity(
                     product.invoiceNumber,
                     userId,
                 );
             }
 
             if (product.invoiceNumber !== currentInvoiceEntity.number) {
-                currentInvoiceEntity = await this.findOrCreateInvoice(
+                currentInvoiceEntity = await this.findOrCreateInvoiceEntity(
                     product.invoiceNumber,
                     userId,
                 );
+                await this.productRepository.save(productsEntityOneInvoice);
+                productsEntityOneInvoice.length = 0;
             }
 
-            const newProduct: Product = this.productRepository.create({
-                ...product,
-                invoice: currentInvoiceEntity,
-                status: Status.NEW,
-                addedBy: userId,
-                addedAt: new Date(Date.now()),
-            });
-
-            const productEntity: Product = await this.productRepository.save(
-                newProduct,
+            const productEntity: Product = await this.createNewProductEntity(
+                product,
+                currentInvoiceEntity,
+                userId,
             );
+            productsEntityOneInvoice.push(productEntity);
 
             productResDtos.push(productResDtoMapper(productEntity));
         }
+        await this.productRepository.save(productsEntityOneInvoice);
+        productsEntityOneInvoice.length = 0;
 
         return productResDtos;
     }
@@ -77,28 +77,41 @@ export class ProductService {
         }
     }
 
-    private async findOrCreateInvoice(
+    private async findOrCreateInvoiceEntity(
         invoiceNo: string,
         userId: string,
     ): Promise<Invoice> {
-        let invoice: Invoice | null = null;
+        let invoiceEntity: Invoice | null = null;
 
-        invoice = await this.invoiceRepository.findOne({
+        invoiceEntity = await this.invoiceRepository.findOne({
             where: {
                 number: invoiceNo,
             },
         });
 
-        if (!invoice) {
-            this.test += 1;
+        if (!invoiceEntity) {
             const newInvoice = this.invoiceRepository.create({
                 number: invoiceNo,
                 addedBy: userId,
                 addedAt: new Date(Date.now()),
                 products: [],
             });
-            invoice = await this.invoiceRepository.save(newInvoice);
+            invoiceEntity = await this.invoiceRepository.save(newInvoice);
         }
-        return invoice;
+        return invoiceEntity;
+    }
+
+    private async createNewProductEntity(
+        product: ProductCreateDTO,
+        currentInvoiceEntity: Invoice,
+        userId: string,
+    ): Promise<Product> {
+        return this.productRepository.create({
+            ...product,
+            invoice: currentInvoiceEntity,
+            status: Status.NEW,
+            addedBy: userId,
+            addedAt: new Date(Date.now()),
+        });
     }
 }
