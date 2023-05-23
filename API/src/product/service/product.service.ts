@@ -7,14 +7,14 @@ import { Status } from '../status/status.enum';
 import { Invoice } from '../../invoice/entity/Invoice.entity';
 import { productResDtoMapper } from '../dto/product-res-dto.mapper';
 import { ProductResDTO } from '../dto/product-res.dto';
+import { InvoiceService } from 'src/invoice/services/invoice.service';
 
 @Injectable()
 export class ProductService {
     constructor(
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
-        @InjectRepository(Invoice)
-        private readonly invoiceRepository: Repository<Invoice>,
+        private readonly invoiceServise: InvoiceService,
     ) {}
     public async uploadBulkProducts(
         productsArray: ProductCreateDTO[],
@@ -29,18 +29,19 @@ export class ProductService {
         );
 
         for (const product of productsArray) {
-            if (!currentInvoiceEntity) {
-                currentInvoiceEntity = await this.findOrCreateInvoiceEntity(
-                    product.invoiceNumber,
-                    userId,
-                );
+            if (
+                !currentInvoiceEntity ||
+                product.invoiceNumber !== currentInvoiceEntity?.number
+            ) {
+                currentInvoiceEntity =
+                    await this.invoiceServise.findOrCreateInvoiceEntity(
+                        product.invoiceNumber,
+                        product.supplier,
+                        userId,
+                    );
             }
 
             if (product.invoiceNumber !== currentInvoiceEntity.number) {
-                currentInvoiceEntity = await this.findOrCreateInvoiceEntity(
-                    product.invoiceNumber,
-                    userId,
-                );
                 await this.productRepository.save(productsEntityOneInvoice);
                 productsEntityOneInvoice.length = 0;
             }
@@ -75,30 +76,6 @@ export class ProductService {
                 cause: error,
             });
         }
-    }
-
-    private async findOrCreateInvoiceEntity(
-        invoiceNo: string,
-        userId: string,
-    ): Promise<Invoice> {
-        let invoiceEntity: Invoice | null = null;
-
-        invoiceEntity = await this.invoiceRepository.findOne({
-            where: {
-                number: invoiceNo,
-            },
-        });
-
-        if (!invoiceEntity) {
-            const newInvoice = this.invoiceRepository.create({
-                number: invoiceNo,
-                addedBy: userId,
-                addedAt: new Date(Date.now()),
-                products: [],
-            });
-            invoiceEntity = await this.invoiceRepository.save(newInvoice);
-        }
-        return invoiceEntity;
     }
 
     private async createNewProductEntity(

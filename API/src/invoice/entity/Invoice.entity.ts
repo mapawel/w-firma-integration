@@ -9,8 +9,8 @@ export class Invoice {
     @Column()
     number: string;
 
-    // @Column()
-    // supplier: string;
+    @Column()
+    supplier: string;
 
     @OneToMany(() => Product, (product) => product.invoice)
     products: Product[];

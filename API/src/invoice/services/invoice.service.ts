@@ -154,4 +154,30 @@ export class InvoiceService {
             );
         }
     }
+
+    public async findOrCreateInvoiceEntity(
+        invoiceNo: string,
+        supplier: string,
+        userId: string,
+    ): Promise<Invoice> {
+        let invoiceEntity: Invoice | null = null;
+
+        invoiceEntity = await this.invoiceRepository.findOne({
+            where: {
+                number: invoiceNo,
+            },
+        });
+
+        if (!invoiceEntity) {
+            const newInvoice = this.invoiceRepository.create({
+                number: invoiceNo,
+                addedBy: userId,
+                addedAt: new Date(Date.now()),
+                supplier,
+                products: [],
+            });
+            invoiceEntity = await this.invoiceRepository.save(newInvoice);
+        }
+        return invoiceEntity;
+    }
 }
