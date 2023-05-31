@@ -1,3 +1,4 @@
+import { Supplier } from 'src/supplier/supppliers.enum';
 import { Status } from '../status/status.enum';
 
 export class ProductResDTO {
@@ -7,7 +8,7 @@ export class ProductResDTO {
     netPrice: number;
     currency: string;
     invoice: string;
-    supplier: string;
+    supplier: Supplier;
     status: Status;
     addedBy: string;
     addedAt: Date;

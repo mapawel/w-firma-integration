@@ -7,6 +7,7 @@ import { InvoiceCreateDTO } from '../dto/invoice-create.dto';
 import { InvoiceUpdateDTO } from '../dto/invoice-update.dto';
 import { invoiceResDtoMapper } from '../dto/invoice-res-dto.mapper';
 import { InvoiceRepoException } from '../exceptions/invoice-repo.exception';
+import { Supplier } from '../../supplier/supppliers.enum';
 
 @Injectable()
 export class InvoiceService {
@@ -157,7 +158,7 @@ export class InvoiceService {
 
     public async findOrCreateInvoiceEntity(
         invoiceNo: string,
-        supplier: string,
+        supplier: Supplier,
         userId: string,
     ): Promise<Invoice> {
         let invoiceEntity: Invoice | null = null;

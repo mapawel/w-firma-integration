@@ -9,6 +9,7 @@ import { MainExceptionFilter } from './exception-filters/main-exception.filter';
 import { InvoiceModule } from './invoice/invoice.module';
 import { UploadModule } from './upload/upload.module';
 import { ProductModule } from './product/product.module';
+import { CodeTranslationModule } from './code-translation/code-translation.module';
 
 @Module({
     imports: [
@@ -38,6 +39,7 @@ import { ProductModule } from './product/product.module';
         InvoiceModule,
         UploadModule,
         ProductModule,
+        CodeTranslationModule,
     ],
     controllers: [],
     providers: [

@@ -1,5 +1,6 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { Supplier } from '../../supplier/supppliers.enum';
 
 export class ProductCreateDTO {
     @IsString()
@@ -27,6 +28,6 @@ export class ProductCreateDTO {
     @IsString()
     invoiceNumber: string;
 
-    @IsString()
-    supplier: string;
+    @IsEnum(Supplier)
+    supplier: Supplier;
 }

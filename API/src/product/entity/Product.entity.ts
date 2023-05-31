@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Status } from '../status/status.enum';
 import { Invoice } from '../../invoice/entity/Invoice.entity';
+import { Supplier } from '../../supplier/supppliers.enum';
 
 @Entity()
 export class Product {
@@ -23,7 +24,7 @@ export class Product {
     invoice: Invoice;
 
     @Column()
-    supplier: string;
+    supplier: Supplier;
 
     @Column()
     status: Status;

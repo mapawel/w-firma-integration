@@ -1,8 +1,9 @@
-import { IsString, Length } from 'class-validator';
+import { IsEnum, IsString, Length } from 'class-validator';
 import { Transform } from 'class-transformer';
 import validators from '../../validation/settings/validators.json';
 import { buildValidatorKeyParamsGetter } from '../../validation/utils';
 import { trimTransformer } from '../../validation/utils';
+import { Supplier } from '../../supplier/supppliers.enum';
 
 const getInvoiceValidatorParam =
     buildValidatorKeyParamsGetter<InvoiceCreateDTO>({
@@ -19,11 +20,11 @@ export class InvoiceCreateDTO {
     @Transform(trimTransformer)
     number: string;
 
-    @IsString()
+    @IsEnum(Supplier)
     @Length(
         getInvoiceValidatorParam('supplier', 'minLength') || 4,
         getInvoiceValidatorParam('supplier', 'maxLength') || 36,
     )
     @Transform(trimTransformer)
-    supplier: string;
+    supplier: Supplier;
 }
