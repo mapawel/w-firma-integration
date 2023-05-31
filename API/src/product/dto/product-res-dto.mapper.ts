@@ -7,7 +7,7 @@ export const productResDtoMapper = (productEntity: Product): ProductResDTO => ({
     quantity: productEntity.quantity,
     netPrice: productEntity.netPrice,
     currency: productEntity.currency,
-    invoice: productEntity.invoice,
+    invoice: productEntity.invoice.number,
     supplier: productEntity.supplier,
     status: productEntity.status,
     addedBy: productEntity.addedBy,

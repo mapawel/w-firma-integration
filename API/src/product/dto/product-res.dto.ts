@@ -1,4 +1,3 @@
-import { Invoice } from '../../invoice/entity/Invoice.entity';
 import { Status } from '../status/status.enum';
 
 export class ProductResDTO {
@@ -7,7 +6,7 @@ export class ProductResDTO {
     quantity: number;
     netPrice: number;
     currency: string;
-    invoice: Invoice;
+    invoice: string;
     supplier: string;
     status: Status;
     addedBy: string;
