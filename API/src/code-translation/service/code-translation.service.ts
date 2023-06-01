@@ -16,33 +16,45 @@ export class CodeTranslationService {
 
     public async createCodeTranslations(
         codeTranslationCreateDTOs: CodeTranslationCreateDTO[],
-    ): Promise<any> {
-        return codeTranslationCreateDTOs;
+        userId: string,
+    ) {
+        const entitiesToSave: CodeTranslation[] = [];
+
+        for (const codeTranslationCreateDTO of codeTranslationCreateDTOs) {
+            const existingEntity: CodeTranslation | null =
+                await this.findExistingTranslationEntity(
+                    codeTranslationCreateDTO,
+                );
+
+            if (!existingEntity) {
+                const newEntity = this.codeTranslationRepository.create({
+                    ...codeTranslationCreateDTO,
+                    addedBy: userId,
+                    addedAt: new Date(Date.now()),
+                });
+                entitiesToSave.push(newEntity);
+            } else {
+                const updatedEntity: CodeTranslation = {
+                    ...existingEntity,
+                    ...codeTranslationCreateDTO,
+                    updatedBy: userId,
+                    updatedAt: new Date(Date.now()),
+                };
+
+                entitiesToSave.push(updatedEntity);
+            }
+        }
+        return await this.codeTranslationRepository.save(entitiesToSave);
     }
 
-    public async findOrCreateCodeTranslationEntity(
+    public async findExistingTranslationEntity(
         codeTranslationCreateDTO: CodeTranslationCreateDTO,
-        userId: string,
-    ): Promise<CodeTranslation> {
-        let codeTranslationEntity: CodeTranslation | null = null;
-
-        codeTranslationEntity = await this.codeTranslationRepository.findOne({
+    ): Promise<CodeTranslation | null> {
+        return await this.codeTranslationRepository.findOne({
             where: {
                 supplier: codeTranslationCreateDTO.supplier,
                 supplierCode: codeTranslationCreateDTO.supplierCode,
             },
         });
-
-        if (!codeTranslationEntity) {
-            const newInvoice = this.codeTranslationRepository.create({
-                ...codeTranslationCreateDTO,
-                addedBy: userId,
-                addedAt: new Date(Date.now()),
-            });
-            codeTranslationEntity = await this.codeTranslationRepository.save(
-                newInvoice,
-            );
-        }
-        return codeTranslationEntity;
     }
 }

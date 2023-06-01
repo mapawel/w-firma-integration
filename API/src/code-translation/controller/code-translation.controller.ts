@@ -20,6 +20,7 @@ export class CodeTranslationController {
     ): Promise<any> {
         return await this.codeTranslationService.createCodeTranslations(
             codeTranslationCreateDTOs,
+            'exxampleUserId',
         );
     }
 }
