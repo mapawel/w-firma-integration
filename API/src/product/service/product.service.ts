@@ -8,7 +8,7 @@ import { Invoice } from '../../invoice/entity/Invoice.entity';
 import { productResDtoMapper } from '../dto/product-res-dto.mapper';
 import { ProductResDTO } from '../dto/product-res.dto';
 import { InvoiceService } from 'src/invoice/services/invoice.service';
-import { ProductQueryParams } from '../controller/product.controller';
+import { ProductQueryParams } from '../types/product-query-params.type';
 
 @Injectable()
 export class ProductService {

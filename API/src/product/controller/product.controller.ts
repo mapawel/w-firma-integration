@@ -4,18 +4,8 @@ import { ProductCreateDTO } from '../dto/product-create.dto';
 import { ProductService } from '../service/product.service';
 import { ProductResDTO } from '../dto/product-res.dto';
 import { ProductQuery } from '../decorators/product-query-param.decorator';
-import { Supplier } from '../../supplier/supppliers.enum';
+import { ProductQueryParams } from '../types/product-query-params.type';
 // import { UserId } from 'src/decorators/user-id.decorator';
-
-export type ProductQueryParams = {
-    supplierIndex: string;
-    currency: string;
-    supplier: Supplier;
-    sortParam: keyof ProductResDTO;
-    sortDirect: 'ASC' | 'DESC';
-    records: number;
-    skip: number;
-};
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.PRODUCTS_ROUTE}`)
 export class ProductController {
