@@ -22,7 +22,7 @@ const ProductTable: FC<IProps> = ({ data }) => (
                 {data?.map(
                     (
                         {
-                            supplierIndex,
+                            supplierCode,
                             quantity,
                             netPrice,
                             currency,
@@ -36,7 +36,7 @@ const ProductTable: FC<IProps> = ({ data }) => (
                         >
                             <td className="px-5 py-1">{invoiceNumber}</td>
                             <td className="border-l-[1px] border-primary px-5 py-1">
-                                {supplierIndex}
+                                {supplierCode}
                             </td>
                             <td className="border-l-[1px] border-primary px-5 py-1 text-right">
                                 {quantity}

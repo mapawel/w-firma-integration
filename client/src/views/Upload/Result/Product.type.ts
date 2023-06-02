@@ -1,5 +1,5 @@
 export type ProductType = {
-    supplierIndex: string;
+    supplierCode: string;
     quantity: number;
     netPrice: number;
     currency: string;
