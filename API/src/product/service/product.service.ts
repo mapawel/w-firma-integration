@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ProductCreateDTO } from '../dto/product-create.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../entity/Product.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { Status } from '../status/status.enum';
 import { Invoice } from '../../invoice/entity/Invoice.entity';
 import { productResDtoMapper } from '../dto/product-res-dto.mapper';
@@ -98,7 +98,7 @@ export class ProductService {
                     currency,
                     supplier,
                     status,
-                    PN: { PN },
+                    PN: PN === 'null' ? IsNull() : { PN },
                     invoice: { number: invoice },
                 },
                 relations: ['PN', 'invoice'],
