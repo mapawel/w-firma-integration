@@ -1,7 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    JoinColumn,
+} from 'typeorm';
 import { Status } from '../status/status.enum';
 import { Invoice } from '../../invoice/entity/Invoice.entity';
 import { Supplier } from '../../supplier/supppliers.enum';
+import { CodeTranslation } from 'src/code-translation/entity/Code-translation.entity';
 
 @Entity()
 export class Product {
@@ -11,8 +18,12 @@ export class Product {
     @Column()
     supplierCode: string;
 
-    @Column({ nullable: true })
-    PN: string;
+    @ManyToOne(
+        () => CodeTranslation,
+        (codeTranslation) => codeTranslation.products,
+        { nullable: true },
+    )
+    PN: CodeTranslation;
 
     @Column()
     quantity: number;

@@ -10,7 +10,6 @@ import { ProductResDTO } from '../dto/product-res.dto';
 import { InvoiceService } from '../../invoice/services/invoice.service';
 import { ProductQueryParams } from '../types/product-query-params.type';
 import { CodeTranslation } from 'src/code-translation/entity/Code-translation.entity';
-import { Supplier } from 'src/supplier/supppliers.enum';
 
 @Injectable()
 export class ProductService {
@@ -21,23 +20,17 @@ export class ProductService {
         private readonly codeTranslatonRepository: Repository<CodeTranslation>,
         private readonly invoiceServise: InvoiceService,
     ) {}
-    private currentSupplierCodeTranslationsMap: Map<string, string> = new Map();
 
     public async uploadBulkProducts(
         productsArray: ProductCreateDTO[],
         userId: string,
     ): Promise<ProductResDTO[]> {
-        console.time('uploadBulkProducts');
-
         const productResDtos: ProductResDTO[] = [];
         const productsEntityOneInvoice: Product[] = [];
         let currentInvoiceEntity: Invoice | null = null;
 
         productsArray.sort((a, b) =>
             a.invoiceNumber.localeCompare(b.invoiceNumber),
-        );
-        this.populateCurrentSupplierCodeTranslations(
-            productsArray[0]?.supplier,
         );
 
         for (const product of productsArray) {
@@ -58,14 +51,17 @@ export class ProductService {
                 productsEntityOneInvoice.length = 0;
             }
 
-            const PN: string | undefined =
-                this.currentSupplierCodeTranslationsMap.get(
-                    product.supplierCode,
-                );
+            const codeTranslation: CodeTranslation | null =
+                await this.codeTranslatonRepository.findOne({
+                    where: {
+                        supplier: product.supplier,
+                        supplierCode: product.supplierCode,
+                    },
+                });
 
             const productEntity: Product = await this.createNewProductEntity(
                 product,
-                PN,
+                codeTranslation,
                 currentInvoiceEntity,
                 userId,
             );
@@ -76,7 +72,6 @@ export class ProductService {
         await this.productRepository.save(productsEntityOneInvoice);
         productsEntityOneInvoice.length = 0;
 
-        console.timeEnd('uploadBulkProducts');
         return productResDtos;
     }
 
@@ -88,6 +83,9 @@ export class ProductService {
                 supplierCode,
                 currency,
                 supplier,
+                PN,
+                status,
+                invoice,
                 sortParam,
                 sortDirect,
                 records,
@@ -99,10 +97,11 @@ export class ProductService {
                     supplierCode,
                     currency,
                     supplier,
+                    status,
+                    PN: { PN },
+                    invoice: { number: invoice },
                 },
-                relations: {
-                    invoice: true,
-                },
+                relations: ['PN', 'invoice'],
                 order: {
                     [sortParam]: sortDirect,
                 },
@@ -122,34 +121,17 @@ export class ProductService {
 
     private async createNewProductEntity(
         product: ProductCreateDTO,
-        PN: string | undefined,
+        codeTranslation: CodeTranslation | null,
         currentInvoiceEntity: Invoice,
         userId: string,
     ): Promise<Product> {
         return this.productRepository.create({
             ...product,
-            PN,
+            PN: codeTranslation || undefined,
             invoice: currentInvoiceEntity,
             status: Status.NEW,
             addedBy: userId,
             addedAt: new Date(Date.now()),
         });
-    }
-
-    private async populateCurrentSupplierCodeTranslations(
-        supplier: Supplier,
-    ): Promise<void> {
-        const currentSupplierCodeTranslations: CodeTranslation[] =
-            await this.codeTranslatonRepository.find({
-                where: {
-                    supplier,
-                },
-            });
-        for (const codeTranslation of currentSupplierCodeTranslations) {
-            this.currentSupplierCodeTranslationsMap.set(
-                codeTranslation.supplierCode,
-                codeTranslation.PN,
-            );
-        }
     }
 }

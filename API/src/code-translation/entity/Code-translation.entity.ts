@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Supplier } from '../../supplier/supppliers.enum';
+import { Product } from '../../product/entity/Product.entity';
 
 @Entity()
 export class CodeTranslation {
@@ -26,4 +27,7 @@ export class CodeTranslation {
 
     @Column({ nullable: true })
     updatedAt: Date;
+
+    @OneToMany(() => Product, (product) => product.PN)
+    products: Product[];
 }
