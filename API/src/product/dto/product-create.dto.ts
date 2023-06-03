@@ -4,7 +4,7 @@ import { Supplier } from '../../supplier/supppliers.enum';
 
 export class ProductCreateDTO {
     @IsString()
-    supplierIndex: string;
+    supplierCode: string;
 
     @Transform(({ value }) => {
         return typeof value === 'string'

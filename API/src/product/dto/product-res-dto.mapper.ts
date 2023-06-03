@@ -3,7 +3,8 @@ import { ProductResDTO } from './product-res.dto';
 
 export const productResDtoMapper = (productEntity: Product): ProductResDTO => ({
     id: productEntity.id,
-    supplierIndex: productEntity.supplierIndex,
+    supplierCode: productEntity.supplierCode,
+    PN: productEntity.PN,
     quantity: productEntity.quantity,
     netPrice: productEntity.netPrice,
     currency: productEntity.currency,

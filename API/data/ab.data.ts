@@ -1,14 +1,14 @@
 export const temporaryAbUserSetHeadings = {
     invoiceNumber: 'numer fak',
-    supplierIndex: 'Inde',
-    quantity: 'Iloś',
+    supplierCode: 'Inde',
+    quantity: 'Ilość',
     netPrice: 'Cena net',
 };
 
 export const temporaryAbUserSetHeddingsTranslation = {
     'numer fak': 'invoiceNumber',
-    Inde: 'supplierIndex',
-    Iloś: 'quantity',
+    Inde: 'supplierCode',
+    Ilość: 'quantity',
     'Cena net': 'netPrice',
 };
 

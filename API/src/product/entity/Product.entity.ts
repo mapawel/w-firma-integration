@@ -9,7 +9,10 @@ export class Product {
     id: number;
 
     @Column()
-    supplierIndex: string;
+    supplierCode: string;
+
+    @Column({ nullable: true })
+    PN: string;
 
     @Column()
     quantity: number;

@@ -2,7 +2,7 @@ import { Supplier } from '../../supplier/supppliers.enum';
 import { ProductResDTO } from '../dto/product-res.dto';
 
 export type ProductQueryParams = {
-    supplierIndex: string;
+    supplierCode: string;
     currency: string;
     supplier: Supplier;
     sortParam: keyof ProductResDTO;

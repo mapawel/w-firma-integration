@@ -3,7 +3,8 @@ import { Status } from '../status/status.enum';
 
 export class ProductResDTO {
     id: number;
-    supplierIndex: string;
+    supplierCode: string;
+    PN: string;
     quantity: number;
     netPrice: number;
     currency: string;
