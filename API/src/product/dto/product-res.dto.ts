@@ -4,7 +4,7 @@ import { Status } from '../status/status.enum';
 export class ProductResDTO {
     id: number;
     supplierCode: string;
-    PN: string | undefined;
+    productCode: string | undefined;
     quantity: number;
     netPrice: number;
     currency: string;

@@ -23,6 +23,9 @@ export class MainExceptionFilter implements ExceptionFilter {
     catch(exception: Error, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
+
+        console.log('exception.cause ----> ', exception.cause);
+
         const status =
             exception instanceof HttpException ? exception.getStatus() : 500;
 

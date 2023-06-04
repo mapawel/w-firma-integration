@@ -6,7 +6,7 @@ export type ProductQueryParams = {
     supplierCode: string;
     currency: string;
     supplier: Supplier;
-    PN: string;
+    productCode: string;
     status: Status;
     invoice: string;
     sortParam: keyof ProductResDTO;

@@ -15,7 +15,7 @@ import { CodeTranslationModule } from './code-translation/code-translation.modul
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: ['.env', '.env.auth'],
+            envFilePath: ['.env', '.env.auth', '.env.wfirma'],
         }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', '..', '..', 'client', 'build'),

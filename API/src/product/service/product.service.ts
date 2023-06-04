@@ -10,6 +10,8 @@ import { ProductResDTO } from '../dto/product-res.dto';
 import { InvoiceService } from '../../invoice/services/invoice.service';
 import { ProductQueryParams } from '../types/product-query-params.type';
 import { CodeTranslation } from '../../code-translation/entity/Code-translation.entity';
+import { CreateOrderService } from '../../integrated-systems/wfirma/create-order/create-order.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ProductService {
@@ -19,6 +21,7 @@ export class ProductService {
         @InjectRepository(CodeTranslation)
         private readonly codeTranslatonRepository: Repository<CodeTranslation>,
         private readonly invoiceServise: InvoiceService,
+        private readonly createOrderService: CreateOrderService,
     ) {}
 
     public async uploadBulkProducts(
@@ -79,11 +82,13 @@ export class ProductService {
         productQueryParams: ProductQueryParams,
     ): Promise<ProductResDTO[]> {
         try {
+            await this.createOrderService.refreshProductsFromSystem();
+
             const {
                 supplierCode,
                 currency,
                 supplier,
-                PN,
+                productCode,
                 status,
                 invoice,
                 sortParam,
@@ -98,10 +103,11 @@ export class ProductService {
                     currency,
                     supplier,
                     status,
-                    productCode: PN === 'null' ? IsNull() : { PN },
+                    productCode:
+                        productCode === 'null' ? IsNull() : { PN: productCode },
                     invoice: { number: invoice },
                 },
-                relations: ['PN', 'invoice'],
+                relations: ['productCode', 'invoice'],
                 order: {
                     [sortParam]: sortDirect,
                 },
