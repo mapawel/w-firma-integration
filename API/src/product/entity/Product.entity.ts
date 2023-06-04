@@ -17,7 +17,7 @@ export class Product {
         (codeTranslation) => codeTranslation.products,
         { nullable: true },
     )
-    PN: CodeTranslation | undefined;
+    productCode: CodeTranslation | undefined;
 
     @Column()
     quantity: number;

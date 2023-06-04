@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { ProductCreateDTO } from '../dto/product-create.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from '../entity/Product.entity';
 import { IsNull, Repository } from 'typeorm';
+import { ProductCreateDTO } from '../dto/product-create.dto';
+import { Product } from '../entity/Product.entity';
 import { Status } from '../status/status.enum';
 import { Invoice } from '../../invoice/entity/Invoice.entity';
 import { productResDtoMapper } from '../dto/product-res-dto.mapper';
 import { ProductResDTO } from '../dto/product-res.dto';
 import { InvoiceService } from '../../invoice/services/invoice.service';
 import { ProductQueryParams } from '../types/product-query-params.type';
-import { CodeTranslation } from 'src/code-translation/entity/Code-translation.entity';
+import { CodeTranslation } from '../../code-translation/entity/Code-translation.entity';
 
 @Injectable()
 export class ProductService {
@@ -98,7 +98,7 @@ export class ProductService {
                     currency,
                     supplier,
                     status,
-                    PN: PN === 'null' ? IsNull() : { PN },
+                    productCode: PN === 'null' ? IsNull() : { PN },
                     invoice: { number: invoice },
                 },
                 relations: ['PN', 'invoice'],
@@ -121,13 +121,13 @@ export class ProductService {
 
     private async createNewProductEntity(
         product: ProductCreateDTO,
-        codeTranslation: CodeTranslation | null,
+        productCode: CodeTranslation | null,
         currentInvoiceEntity: Invoice,
         userId: string,
     ): Promise<Product> {
         return this.productRepository.create({
             ...product,
-            PN: codeTranslation || undefined,
+            productCode: productCode || undefined,
             invoice: currentInvoiceEntity,
             status: Status.NEW,
             addedBy: userId,

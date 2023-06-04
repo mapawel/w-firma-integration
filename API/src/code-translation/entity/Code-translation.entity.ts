@@ -28,6 +28,6 @@ export class CodeTranslation {
     @Column({ nullable: true })
     updatedAt: Date;
 
-    @OneToMany(() => Product, (product) => product.PN)
+    @OneToMany(() => Product, (product) => product.productCode)
     products: Product[];
 }
