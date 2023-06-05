@@ -10,7 +10,7 @@ import { ProductResDTO } from '../dto/product-res.dto';
 import { InvoiceService } from '../../invoice/services/invoice.service';
 import { ProductQueryParams } from '../types/product-query-params.type';
 import { CodeTranslation } from '../../code-translation/entity/Code-translation.entity';
-import { productIdResMapper } from '../dto/product-id-res.mapper';
+import { BulkUploadResDTO } from '../dto/bulk-upload-res-dto';
 
 @Injectable()
 export class ProductService {
@@ -25,10 +25,12 @@ export class ProductService {
     public async uploadBulkProducts(
         productsArray: ProductCreateDTO[],
         userId: string,
-    ): Promise<number[]> {
+    ): Promise<BulkUploadResDTO> {
         const productIds: number[] = [];
         const productsEntityOneInvoice: Product[] = [];
         let currentInvoiceEntity: Invoice | null = null;
+        let problemCount = 0;
+        let invoicesCount = 0;
 
         productsArray.sort((a, b) =>
             a.invoiceNumber.localeCompare(b.invoiceNumber),
@@ -45,10 +47,14 @@ export class ProductService {
                         product.supplier,
                         userId,
                     );
+                invoicesCount++;
             }
 
             if (product.invoiceNumber !== currentInvoiceEntity.number) {
                 await this.productRepository.save(productsEntityOneInvoice);
+                productsEntityOneInvoice.forEach((product: Product) =>
+                    productIds.push(product.id),
+                );
                 productsEntityOneInvoice.length = 0;
             }
 
@@ -60,6 +66,8 @@ export class ProductService {
                     },
                 });
 
+            if (!codeTranslation) problemCount++;
+
             const productEntity: Product = await this.createNewProductEntity(
                 product,
                 codeTranslation,
@@ -67,13 +75,21 @@ export class ProductService {
                 userId,
             );
             productsEntityOneInvoice.push(productEntity);
-
-            productIds.push(productIdResMapper(productEntity));
         }
+
         await this.productRepository.save(productsEntityOneInvoice);
+        productsEntityOneInvoice.forEach((product: Product) =>
+            productIds.push(product.id),
+        );
         productsEntityOneInvoice.length = 0;
 
-        return productIds;
+        return {
+            canAutoProceed: !problemCount,
+            problemCount,
+            successCount: productIds.length,
+            invoicesCount,
+            productIds,
+        };
     }
 
     public async getAllProducts(

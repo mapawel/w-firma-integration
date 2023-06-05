@@ -5,6 +5,7 @@ import { ProductService } from '../service/product.service';
 import { ProductResDTO } from '../dto/product-res.dto';
 import { ProductQuery } from '../decorators/product-query-param.decorator';
 import { ProductQueryParams } from '../types/product-query-params.type';
+import { BulkUploadResDTO } from '../dto/bulk-upload-res-dto';
 // import { UserId } from 'src/decorators/user-id.decorator';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.PRODUCTS_ROUTE}`)
@@ -15,7 +16,7 @@ export class ProductController {
     public async createProducts(
         @Body() productsArray: ProductCreateDTO[],
         // @UserId() userId: string,
-    ): Promise<number[]> {
+    ): Promise<BulkUploadResDTO> {
         return await this.productService.uploadBulkProducts(
             productsArray,
             'exampleUserId',
