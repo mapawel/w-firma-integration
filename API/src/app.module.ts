@@ -10,6 +10,7 @@ import { InvoiceModule } from './invoice/invoice.module';
 import { UploadModule } from './upload/upload.module';
 import { ProductModule } from './product/product.module';
 import { CodeTranslationModule } from './code-translation/code-translation.module';
+import { CreateOrderModule } from './integrations/create-order/create-order.module';
 
 @Module({
     imports: [
@@ -40,6 +41,7 @@ import { CodeTranslationModule } from './code-translation/code-translation.modul
         UploadModule,
         ProductModule,
         CodeTranslationModule,
+        CreateOrderModule,
     ],
     controllers: [],
     providers: [

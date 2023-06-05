@@ -15,7 +15,7 @@ export class ProductController {
     public async createProducts(
         @Body() productsArray: ProductCreateDTO[],
         // @UserId() userId: string,
-    ): Promise<ProductResDTO[]> {
+    ): Promise<number[]> {
         return await this.productService.uploadBulkProducts(
             productsArray,
             'exampleUserId',

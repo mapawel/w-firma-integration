@@ -10,8 +10,7 @@ import { ProductResDTO } from '../dto/product-res.dto';
 import { InvoiceService } from '../../invoice/services/invoice.service';
 import { ProductQueryParams } from '../types/product-query-params.type';
 import { CodeTranslation } from '../../code-translation/entity/Code-translation.entity';
-import { CreateOrderService } from '../../integrated-systems/wfirma/create-order/create-order.service';
-import { ConfigService } from '@nestjs/config';
+import { productIdResMapper } from '../dto/product-id-res.mapper';
 
 @Injectable()
 export class ProductService {
@@ -21,14 +20,13 @@ export class ProductService {
         @InjectRepository(CodeTranslation)
         private readonly codeTranslatonRepository: Repository<CodeTranslation>,
         private readonly invoiceServise: InvoiceService,
-        private readonly createOrderService: CreateOrderService,
     ) {}
 
     public async uploadBulkProducts(
         productsArray: ProductCreateDTO[],
         userId: string,
-    ): Promise<ProductResDTO[]> {
-        const productResDtos: ProductResDTO[] = [];
+    ): Promise<number[]> {
+        const productIds: number[] = [];
         const productsEntityOneInvoice: Product[] = [];
         let currentInvoiceEntity: Invoice | null = null;
 
@@ -70,20 +68,18 @@ export class ProductService {
             );
             productsEntityOneInvoice.push(productEntity);
 
-            productResDtos.push(productResDtoMapper(productEntity));
+            productIds.push(productIdResMapper(productEntity));
         }
         await this.productRepository.save(productsEntityOneInvoice);
         productsEntityOneInvoice.length = 0;
 
-        return productResDtos;
+        return productIds;
     }
 
     public async getAllProducts(
         productQueryParams: ProductQueryParams,
     ): Promise<ProductResDTO[]> {
         try {
-            await this.createOrderService.refreshProductsFromSystem();
-
             const {
                 supplierCode,
                 currency,

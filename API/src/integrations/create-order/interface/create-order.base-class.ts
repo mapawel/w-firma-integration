@@ -1,4 +1,3 @@
-import { ProductResDTO } from '../../../product/dto/product-res.dto';
 import { SystemProductResDTO } from '../dto/system-product-res.dto';
 
 export abstract class CreateOrderBaseClass {
@@ -24,8 +23,7 @@ export abstract class CreateOrderBaseClass {
         return systemId;
     }
 
+    public abstract refreshProductsFromSystem(): Promise<boolean>;
     public abstract getCurrentSystemProducts(): Promise<SystemProductResDTO[]>;
-    public abstract createSystemOrder(
-        productsArr: ProductResDTO[],
-    ): Promise<boolean>;
+    public abstract createSystemOrder(productsIds: number[]): Promise<boolean>;
 }

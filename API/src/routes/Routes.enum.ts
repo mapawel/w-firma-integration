@@ -8,4 +8,6 @@ export enum Routes {
     UPLOAD_ROUTE = '/upload',
     PRODUCTS_ROUTE = '/products',
     CODE_TRANSLATIONS_ROUTE = '/code-translations',
+    ORDERS_ROUTE = '/orders',
+    ORDERS_ROUTE_REFRESH = '/refresh',
 }

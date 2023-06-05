@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SystemProductResDTO } from '../../../integrations/create-order/dto/system-product-res.dto';
-import { FromSystemProductsResDTO } from './dto/from-system-products-res.dto';
-import { CreateOrderBaseClass } from '../../../integrations/create-order/interface/create-order.base-class';
-import { ProductResDTO } from '../../../product/dto/product-res.dto';
-import { findAllGoodsPayload } from './api-payloads/find-all-goods.payload';
-import { mapToSystemProductResDto } from './dto/system-product.mapper';
+import { SystemProductResDTO } from '../../../../integrations/create-order/dto/system-product-res.dto';
+import { FromSystemProductsResDTO } from '../dto/from-system-products-res.dto';
+import { CreateOrderBaseClass } from '../../../../integrations/create-order/interface/create-order.base-class';
+import { findAllGoodsPayload } from '../api-payloads/find-all-goods.payload';
+import { mapToSystemProductResDto } from '../dto/system-product.mapper';
 
 @Injectable()
 export class CreateOrderService extends CreateOrderBaseClass {
@@ -46,9 +45,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
         }
     }
 
-    public async createSystemOrder(
-        productsArr: ProductResDTO[],
-    ): Promise<boolean> {
+    public async createSystemOrder(productsIds: number[]): Promise<boolean> {
         return true;
     }
 }
