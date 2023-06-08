@@ -12,6 +12,8 @@ export const temporaryAbUserSetHeddingsTranslation = {
     'Cena net': 'netPrice',
 };
 
+export const temporaryAbContractorId = 95427668;
+
 // to translate what is above before putting it into DB
 // private mapToAppHeadings(
 //     supplierParams: Record<string, string>,

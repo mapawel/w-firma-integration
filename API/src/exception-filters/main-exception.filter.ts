@@ -24,12 +24,12 @@ export class MainExceptionFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
 
-        console.log('exception.cause ----> ', exception.cause);
+        // console.log('exception.cause ----> ', exception.cause);
 
         const status =
             exception instanceof HttpException ? exception.getStatus() : 500;
 
-        this.logger.error(this.buildFullExceptionMessage(exception));
+        // this.logger.error(this.buildFullExceptionMessage(exception));
 
         if (exception instanceof NotFoundException)
             return response.status(status).json(exception.getResponse());
