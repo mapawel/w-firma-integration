@@ -53,7 +53,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
         }
     }
 
-    public async createSystemOrder(productsIds: number[]): Promise<boolean> {
+    public async createSystemOrder(productsIds: number[]): Promise<string[]> {
         const productErrors: string[] = [];
 
         const productsToOrder: Product[] = await this.productRepository
@@ -72,9 +72,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
         if (productErrors.length > 0)
             throw new BadRequestException(productErrors);
 
-        await this.splitUploadOrdersToSystem(productsToOrder);
-
-        return false;
+        return await this.splitUploadOrdersToSystem(productsToOrder);
     }
 
     private checkIfErrors(product: Product): null | string {
@@ -93,102 +91,57 @@ export class CreateOrderService extends CreateOrderBaseClass {
 
     private async splitUploadOrdersToSystem(
         products: Product[],
-    ): Promise<boolean> {
-        let currentInvoiceNumber: string | null = null;
-        const currentInvoiceProducts: Product[] = [];
-
-        for (const product of products) {
-            if (currentInvoiceNumber === null) {
-                currentInvoiceNumber = product.invoice.number;
-            } else if (currentInvoiceNumber !== product.invoice.number) {
-                await this.uploadOrderToSystem(currentInvoiceProducts);
-                currentInvoiceProducts.length = 0;
-                currentInvoiceNumber = product.invoice.number;
-            }
-
-            currentInvoiceProducts.push(product);
-        }
-
-        await this.uploadOrderToSystem(currentInvoiceProducts);
-
-        return true;
-    }
-
-    private async uploadOrderToSystem(products: Product[]): Promise<boolean> {
+    ): Promise<string[]> {
         try {
-            const formatDate = (currentDate: Date): string => {
-                const year = currentDate.getFullYear();
-                const month = String(currentDate.getMonth() + 1).padStart(
-                    2,
-                    '0',
-                );
-                const day = String(currentDate.getDate()).padStart(2, '0');
+            let currentInvoiceNumber: string | null = null;
+            const currentInvoiceProducts: Product[] = [];
+            const uploadInvoiceStatus: string[] = [];
 
-                return `${year}-${month}-${day}`;
+            const uploadInvoiceProductsAndSaveResults = async (
+                currentInvoiceProducts: Product[],
+            ) => {
+                const invoiceFeedback: string =
+                    await this.uploadOneInvoiceOrderToSystem(
+                        currentInvoiceProducts,
+                    );
+                uploadInvoiceStatus.push(invoiceFeedback);
+                currentInvoiceProducts.length = 0;
             };
 
-            const buildRequestData = (products: Product[]) => `
-            {
-                "api": {
-                    "warehouse_documents": {
-                        "0": {
-                            "warehouse_document": {
-                                "date": "${formatDate(new Date())}",
-                                "currency": "${products[0].currency}",
-                                "contractor": {
-                                    "id": ${temporaryAbContractorId}
-                                },
-                                "description": "${products[0].invoice.number}",
-                                "warehouse_document_contents": {
-                                    "0": {
-                                        "warehouse_document_content": {
-                                            "name": "${
-                                                products[0].productCode?.PN
-                                            } / ${products[0].supplierCode}",
-                                            "unit_count": ${
-                                                products[0].quantity
-                                            },
-                                            "price": ${products[0].netPrice},
-                                            "good": {
-                                                "id": ${this.systemProductsMap.get(
-                                                    products[0].productCode
-                                                        ?.PN as string,
-                                                )}
-                                            },
-                                            "unit": "szt."
-                                        }
-                                    },
-                                    "1": {
-                                        "warehouse_document_content": {
-                                            "name": "b",
-                                            "unit_count": ${
-                                                products[0].quantity
-                                            },
-                                            "price": ${products[0].netPrice},
-                                            "good": {
-                                                "id": ${this.systemProductsMap.get(
-                                                    products[0].productCode
-                                                        ?.PN as string,
-                                                )}
-                                            },
-                                            "unit": "szt."
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+            for (const product of products) {
+                if (currentInvoiceNumber === null) {
+                    currentInvoiceNumber = product.invoice.number;
+                } else if (currentInvoiceNumber !== product.invoice.number) {
+                    await uploadInvoiceProductsAndSaveResults(
+                        currentInvoiceProducts,
+                    );
+                    currentInvoiceNumber = product.invoice.number;
                 }
-            }
-            `;
 
+                currentInvoiceProducts.push(product);
+            }
+
+            await uploadInvoiceProductsAndSaveResults(currentInvoiceProducts);
+
+            return uploadInvoiceStatus;
+        } catch (err) {
+            throw new Error('Problem with uploading orders to W-Firma', {
+                cause: err,
+            });
+        }
+    }
+
+    private async uploadOneInvoiceOrderToSystem(
+        products: Product[],
+    ): Promise<string> {
+        try {
             const { data } = await axios.post(
                 `${this.configService.get(
                     'W_FIRMA_API_URL',
                 )}${this.configService.get(
                     'W_FIRMA_CREATE_ORDER_URL',
                 )}${this.configService.get('W_FIRMA_COMPANY_ID')}`,
-                buildRequestData(products),
+                this.buildRequestData(products),
                 {
                     headers: {
                         accessKey: this.configService.get('ACCESS_KEY', ''),
@@ -198,14 +151,68 @@ export class CreateOrderService extends CreateOrderBaseClass {
                 },
             );
 
-            console.log('data ----> ', data);
-
-            return true;
+            return data?.status?.code === 'OK'
+                ? products[0].invoice.number
+                : `Fail for invoice: ${products[0].invoice.number} -> ${data?.status?.code}`;
         } catch (err) {
-            console.log('err ----> ', JSON.stringify(err, null, 2));
-            throw new Error('problem with uploading order to w-firma', {
-                cause: err,
-            });
+            throw new Error(
+                `Problem with uploading order to W-Firma for invocie: ${products[0].invoice.number}`,
+                {
+                    cause: err,
+                },
+            );
         }
+    }
+
+    private formatDate(currentDate: Date): string {
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    }
+
+    private buildRequestData(products: Product[]): string {
+        return `
+        {
+            "api": {
+                "warehouse_documents": {
+                    "0": {
+                        "warehouse_document": {
+                            "date": "${this.formatDate(new Date())}",
+                            "currency": "${products[0].currency}",
+                            "contractor": {
+                                "id": ${temporaryAbContractorId}
+                            },
+                            "description": "${products[0].invoice.number}",
+                            "warehouse_document_contents": {
+
+                                ${products.map(
+                                    (product: Product, index: number) => `
+                                "${index}": {
+                                    "warehouse_document_content": {
+                                        "name": "${product.productCode?.PN} / ${
+                                        product.supplierCode
+                                    }",
+                                        "unit_count": ${product.quantity},
+                                        "price": ${product.netPrice},
+                                        "good": {
+                                            "id": ${this.systemProductsMap.get(
+                                                product.productCode
+                                                    ?.PN as string,
+                                            )}
+                                        },
+                                        "unit": "szt."
+                                    }
+                                }
+                                `,
+                                )}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        `;
     }
 }

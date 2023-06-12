@@ -25,5 +25,5 @@ export abstract class CreateOrderBaseClass {
 
     public abstract refreshProductsFromSystem(): Promise<boolean>;
     public abstract getCurrentSystemProducts(): Promise<SystemProductResDTO[]>;
-    public abstract createSystemOrder(productsIds: number[]): Promise<boolean>;
+    public abstract createSystemOrder(productsIds: number[]): Promise<string[]>;
 }

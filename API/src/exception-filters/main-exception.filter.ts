@@ -3,33 +3,21 @@ import {
     Catch,
     ArgumentsHost,
     HttpException,
-    Logger,
-    LoggerService,
     BadRequestException,
     NotFoundException,
-    UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { Routes } from 'src/routes/Routes.enum';
 
 @Catch()
 export class MainExceptionFilter implements ExceptionFilter {
-    private readonly logger: LoggerService = new Logger(
-        MainExceptionFilter.name,
-    );
-    private readonly configService: ConfigService = new ConfigService();
-
     catch(exception: Error, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
 
-        // console.log('exception.cause ----> ', exception.cause);
-
         const status =
             exception instanceof HttpException ? exception.getStatus() : 500;
 
-        // this.logger.error(this.buildFullExceptionMessage(exception));
+        this.logException(exception);
 
         if (exception instanceof NotFoundException)
             return response.status(status).json(exception.getResponse());
@@ -45,20 +33,19 @@ export class MainExceptionFilter implements ExceptionFilter {
         });
     }
 
-    private buildFullExceptionMessage(exception: Error): string {
+    private logException(exception: Error): void {
         const errorResponse =
             exception instanceof BadRequestException
                 ? exception.getResponse()
                 : null;
 
-        return `
-        EXCEPTION: ${exception},
-        STACK: ${exception.stack},
-        CAUSE?: ${exception.cause},
-        ${
-            errorResponse &&
-            `ERROR-RESPONSE: ${JSON.stringify(errorResponse, null, 2)}`
-        }
-        `;
+        console.log(' --->   EXCEPTION: ', exception.message);
+        console.log(' --->   STACK: ', exception.stack);
+        console.log(' --->   CAUSE?: ', exception.cause);
+        if (errorResponse)
+            console.log(
+                ' --->   ERROR-RESPONSE?: ',
+                JSON.stringify(errorResponse, null, 2),
+            );
     }
 }

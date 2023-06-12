@@ -17,7 +17,7 @@ export class CreateOrderController {
     @Post()
     public async createSystemOrder(
         @Body() productIds: number[],
-    ): Promise<boolean> {
+    ): Promise<string[]> {
         return await this.createOrderService.createSystemOrder(productIds);
     }
 }
