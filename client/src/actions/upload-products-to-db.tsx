@@ -8,7 +8,7 @@ import { APIRoutes } from '@/routes/api';
 import { UploadResDTO } from '@/views/Upload/Result/Upload-result.type';
 import { BulkUploadResDTO } from '@/views/Upload/Result/types/bulk-upload-res.dto';
 
-export const submitUpladProductdToDB = async (
+export const upladProductdToDB = async (
     uploadData: UploadResDTO,
 ): Promise<BulkUploadResDTO | void> => {
     try {
@@ -30,7 +30,7 @@ export const submitUpladProductdToDB = async (
                 mainInfo: 'Coś nie tak z wysłanymi danymi. Wskazówki:',
                 detailsArr: err.response.data.message,
             });
-        setAppData({
+        return setAppData({
             mainInfo: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
             detailsArr: [],
         });

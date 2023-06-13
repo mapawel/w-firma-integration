@@ -1,7 +1,7 @@
 import { FC, useRef } from 'react';
 import NavTemplate from '@/components/templates/Nav-template';
 import { Label } from '@/components/atoms/Label';
-import { submitUpladFileForm } from '@/actions/submit-upload-file-form';
+import { upladFileForm } from '@/actions/upload-file-form';
 import { Input } from '@/views/Upload/Input.enum';
 import { Supplier } from '@/views/Upload/Supplier.enum';
 import { Cur } from './Cur.enum';
@@ -107,7 +107,7 @@ const UploadView: FC = () => {
                                 name={Input.FILE}
                                 id={Input.FILE}
                                 onChange={() =>
-                                    submitUpladFileForm(formRef, navigate)
+                                    upladFileForm(formRef, navigate)
                                 }
                             />
                             <label

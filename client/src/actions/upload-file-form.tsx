@@ -10,7 +10,7 @@ import { ClientRoutes } from '@/routes/client';
 import { NavigateFunction } from 'react-router-dom';
 import { UploadResDTO } from '@/views/Upload/Result/Upload-result.type';
 
-export const submitUpladFileForm = async (
+export const upladFileForm = async (
     formRef: React.RefObject<HTMLFormElement>,
     navigate: NavigateFunction,
 ) => {
@@ -58,7 +58,7 @@ export const submitUpladFileForm = async (
                     'Coś nie tak z plikiem lub ustawieniami jak plik ma być czytany. Wskazówki:',
                 detailsArr: err.response.data.message,
             });
-        setAppData({
+        return setAppData({
             mainInfo: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
             detailsArr: [],
         });

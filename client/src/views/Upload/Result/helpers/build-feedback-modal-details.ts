@@ -1,6 +1,8 @@
-import { BulkUploadResDTO } from "../types/bulk-upload-res.dto";
+import { BulkUploadResDTO } from '../types/bulk-upload-res.dto';
 
-export const buildFeedbackModalDetails = (responseData: BulkUploadResDTO): string[] => {
+export const buildFeedbackModalDetails = (
+    responseData: BulkUploadResDTO,
+): string[] => {
     const detailsArr: string[] = [];
     detailsArr.push(`Dodana liczba faktur: ${responseData.invoicesCount}`);
     detailsArr.push(

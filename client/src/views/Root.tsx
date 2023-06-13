@@ -3,8 +3,6 @@ import AuthProvider from '@/providers/auth/Auth.provider';
 import Routing from '@/components/templates/Routing';
 
 function Root(): JSX.Element {
-
-
     return (
         <AppStatusProvider>
             <AuthProvider>

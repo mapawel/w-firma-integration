@@ -6,4 +6,5 @@ export enum APIRoutes {
     UPLOAD_FILE = '/api/upload',
     UPLOAD_PRODUCTS = '/api/products',
     UPLOAD_ORDERS = '/api/orders',
+    REFRESH_CODE_IDS = '/api/orders/refresh',
 }

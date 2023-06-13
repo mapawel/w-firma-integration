@@ -1,4 +1,7 @@
-import { submitUpladProductdToDB } from '@/actions/submit-upload-products-to-db';
+import { useEffect } from 'react';
+import { upladProductdToDB } from '@/actions/upload-products-to-db';
+import { upladProductsForOrders } from '@/actions/upload-product-for-orders';
+import { refreshCodeIds } from '@/actions/refresh-code-ids';
 import ProductTable from '@/components/organisms/Product-table';
 import NavTemplate from '@/components/templates/Nav-template';
 import { toFixedNum } from '@/helpers/to-fixed-num';
@@ -26,13 +29,12 @@ const ResultView: FC = () => {
     } = state || {};
 
     const handleSaveToDB = async () => {
-        const responseData: BulkUploadResDTO | void =
-            await submitUpladProductdToDB({
-                data,
-                totalPositions,
-                totalQty,
-                totalValue,
-            });
+        const responseData: BulkUploadResDTO | void = await upladProductdToDB({
+            data,
+            totalPositions,
+            totalQty,
+            totalValue,
+        });
 
         if (!responseData) return;
         setAppData({
@@ -47,18 +49,33 @@ const ResultView: FC = () => {
     };
 
     const handleCreateOrders = async () => {
-        const responseData: BulkUploadResDTO | void =
-            await submitUpladProductdToDB({
-                data,
-                totalPositions,
-                totalQty,
-                totalValue,
-            });
+        const responseData: BulkUploadResDTO | void = await upladProductdToDB({
+            data,
+            totalPositions,
+            totalQty,
+            totalValue,
+        });
 
         if (!responseData) return;
+        if (!responseData.canAutoProceed) {
+            return setAppData({
+                mainInfo:
+                    'Produkty dodano do bazy danych, ale napotkanu problemy. Nie można było od razu stworzyć zamówień w W-Firma.',
+                detailsArr: buildFeedbackModalDetails(responseData),
+                callbackClearInfo: () => {
+                    cleanAppData();
+                    navigate('/', { replace: true });
+                },
+                callbackClearInfoLabel: 'Wróć do strony głównej',
+            });
+        }
+
+        const createOrdersResult: string[] | void =
+            await upladProductsForOrders(responseData.productIds);
+        if (!createOrdersResult) return;
         setAppData({
-            mainInfo: 'Pomyślnie dodano produkty do bazy danych.',
-            detailsArr: buildFeedbackModalDetails(responseData),
+            mainInfo: 'Informacja o statusie dodawania zamówień do W-Firma:',
+            detailsArr: createOrdersResult,
             callbackClearInfo: () => {
                 cleanAppData();
                 navigate('/', { replace: true });
@@ -66,6 +83,10 @@ const ResultView: FC = () => {
             callbackClearInfoLabel: 'Wróć do strony głównej',
         });
     };
+
+    useEffect(() => {
+        refreshCodeIds();
+    }, []);
 
     return (
         <>
