@@ -10,7 +10,7 @@ import { ClientRoutes } from '@/routes/client';
 import { NavigateFunction } from 'react-router-dom';
 import { UploadResDTO } from '@/views/Upload/Result/Upload-result.type';
 
-export const submitUpladForm = async (
+export const submitUpladFileForm = async (
     formRef: React.RefObject<HTMLFormElement>,
     navigate: NavigateFunction,
 ) => {
@@ -32,7 +32,7 @@ export const submitUpladForm = async (
             });
 
         const { data }: { data: UploadResDTO } = await axios.post(
-            APIRoutes.UPLOAD_POST_FILE,
+            APIRoutes.UPLOAD_FILE,
             form,
             {
                 headers: {

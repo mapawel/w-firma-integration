@@ -31,7 +31,9 @@ const ModalTemplate: FC<IProps> = ({ data }) => (
                             : cleanAppData
                     }
                 >
-                    CLOSE
+                    {data.callbackClearInfoLabel
+                        ? data.callbackClearInfoLabel
+                        : 'CLOSE'}
                 </button>
             </div>
         </div>

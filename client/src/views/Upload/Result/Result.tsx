@@ -1,11 +1,17 @@
+import { submitUpladProductdToDB } from '@/actions/submit-upload-products-to-db';
 import ProductTable from '@/components/organisms/Product-table';
 import NavTemplate from '@/components/templates/Nav-template';
+import { toFixedNum } from '@/helpers/to-fixed-num';
+import { ClientRoutes } from '@/routes/client';
 import { FC } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { UploadResDTO } from './Upload-result.type';
-import { toFixedNum } from '@/helpers/to-fixed-num';
-import { ClientRoutes } from '@/routes/client';
-import { submitUpladedData } from '@/actions/submit-uploaded-data';
+import {
+    cleanAppData,
+    setAppData,
+} from '@/providers/app-status/use-app-status';
+import { buildFeedbackModalDetails } from './helpers/build-feedback-modal-details';
+import { BulkUploadResDTO } from './types/bulk-upload-res.dto';
 
 const ResultView: FC = () => {
     const navigate = useNavigate();
@@ -18,6 +24,48 @@ const ResultView: FC = () => {
             totalValue = 0,
         } = {},
     } = state || {};
+
+    const handleSaveToDB = async () => {
+        const responseData: BulkUploadResDTO | void =
+            await submitUpladProductdToDB({
+                data,
+                totalPositions,
+                totalQty,
+                totalValue,
+            });
+
+        if (!responseData) return;
+        setAppData({
+            mainInfo: 'Pomyślnie dodano produkty do bazy danych.',
+            detailsArr: buildFeedbackModalDetails(responseData),
+            callbackClearInfo: () => {
+                cleanAppData();
+                navigate('/', { replace: true });
+            },
+            callbackClearInfoLabel: 'Wróć do strony głównej',
+        });
+    };
+
+    const handleCreateOrders = async () => {
+        const responseData: BulkUploadResDTO | void =
+            await submitUpladProductdToDB({
+                data,
+                totalPositions,
+                totalQty,
+                totalValue,
+            });
+
+        if (!responseData) return;
+        setAppData({
+            mainInfo: 'Pomyślnie dodano produkty do bazy danych.',
+            detailsArr: buildFeedbackModalDetails(responseData),
+            callbackClearInfo: () => {
+                cleanAppData();
+                navigate('/', { replace: true });
+            },
+            callbackClearInfoLabel: 'Wróć do strony głównej',
+        });
+    };
 
     return (
         <>
@@ -57,22 +105,15 @@ const ResultView: FC = () => {
                 <div className="mb-10 flex gap-4">
                     <button
                         className="rounded-md bg-primary px-5 py-2.5 text-sm text-white transition duration-150 hover:bg-primaryHover"
-                        onClick={() =>
-                            submitUpladedData({
-                                data,
-                                totalPositions,
-                                totalQty,
-                                totalValue,
-                            })
-                        }
+                        onClick={handleCreateOrders}
                     >
-                        ŁADUJ DO W-FIRMY!
+                        ŁADUJ ZAMÓWIENIE DO W-FIRMY!
                     </button>
                     <button
                         className="rounded-md bg-secondary px-5 py-2.5 text-sm text-white transition duration-150 hover:bg-secondaryLight"
-                        onClick={() => alert(1)}
+                        onClick={handleSaveToDB}
                     >
-                        ZAPISZ I WRÓĆ
+                        TYLKO ZAPISZ W BAZIE
                     </button>
                     <button
                         className="rounded-md bg-cta px-5 py-2.5 text-sm text-white transition duration-150 hover:bg-ctaHover"
