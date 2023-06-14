@@ -1,7 +1,5 @@
-import { useEffect } from 'react';
 import { upladProductdToDB } from '@/actions/upload-products-to-db';
 import { upladProductsForOrders } from '@/actions/upload-product-for-orders';
-import { refreshCodeIds } from '@/actions/refresh-code-ids';
 import ProductTable from '@/components/organisms/Product-table';
 import NavTemplate from '@/components/templates/Nav-template';
 import { toFixedNum } from '@/helpers/to-fixed-num';
@@ -83,10 +81,6 @@ const ResultView: FC = () => {
             callbackClearInfoLabel: 'Wróć do strony głównej',
         });
     };
-
-    useEffect(() => {
-        refreshCodeIds();
-    }, []);
 
     return (
         <>

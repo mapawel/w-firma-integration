@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react';
+import { FC, useRef, useEffect } from 'react';
 import NavTemplate from '@/components/templates/Nav-template';
 import { Label } from '@/components/atoms/Label';
 import { upladFileForm } from '@/actions/upload-file-form';
@@ -7,10 +7,15 @@ import { Supplier } from '@/views/Upload/Supplier.enum';
 import { Cur } from './Cur.enum';
 import { uploadInstruction } from '@/assets/text/upload-instruction.text';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { refreshCodeIds } from '@/actions/refresh-code-ids';
 
 const UploadView: FC = () => {
     const formRef = useRef<HTMLFormElement>(null);
     const navigate: NavigateFunction = useNavigate();
+
+    useEffect(() => {
+        refreshCodeIds();
+    }, []);
 
     return (
         <NavTemplate>

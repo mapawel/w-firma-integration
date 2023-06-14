@@ -6,7 +6,6 @@ import { ConfigService } from '@nestjs/config';
 import { SystemProductResDTO } from '../../../../integrations/create-order/dto/system-product-res.dto';
 import { FromSystemProductsResDTO } from '../dto/from-system-products-res.dto';
 import { CreateOrderBaseClass } from '../../../../integrations/create-order/interface/create-order.base-class';
-import { findAllGoodsPayload } from '../api-payloads/find-all-goods.payload';
 import { mapToSystemProductResDto } from '../dto/system-product.mapper';
 import { Product } from '../../../../product/entity/Product.entity';
 import { temporaryAbContractorId } from 'data/ab.data';
@@ -36,7 +35,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
                         'W_FIRMA_FIND_GOODS_URL',
                     )}${this.configService.get('W_FIRMA_COMPANY_ID')}`,
                     {
-                        data: findAllGoodsPayload,
+                        data: this.buildRequestGetProducts(),
                         headers: {
                             accessKey: this.configService.get('ACCESS_KEY', ''),
                             secretKey: this.configService.get('SECRET_KEY', ''),
@@ -63,6 +62,11 @@ export class CreateOrderService extends CreateOrderBaseClass {
             .where('product.id IN (:...productsIds)', { productsIds })
             .orderBy('invoice.number', 'ASC')
             .getMany();
+
+        if (!productsToOrder.length)
+            throw new Error(
+                'No passed products found in DB to generate orders with them!',
+            );
 
         for (const product of productsToOrder) {
             const productError: string | null = this.checkIfErrors(product);
@@ -170,6 +174,24 @@ export class CreateOrderService extends CreateOrderBaseClass {
         const day = String(currentDate.getDate()).padStart(2, '0');
 
         return `${year}-${month}-${day}`;
+    }
+
+    private buildRequestGetProducts(): string {
+        return `
+            {
+                "api": {
+                "goods": {
+                    "parameters": {
+                    "page": 1,
+                    "limit": 10000,
+                    "fields": {
+                        "field": "id",
+                        "field": "code"
+                    }
+                    }
+                }
+                }
+            }`;
     }
 
     private buildRequestData(products: Product[]): string {
