@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ProductController } from './controller/product.controller';
-import { ProductService } from './service/product.service';
+import { ProductFetchService } from './services/product-fetch.service';
+import { ProductUploadService } from './services/product-upload.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entity/Product.entity';
 import { Invoice } from '../invoice/entity/Invoice.entity';
@@ -11,6 +12,11 @@ import { CreateOrderService } from '../integrated-systems/wfirma/create-order/se
 @Module({
     imports: [TypeOrmModule.forFeature([Product, Invoice, CodeTranslation])],
     controllers: [ProductController],
-    providers: [ProductService, InvoiceService, CreateOrderService],
+    providers: [
+        ProductFetchService,
+        ProductUploadService,
+        InvoiceService,
+        CreateOrderService,
+    ],
 })
 export class ProductModule {}

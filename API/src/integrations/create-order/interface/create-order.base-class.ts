@@ -1,3 +1,4 @@
+import { CreateOrderResDTO } from 'src/integrated-systems/wfirma/create-order/dto/create-order-res.dto';
 import { SystemProductResDTO } from '../dto/system-product-res.dto';
 
 export abstract class CreateOrderBaseClass {
@@ -25,5 +26,7 @@ export abstract class CreateOrderBaseClass {
 
     public abstract refreshProductsFromSystem(): Promise<boolean>;
     public abstract getCurrentSystemProducts(): Promise<SystemProductResDTO[]>;
-    public abstract createSystemOrder(productsIds: number[]): Promise<string[]>;
+    public abstract createSystemOrder(
+        productsIds: number[],
+    ): Promise<CreateOrderResDTO>;
 }

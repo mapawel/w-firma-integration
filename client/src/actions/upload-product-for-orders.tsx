@@ -5,22 +5,20 @@ import {
     stopLoading,
 } from '@/providers/app-status/use-app-status';
 import { APIRoutes } from '@/routes/api';
+import { CreateOrderResDTO } from '@/views/Upload/Result/types/create-order-res.dto';
 
 export const upladProductsForOrders = async (
     productIds: number[],
-): Promise<string[] | void> => {
+): Promise<CreateOrderResDTO | void> => {
     try {
         startLoading();
 
-        const { data: responseData }: { data: string[] } = await axios.post(
-            APIRoutes.UPLOAD_ORDERS,
-            productIds,
-            {
+        const { data: responseData }: { data: CreateOrderResDTO } =
+            await axios.post(APIRoutes.UPLOAD_ORDERS, productIds, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            },
-        );
+            });
         stopLoading();
         return responseData;
     } catch (err: any) {

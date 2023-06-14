@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { SystemProductResDTO } from '../../../../integrations/create-order/dto/system-product-res.dto';
 import { FromSystemProductsResDTO } from '../dto/from-system-products-res.dto';
@@ -9,6 +9,8 @@ import { CreateOrderBaseClass } from '../../../../integrations/create-order/inte
 import { mapToSystemProductResDto } from '../dto/system-product.mapper';
 import { Product } from '../../../../product/entity/Product.entity';
 import { temporaryAbContractorId } from 'data/ab.data';
+import { CreateOrderResDTO } from '../dto/create-order-res.dto';
+import { Status } from 'src/product/status/status.enum';
 
 @Injectable()
 export class CreateOrderService extends CreateOrderBaseClass {
@@ -19,6 +21,9 @@ export class CreateOrderService extends CreateOrderBaseClass {
     ) {
         super();
     }
+    private currentInvoiceNumber: string | null = null;
+    private currentInvoiceProducts: Product[] = [];
+    private uploadInvoiceStatus: string[] = [];
 
     public async refreshProductsFromSystem(): Promise<boolean> {
         this.updateSystemProductsMap(await this.getCurrentSystemProducts());
@@ -52,8 +57,12 @@ export class CreateOrderService extends CreateOrderBaseClass {
         }
     }
 
-    public async createSystemOrder(productsIds: number[]): Promise<string[]> {
+    public async createSystemOrder(
+        productsIds: number[],
+    ): Promise<CreateOrderResDTO> {
         const productErrors: string[] = [];
+
+        this.resetClassFields();
 
         const productsToOrder: Product[] = await this.productRepository
             .createQueryBuilder('product')
@@ -76,19 +85,25 @@ export class CreateOrderService extends CreateOrderBaseClass {
         if (productErrors.length > 0)
             throw new BadRequestException(productErrors);
 
-        return await this.splitUploadOrdersToSystem(productsToOrder);
+        const createOrdersInfo: string[] = await this.splitUploadOrdersToSystem(
+            productsToOrder,
+        );
+
+        return {
+            info: createOrdersInfo,
+        };
     }
 
     private checkIfErrors(product: Product): null | string {
         if (!product.productCode)
-            return `Dla produktu ${product.supplierCode} nie ma tłumaczenia kodu na PN, który byłby do wyszukania w W-Firma`;
+            return `Dla produktu ${product.supplierCode} nie ma tłumaczenia kodu na PN.`;
 
         const systemProduct: string | undefined = this.systemProductsMap.get(
             product.productCode.PN,
         );
 
         if (!systemProduct)
-            return `Dla produktu ${product.supplierCode}, tłumaczenie na PN: ${product.productCode.PN} nie można odszukać produktu w W-Firma. Jeśli dodałeś go niedawno, spróbuj odświeżyć stronę.`;
+            return `Dla produktu ${product.supplierCode}, PN: ${product.productCode.PN} nie można odszukać id produktu w W-Firma. Jeśli dodałeś produkt w W-firma niedawno, spróbuj odświeżyć stronę.`;
 
         return null;
     }
@@ -97,42 +112,40 @@ export class CreateOrderService extends CreateOrderBaseClass {
         products: Product[],
     ): Promise<string[]> {
         try {
-            let currentInvoiceNumber: string | null = null;
-            const currentInvoiceProducts: Product[] = [];
-            const uploadInvoiceStatus: string[] = [];
-
-            const uploadInvoiceProductsAndSaveResults = async (
-                currentInvoiceProducts: Product[],
-            ) => {
-                const invoiceFeedback: string =
-                    await this.uploadOneInvoiceOrderToSystem(
-                        currentInvoiceProducts,
-                    );
-                uploadInvoiceStatus.push(invoiceFeedback);
-                currentInvoiceProducts.length = 0;
-            };
-
             for (const product of products) {
-                if (currentInvoiceNumber === null) {
-                    currentInvoiceNumber = product.invoice.number;
-                } else if (currentInvoiceNumber !== product.invoice.number) {
-                    await uploadInvoiceProductsAndSaveResults(
-                        currentInvoiceProducts,
+                if (this.currentInvoiceNumber === null) {
+                    this.currentInvoiceNumber = product.invoice.number;
+                } else if (
+                    this.currentInvoiceNumber !== product.invoice.number
+                ) {
+                    await this.uploadInvoiceProductsAndResetArr(
+                        this.currentInvoiceProducts,
                     );
-                    currentInvoiceNumber = product.invoice.number;
+                    this.currentInvoiceNumber = product.invoice.number;
                 }
 
-                currentInvoiceProducts.push(product);
+                this.currentInvoiceProducts.push(product);
             }
 
-            await uploadInvoiceProductsAndSaveResults(currentInvoiceProducts);
+            await this.uploadInvoiceProductsAndResetArr(
+                this.currentInvoiceProducts,
+            );
 
-            return uploadInvoiceStatus;
+            return this.uploadInvoiceStatus;
         } catch (err) {
             throw new Error('Problem with uploading orders to W-Firma', {
                 cause: err,
             });
         }
+    }
+
+    private async uploadInvoiceProductsAndResetArr(
+        currentInvoiceProducts: Product[],
+    ): Promise<void> {
+        const invoiceFeedback: string =
+            await this.uploadOneInvoiceOrderToSystem(currentInvoiceProducts);
+        this.uploadInvoiceStatus.push(invoiceFeedback);
+        currentInvoiceProducts.length = 0;
     }
 
     private async uploadOneInvoiceOrderToSystem(
@@ -155,9 +168,33 @@ export class CreateOrderService extends CreateOrderBaseClass {
                 },
             );
 
-            return data?.status?.code === 'OK'
-                ? products[0].invoice.number
-                : `Fail for invoice: ${products[0].invoice.number} -> ${data?.status?.code}`;
+            if (data?.status?.code === 'OK') {
+                await this.productRepository.update(
+                    {
+                        id: In(products.map((product: Product) => product.id)),
+                    },
+                    { status: Status.SUCCESS },
+                );
+
+                return `Sukces dla faktury: ${
+                    products[0].invoice.number
+                }. Ilość produktów na zamówieniu: ${
+                    products.length
+                }. Wartość netto faktury: ${products.reduce(
+                    (acc: number, curr: Product) =>
+                        acc + curr.netPrice * curr.quantity,
+                    0,
+                )} ${products[0].currency}`;
+            } else {
+                await this.productRepository.update(
+                    {
+                        id: In(products.map((product: Product) => product.id)),
+                    },
+                    { status: Status.ERROR },
+                );
+
+                return `Błąd dla faktury: ${products[0].invoice.number} -> ${data?.status?.code}`;
+            }
         } catch (err) {
             throw new Error(
                 `Problem with uploading order to W-Firma for invocie: ${products[0].invoice.number}`,
@@ -236,5 +273,11 @@ export class CreateOrderService extends CreateOrderBaseClass {
             }
         }
         `;
+    }
+
+    private resetClassFields(): void {
+        this.currentInvoiceNumber = null;
+        this.currentInvoiceProducts.length = 0;
+        this.uploadInvoiceStatus.length = 0;
     }
 }

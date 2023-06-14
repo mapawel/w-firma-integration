@@ -13,7 +13,7 @@ export const refreshCodeIds = async (): Promise<boolean | void> => {
         const { data: responseData }: { data: boolean } = await axios.get(
             APIRoutes.REFRESH_CODE_IDS,
         );
-        
+
         stopLoading();
         return responseData;
     } catch (err: any) {

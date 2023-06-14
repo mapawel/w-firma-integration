@@ -1,8 +1,6 @@
 import { upladProductdToDB } from '@/actions/upload-products-to-db';
 import { upladProductsForOrders } from '@/actions/upload-product-for-orders';
-import ProductTable from '@/components/organisms/Product-table';
 import NavTemplate from '@/components/templates/Nav-template';
-import { toFixedNum } from '@/helpers/to-fixed-num';
 import { ClientRoutes } from '@/routes/client';
 import { FC } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
@@ -11,8 +9,10 @@ import {
     cleanAppData,
     setAppData,
 } from '@/providers/app-status/use-app-status';
-import { buildFeedbackModalDetails } from './helpers/build-feedback-modal-details';
+import { setAppDataAsDBUpload } from './helpers/set-app-data-db-upload';
 import { BulkUploadResDTO } from './types/bulk-upload-res.dto';
+import { CreateOrderResDTO } from './types/create-order-res.dto';
+import { UploadResultInside } from '@/components/organisms/Upload-result-inside';
 
 const ResultView: FC = () => {
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ const ResultView: FC = () => {
         } = {},
     } = state || {};
 
-    const handleSaveToDB = async () => {
+    const handleSaveToDB = async (): Promise<void> => {
         const responseData: BulkUploadResDTO | void = await upladProductdToDB({
             data,
             totalPositions,
@@ -35,18 +35,14 @@ const ResultView: FC = () => {
         });
 
         if (!responseData) return;
-        setAppData({
-            mainInfo: 'Pomyślnie dodano produkty do bazy danych.',
-            detailsArr: buildFeedbackModalDetails(responseData),
-            callbackClearInfo: () => {
-                cleanAppData();
-                navigate('/', { replace: true });
-            },
-            callbackClearInfoLabel: 'Wróć do strony głównej',
-        });
+        setAppDataAsDBUpload(
+            'Pomyślnie dodano produkty do bazy danych.',
+            responseData,
+            navigate,
+        );
     };
 
-    const handleCreateOrders = async () => {
+    const handleCreateOrders = async (): Promise<void> => {
         const responseData: BulkUploadResDTO | void = await upladProductdToDB({
             data,
             totalPositions,
@@ -56,24 +52,19 @@ const ResultView: FC = () => {
 
         if (!responseData) return;
         if (!responseData.canAutoProceed) {
-            return setAppData({
-                mainInfo:
-                    'Produkty dodano do bazy danych, ale napotkanu problemy. Nie można było od razu stworzyć zamówień w W-Firma.',
-                detailsArr: buildFeedbackModalDetails(responseData),
-                callbackClearInfo: () => {
-                    cleanAppData();
-                    navigate('/', { replace: true });
-                },
-                callbackClearInfoLabel: 'Wróć do strony głównej',
-            });
+            return setAppDataAsDBUpload(
+                'Produkty dodano do bazy danych, ale napotkanu problemy. Nie można było od razu stworzyć zamówień w W-Firma.',
+                responseData,
+                navigate,
+            );
         }
 
-        const createOrdersResult: string[] | void =
+        const createOrdersInfo: CreateOrderResDTO | void =
             await upladProductsForOrders(responseData.productIds);
-        if (!createOrdersResult) return;
+        if (!createOrdersInfo) return;
         setAppData({
             mainInfo: 'Informacja o statusie dodawania zamówień do W-Firma:',
-            detailsArr: createOrdersResult,
+            detailsArr: createOrdersInfo.info,
             callbackClearInfo: () => {
                 cleanAppData();
                 navigate('/', { replace: true });
@@ -82,65 +73,20 @@ const ResultView: FC = () => {
         });
     };
 
+    const handleCancel = (): void =>
+        navigate(ClientRoutes.UPLOAD, { replace: true });
+
     return (
         <>
             {!state && <Navigate to="/upload" replace={true} />}
 
             <NavTemplate>
-                <h1 className="mb-4 text-2xl font-semibold">
-                    Odczytano z załadowanego pliku:
-                </h1>
-                <div className="mb-8 flex gap-10">
-                    <div>
-                        <h3 className="text-xl">Dostawca:</h3>
-                        <h3 className="text-xl">Ilość pozycji:</h3>
-                        <h3 className="text-xl">Ilość szt:</h3>
-                        <h3 className="text-xl">Wartość:</h3>
-                    </div>
-                    <div>
-                        <p className="text-right text-xl font-semibold">
-                            {data?.[0].supplier.toUpperCase()}
-                        </p>
-                        <p className="text-right text-xl font-semibold">
-                            {toFixedNum(totalPositions, 0)}
-                        </p>
-                        <p className="text-right text-xl font-semibold">
-                            {toFixedNum(totalQty, 0)}
-                        </p>
-                        <div className="relative">
-                            <p className="text-right text-xl font-semibold">
-                                {toFixedNum(totalValue, 2)}
-                            </p>
-                            <span className="absolute left-[100%] top-0 ml-2 text-xl font-semibold">
-                                {data[0]?.currency}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="mb-10 flex gap-4">
-                    <button
-                        className="rounded-md bg-primary px-5 py-2.5 text-sm text-white transition duration-150 hover:bg-primaryHover"
-                        onClick={handleCreateOrders}
-                    >
-                        ŁADUJ ZAMÓWIENIE DO W-FIRMY!
-                    </button>
-                    <button
-                        className="rounded-md bg-secondary px-5 py-2.5 text-sm text-white transition duration-150 hover:bg-secondaryLight"
-                        onClick={handleSaveToDB}
-                    >
-                        TYLKO ZAPISZ W BAZIE
-                    </button>
-                    <button
-                        className="rounded-md bg-cta px-5 py-2.5 text-sm text-white transition duration-150 hover:bg-ctaHover"
-                        onClick={() =>
-                            navigate(ClientRoutes.UPLOAD, { replace: true })
-                        }
-                    >
-                        PRZERWIJ / WYJDŹ
-                    </button>
-                </div>
-                <h2 className="mb-4 text-xl font-semibold">Szczegóły:</h2>
-                <ProductTable data={state?.uploadResult.data} />
+                <UploadResultInside
+                    uploadResult={state.uploadResult}
+                    handleCancel={handleCancel}
+                    handleCreateOrders={handleCreateOrders}
+                    handleSaveToDB={handleSaveToDB}
+                />
             </NavTemplate>
         </>
     );
