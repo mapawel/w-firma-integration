@@ -5,6 +5,7 @@ import { Product } from '../entity/Product.entity';
 import { productResDtoMapper } from '../dto/product-res-dto.mapper';
 import { ProductResDTO } from '../dto/product-res.dto';
 import { ProductQueryParams } from '../types/product-query-params.type';
+import { ProductException } from '../exceptions/product.exception';
 
 @Injectable()
 export class ProductFetchService {
@@ -19,9 +20,9 @@ export class ProductFetchService {
         try {
             const {
                 supplierCode,
+                productCode,
                 currency,
                 supplier,
-                productCode,
                 status,
                 invoice,
                 sortParam,
@@ -51,10 +52,17 @@ export class ProductFetchService {
             return allProducts.map((product: Product) =>
                 productResDtoMapper(product),
             );
-        } catch (error) {
-            throw new Error('Error while getting all products.', {
-                cause: error,
-            });
+        } catch (err) {
+            throw new ProductException(
+                `Error while getting products. Query: ${JSON.stringify(
+                    productQueryParams,
+                    null,
+                    2,
+                )}`,
+                {
+                    cause: err,
+                },
+            );
         }
     }
 }

@@ -1,4 +1,5 @@
 import { Supplier } from '../../supplier/supppliers.enum';
+import { ProductForInvoiceResDTO } from '../../product/dto/product-for-invoice-res.dto';
 
 export class InvoiceResDTO {
     id: number;
@@ -8,5 +9,5 @@ export class InvoiceResDTO {
     addedAt: Date;
     updatedBy: string;
     updatedAt: Date;
-    products: any[]; //TODO to change to DTO
+    products: ProductForInvoiceResDTO[];
 }

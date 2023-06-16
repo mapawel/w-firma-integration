@@ -2,7 +2,6 @@ import * as dotenv from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
-import { corsConfig } from './cors.config';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 
@@ -15,7 +14,6 @@ async function bootstrap() {
 
     app.use(bodyParser({ limit: '10mb' }));
 
-    app.enableCors(corsConfig);
     if (!process.env.COOKIE_SECRET) throw new Error('Cookie secret not set');
     app.use(cookieParser(process.env.COOKIE_SECRET));
 

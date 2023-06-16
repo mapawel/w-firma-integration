@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import axios from 'axios';
 import MockAdapter = require('axios-mock-adapter');
 import { ConfigModule } from '@nestjs/config';
-import { AuthService } from '../Auth.service';
+import { AuthService } from '../auth.service';
 import { Routes } from '../../../routes/Routes.enum';
 import { AuthException } from '../../../auth/exceptions/auth.exception';
 

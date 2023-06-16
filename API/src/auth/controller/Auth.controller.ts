@@ -1,5 +1,5 @@
 import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common';
-import { AuthService } from '../service/Auth.service';
+import { AuthService } from '../service/auth.service';
 import { Routes } from '../../routes/Routes.enum';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';

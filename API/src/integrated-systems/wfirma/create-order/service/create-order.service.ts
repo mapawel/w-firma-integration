@@ -10,7 +10,8 @@ import { mapToSystemProductResDto } from '../dto/system-product.mapper';
 import { Product } from '../../../../product/entity/Product.entity';
 import { temporaryAbContractorId } from 'data/ab.data';
 import { CreateOrderResDTO } from '../dto/create-order-res.dto';
-import { Status } from 'src/product/status/status.enum';
+import { Status } from '../../../../product/status/status.enum';
+import { CreateOrderException } from '../../../../integrations/create-order/exceptions/create-order.exception';
 
 @Injectable()
 export class CreateOrderService extends CreateOrderBaseClass {
@@ -26,8 +27,14 @@ export class CreateOrderService extends CreateOrderBaseClass {
     private uploadInvoiceStatus: string[] = [];
 
     public async refreshProductsFromSystem(): Promise<boolean> {
-        this.updateSystemProductsMap(await this.getCurrentSystemProducts());
-        return true;
+        try {
+            this.updateSystemProductsMap(await this.getCurrentSystemProducts());
+            return true;
+        } catch (err) {
+            throw new Error('problem with refreshing products from w-firma', {
+                cause: err,
+            });
+        }
     }
 
     public async getCurrentSystemProducts(): Promise<SystemProductResDTO[]> {
@@ -51,61 +58,80 @@ export class CreateOrderService extends CreateOrderBaseClass {
 
             return mapToSystemProductResDto(data);
         } catch (err) {
-            throw new Error('problem with downloading products from w-firma', {
-                cause: err,
-            });
+            throw new CreateOrderException(
+                'problem with downloading products from w-firma',
+                {
+                    cause: err,
+                },
+            );
         }
     }
 
     public async createSystemOrder(
         productsIds: number[],
     ): Promise<CreateOrderResDTO> {
-        const productErrors: string[] = [];
+        try {
+            const productErrors: string[] = [];
 
-        this.resetClassFields();
+            this.resetClassFields();
 
-        const productsToOrder: Product[] = await this.productRepository
-            .createQueryBuilder('product')
-            .leftJoinAndSelect('product.invoice', 'invoice')
-            .leftJoinAndSelect('product.productCode', 'productCode')
-            .where('product.id IN (:...productsIds)', { productsIds })
-            .orderBy('invoice.number', 'ASC')
-            .getMany();
+            const productsToOrder: Product[] = await this.productRepository
+                .createQueryBuilder('product')
+                .leftJoinAndSelect('product.invoice', 'invoice')
+                .leftJoinAndSelect('product.productCode', 'productCode')
+                .where('product.id IN (:...productsIds)', { productsIds })
+                .orderBy('invoice.number', 'ASC')
+                .getMany();
 
-        if (!productsToOrder.length)
-            throw new Error(
-                'No passed products found in DB to generate orders with them!',
+            if (!productsToOrder.length)
+                throw new Error(
+                    'No passed products found in DB to generate orders with them!',
+                );
+
+            for (const product of productsToOrder) {
+                const productError: string | null = this.checkIfErrors(product);
+                if (productError) productErrors.push(productError);
+            }
+
+            if (productErrors.length > 0)
+                throw new BadRequestException(productErrors);
+
+            const createOrdersInfo: string[] =
+                await this.splitUploadOrdersToSystem(productsToOrder);
+
+            return {
+                info: createOrdersInfo,
+            };
+        } catch (err) {
+            throw new CreateOrderException(
+                `problem with creating order in w-firma, product ids: ${productsIds}`,
+                {
+                    cause: err,
+                },
             );
-
-        for (const product of productsToOrder) {
-            const productError: string | null = this.checkIfErrors(product);
-            if (productError) productErrors.push(productError);
         }
-
-        if (productErrors.length > 0)
-            throw new BadRequestException(productErrors);
-
-        const createOrdersInfo: string[] = await this.splitUploadOrdersToSystem(
-            productsToOrder,
-        );
-
-        return {
-            info: createOrdersInfo,
-        };
     }
 
     private checkIfErrors(product: Product): null | string {
-        if (!product.productCode)
-            return `Dla produktu ${product.supplierCode} nie ma tłumaczenia kodu na PN.`;
+        try {
+            if (!product.productCode)
+                return `Dla produktu ${product.supplierCode} nie ma tłumaczenia kodu na PN.`;
 
-        const systemProduct: string | undefined = this.systemProductsMap.get(
-            product.productCode.PN,
-        );
+            const systemProduct: string | undefined =
+                this.systemProductsMap.get(product.productCode.PN);
 
-        if (!systemProduct)
-            return `Dla produktu ${product.supplierCode}, PN: ${product.productCode.PN} nie można odszukać id produktu w W-Firma. Jeśli dodałeś produkt w W-firma niedawno, spróbuj odświeżyć stronę.`;
+            if (!systemProduct)
+                return `Dla produktu ${product.supplierCode}, PN: ${product.productCode.PN} nie można odszukać id produktu w W-Firma. Jeśli dodałeś produkt w W-firma niedawno, spróbuj odświeżyć stronę.`;
 
-        return null;
+            return null;
+        } catch (err) {
+            throw new CreateOrderException(
+                'problem with checking product errors',
+                {
+                    cause: err,
+                },
+            );
+        }
     }
 
     private async splitUploadOrdersToSystem(
@@ -133,19 +159,33 @@ export class CreateOrderService extends CreateOrderBaseClass {
 
             return this.uploadInvoiceStatus;
         } catch (err) {
-            throw new Error('Problem with uploading orders to W-Firma', {
-                cause: err,
-            });
+            throw new CreateOrderException(
+                'Problem with uploading orders to W-Firma while splitting them to invoices',
+                {
+                    cause: err,
+                },
+            );
         }
     }
 
     private async uploadInvoiceProductsAndResetArr(
         currentInvoiceProducts: Product[],
     ): Promise<void> {
-        const invoiceFeedback: string =
-            await this.uploadOneInvoiceOrderToSystem(currentInvoiceProducts);
-        this.uploadInvoiceStatus.push(invoiceFeedback);
-        currentInvoiceProducts.length = 0;
+        try {
+            const invoiceFeedback: string =
+                await this.uploadOneInvoiceOrderToSystem(
+                    currentInvoiceProducts,
+                );
+            this.uploadInvoiceStatus.push(invoiceFeedback);
+            currentInvoiceProducts.length = 0;
+        } catch (err) {
+            throw new CreateOrderException(
+                'problem with uploading one invoice products',
+                {
+                    cause: err,
+                },
+            );
+        }
     }
 
     private async uploadOneInvoiceOrderToSystem(
@@ -196,7 +236,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
                 return `Błąd dla faktury: ${products[0].invoice.number} -> ${data?.status?.code}`;
             }
         } catch (err) {
-            throw new Error(
+            throw new CreateOrderException(
                 `Problem with uploading order to W-Firma for invocie: ${products[0].invoice.number}`,
                 {
                     cause: err,

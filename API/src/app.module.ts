@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_FILTER } from '@nestjs/core';
-import { AuthModule } from './auth/Auth.module';
+import { AuthModule } from './auth/auth.module';
 import { MainExceptionFilter } from './exception-filters/main-exception.filter';
 import { InvoiceModule } from './invoice/invoice.module';
 import { UploadModule } from './upload/upload.module';

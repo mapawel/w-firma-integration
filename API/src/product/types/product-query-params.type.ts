@@ -4,9 +4,9 @@ import { Status } from '../status/status.enum';
 
 export type ProductQueryParams = {
     supplierCode: string;
+    productCode: string;
     currency: string;
     supplier: Supplier;
-    productCode: string;
     status: Status;
     invoice: string;
     sortParam: keyof ProductResDTO;

@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Invoice } from '../entity/Invoice.entity';
 import { InvoiceResDTO } from '../dto/invoice-res.dto';
-import { InvoiceCreateDTO } from '../dto/invoice-create.dto';
+// import { InvoiceCreateDTO } from '../dto/invoice-create.dto';
 import { InvoiceUpdateDTO } from '../dto/invoice-update.dto';
 import { invoiceResDtoMapper } from '../dto/invoice-res-dto.mapper';
-import { InvoiceRepoException } from '../exceptions/invoice-repo.exception';
+import { InvoiceException } from '../exceptions/invoice.exception';
 import { Supplier } from '../../supplier/supppliers.enum';
+import { InvoiceQueryParams } from '../types/invoce-query-params.type';
 
 @Injectable()
 export class InvoiceService {
@@ -16,20 +17,45 @@ export class InvoiceService {
         private readonly invoiceRepository: Repository<Invoice>,
     ) {}
 
-    public async getAllInvoices(): Promise<InvoiceResDTO[]> {
+    public async getAllInvoices(
+        invoiceQueryParams: InvoiceQueryParams,
+    ): Promise<InvoiceResDTO[]> {
         try {
+            const {
+                number,
+                supplier,
+                sortParam,
+                sortDirect,
+                records,
+                skip,
+            }: InvoiceQueryParams = invoiceQueryParams;
+
             const allInvoices: Invoice[] = await this.invoiceRepository.find({
-                relations: {
-                    products: true,
+                where: {
+                    number,
+                    supplier,
                 },
+                relations: {
+                    products: {
+                        productCode: true,
+                    },
+                },
+                order: {
+                    [sortParam]: sortDirect,
+                },
+                take: records,
+                skip,
             });
+
             return allInvoices.map((invoice: Invoice) =>
                 invoiceResDtoMapper(invoice),
             );
-        } catch (error) {
-            throw new InvoiceRepoException(
-                'Error while getting all invoices.',
-                { cause: error },
+        } catch (err) {
+            throw new InvoiceException(
+                'Error while getting all invoices from DB.',
+                {
+                    cause: err,
+                },
             );
         }
     }
@@ -39,67 +65,54 @@ export class InvoiceService {
             const invoice: Invoice | null =
                 await this.invoiceRepository.findOne({
                     where: { id: invoiceId },
+                    relations: {
+                        products: {
+                            productCode: true,
+                        },
+                    },
                 });
             if (!invoice) {
                 throw new NotFoundException('Invoice not found.');
             }
+
             return invoiceResDtoMapper(invoice);
-        } catch (error) {
-            if (error instanceof NotFoundException) throw error;
-            throw new InvoiceRepoException(
-                `Error while getting invoice with passed id: ${invoiceId}`,
-                { cause: error },
+        } catch (err) {
+            if (err instanceof NotFoundException) throw err;
+            throw new InvoiceException(
+                `Error while getting invoice from DB with passed id: ${invoiceId}`,
+                { cause: err },
             );
         }
     }
 
-    public async getInvoiceByNumber(iNubmer: string): Promise<InvoiceResDTO[]> {
-        try {
-            const invoices: Invoice[] | null =
-                await this.invoiceRepository.find({
-                    where: { number: iNubmer },
-                });
-            if (!invoices.length) {
-                throw new NotFoundException('Invoice not found.');
-            }
-            return invoices.map((invoice: Invoice) =>
-                invoiceResDtoMapper(invoice),
-            );
-        } catch (error) {
-            if (error instanceof NotFoundException) throw error;
-            throw new InvoiceRepoException(
-                `Error while getting invoice with passed id: ${iNubmer}`,
-                { cause: error },
-            );
-        }
-    }
+    // PROBABLY TO REMOVE
 
-    public async createInvoice(
-        invoiceCreateDTO: InvoiceCreateDTO,
-        addedBy: string,
-    ): Promise<InvoiceResDTO> {
-        try {
-            const newInvoice: Invoice = this.invoiceRepository.create({
-                addedBy,
-                addedAt: new Date(Date.now()),
-                ...invoiceCreateDTO,
-            });
-            const savedInvoice: Invoice = await this.invoiceRepository.save(
-                newInvoice,
-            );
+    // public async createInvoice(
+    //     invoiceCreateDTO: InvoiceCreateDTO,
+    //     addedBy: string,
+    // ): Promise<InvoiceResDTO> {
+    //     try {
+    //         const newInvoice: Invoice = this.invoiceRepository.create({
+    //             addedBy,
+    //             addedAt: new Date(Date.now()),
+    //             ...invoiceCreateDTO,
+    //         });
+    //         const savedInvoice: Invoice = await this.invoiceRepository.save(
+    //             newInvoice,
+    //         );
 
-            return invoiceResDtoMapper(savedInvoice);
-        } catch (error) {
-            throw new InvoiceRepoException(
-                `Error while creating invoice, payload: ${JSON.stringify(
-                    invoiceCreateDTO,
-                    null,
-                    2,
-                )}.`,
-                { cause: error },
-            );
-        }
-    }
+    //         return invoiceResDtoMapper(savedInvoice);
+    //     } catch (err) {
+    //         throw new InvoiceException(
+    //             `Error while creating invoice in DB, payload: ${JSON.stringify(
+    //                 invoiceCreateDTO,
+    //                 null,
+    //                 2,
+    //             )}.`,
+    //             { cause: err },
+    //         );
+    //     }
+    // }
 
     public async updateInvoice(
         invoiceId: number,
@@ -124,15 +137,15 @@ export class InvoiceService {
                 invoiceId,
             );
             return updatedInvoice;
-        } catch (error) {
-            if (error instanceof NotFoundException) throw error;
-            throw new InvoiceRepoException(
-                `Error while updating invoice with passed id: ${invoiceId}, payload: ${JSON.stringify(
+        } catch (err) {
+            if (err instanceof NotFoundException) throw err;
+            throw new InvoiceException(
+                `Error while updating invoice in DB with passed id: ${invoiceId}, payload: ${JSON.stringify(
                     invoiceUpdateDTO,
                     null,
                     2,
                 )}.`,
-                { cause: error },
+                { cause: err },
             );
         }
     }
@@ -147,11 +160,11 @@ export class InvoiceService {
                     'Cannot delete invoice! Resource not found.',
                 );
             return true;
-        } catch (error) {
-            if (error instanceof NotFoundException) throw error;
-            throw new InvoiceRepoException(
-                `Error while deleting invoice with passed id: ${invoiceId}`,
-                { cause: error },
+        } catch (err) {
+            if (err instanceof NotFoundException) throw err;
+            throw new InvoiceException(
+                `Error while deleting invoice in DB with passed id: ${invoiceId}`,
+                { cause: err },
             );
         }
     }
@@ -161,24 +174,32 @@ export class InvoiceService {
         supplier: Supplier,
         userId: string,
     ): Promise<Invoice> {
-        let invoiceEntity: Invoice | null = null;
+        try {
+            let invoiceEntity: Invoice | null = null;
 
-        invoiceEntity = await this.invoiceRepository.findOne({
-            where: {
-                number: invoiceNo,
-            },
-        });
-
-        if (!invoiceEntity) {
-            const newInvoice = this.invoiceRepository.create({
-                number: invoiceNo,
-                addedBy: userId,
-                addedAt: new Date(Date.now()),
-                supplier,
-                products: [],
+            invoiceEntity = await this.invoiceRepository.findOne({
+                where: {
+                    number: invoiceNo,
+                },
             });
-            invoiceEntity = await this.invoiceRepository.save(newInvoice);
+
+            if (!invoiceEntity) {
+                const newInvoice = this.invoiceRepository.create({
+                    number: invoiceNo,
+                    addedBy: userId,
+                    addedAt: new Date(Date.now()),
+                    supplier,
+                    products: [],
+                });
+                invoiceEntity = await this.invoiceRepository.save(newInvoice);
+            }
+            return invoiceEntity;
+        } catch (err) {
+            if (err instanceof NotFoundException) throw err;
+            throw new InvoiceException(
+                `Error while find or create an invoice in DB with passed number: ${invoiceNo}`,
+                { cause: err },
+            );
         }
-        return invoiceEntity;
     }
 }
