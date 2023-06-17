@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Root from '@/views/Root';
+import Root from '@/ui/views/Root';
 import reportWebVitals from '@/reportWebVitals';
 import './index.css';
 
