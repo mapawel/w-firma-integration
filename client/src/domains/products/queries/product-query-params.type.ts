@@ -1,5 +1,5 @@
 import { Supplier } from '@/domains/supplier/supppliers.enum';
-import { ProductResDTO } from '../dto/product-res.dto';
+import { ProductResDTO } from '../dto/products-res.dto';
 import { Status } from '../status/status.enum';
 
 export type ProductQueryParams = {

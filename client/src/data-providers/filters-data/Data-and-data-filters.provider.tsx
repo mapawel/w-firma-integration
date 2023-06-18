@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { DataAndDataFiltersCtx } from './filters-data.context';
 import { Status } from '@/domains/products/status/status.enum';
-import { ProductResDTO } from '@/domains/products/dto/product-res.dto';
+import { ProductResDTO } from '@/domains/products/dto/products-res.dto';
 import { ProductQueryParams } from '@/domains/products/queries/product-query-params.type';
 import { fetchProducts } from '@/domains/products/actions/fetch-products';
-import useSWR from 'swr';
+import useSWR, { SWRResponse } from 'swr';
 import { APIRoutes } from '@/navigation/routes/api.routes';
+import { ResponseFromProductFetchDTO } from '@/domains/products/dto/response-from-product-fetch.dto';
 
 interface IProps {
     children: React.ReactNode;
@@ -30,9 +31,10 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
         sortParam,
         sortDirect,
         records: String(records),
+        skip: String(skip),
     };
 
-    const { data }: { data: ProductResDTO[] } = useSWR(
+    const { data }: SWRResponse<ResponseFromProductFetchDTO | void> = useSWR(
         [APIRoutes.UPLOAD_OR_FETCH_PRODUCTS, queryParams],
         ([url, params]) => fetchProducts(url, params),
     );
@@ -62,11 +64,15 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
         };
     });
 
+    useEffect(() => {
+        setSkip(0);
+    }, [filterStatus, filterInvoice, sortParam, sortDirect]);
+
     return (
         <DataAndDataFiltersCtx.Provider
             value={{
-                data,
-                count: data?.length,
+                data: data?.products || [],
+                count: data?.totalProducts || 0,
                 filterStatus,
                 filterInvoice,
                 handleSort,

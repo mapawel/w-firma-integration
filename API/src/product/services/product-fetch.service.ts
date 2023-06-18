@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Product } from '../entity/Product.entity';
 import { productResDtoMapper } from '../dto/product-res-dto.mapper';
-import { ProductResDTO } from '../dto/product-res.dto';
 import { ProductQueryParams } from '../types/product-query-params.type';
 import { ProductException } from '../exceptions/product.exception';
+import { CompleteResponseDTO } from '../dto/complete-response.dto';
+import { Invoice } from 'src/invoice/entity/Invoice.entity';
 
 @Injectable()
 export class ProductFetchService {
@@ -16,7 +17,7 @@ export class ProductFetchService {
 
     public async getAllProducts(
         productQueryParams: ProductQueryParams,
-    ): Promise<ProductResDTO[]> {
+    ): Promise<CompleteResponseDTO> {
         try {
             const {
                 supplierCode,
@@ -75,11 +76,30 @@ export class ProductFetchService {
                 });
             }
 
-            const allProducts: Product[] = await queryBuilder.getMany();
+            const products: Product[] = await queryBuilder.getMany();
+            const [totalProducts, uniqueInvoices]: [
+                number,
+                { invoice_number: string }[],
+            ] = await Promise.all([
+                queryBuilder.getCount(),
+                await queryBuilder
+                    .orderBy('invoice.number')
+                    .distinctOn(['invoice.number'])
+                    .select('invoice.number')
+                    .getRawMany(),
+            ]);
 
-            return allProducts.map((product: Product) =>
-                productResDtoMapper(product),
+            const uniqueInvoiceNumbers = uniqueInvoices.map(
+                (item: { invoice_number: string }) => item.invoice_number,
             );
+
+            return {
+                products: products.map((product: Product) =>
+                    productResDtoMapper(product),
+                ),
+                totalProducts,
+                uniqueInvoiceNumbers,
+            };
         } catch (err) {
             throw new ProductException(
                 `Error while getting products. Query: ${JSON.stringify(

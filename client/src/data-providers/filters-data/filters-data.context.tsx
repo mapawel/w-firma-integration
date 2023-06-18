@@ -1,4 +1,4 @@
-import { ProductResDTO } from '@/domains/products/dto/product-res.dto';
+import { ProductResDTO } from '@/domains/products/dto/products-res.dto';
 import { Status } from '@/domains/products/status/status.enum';
 import { createContext } from 'react';
 import { Dispatch, SetStateAction } from 'react';

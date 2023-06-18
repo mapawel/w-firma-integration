@@ -5,6 +5,7 @@ import {
     stopLoading,
 } from '@/data-providers/app-status/use-app-status';
 import { ProductQueryParams } from '../queries/product-query-params.type';
+import { ResponseFromProductFetchDTO } from '../dto/response-from-product-fetch.dto';
 
 export const fetchProducts = async (
     url: string,
@@ -14,7 +15,7 @@ export const fetchProducts = async (
         const queryString = new URLSearchParams(queryParams).toString();
 
         startLoading();
-        const { data: responseData }: { data: any } = await axios.get(
+        const { data }: { data: ResponseFromProductFetchDTO } = await axios.get(
             `${url}?${queryString}`,
             {
                 headers: {
@@ -24,7 +25,7 @@ export const fetchProducts = async (
         );
         stopLoading();
 
-        return responseData;
+        return data;
     } catch (err: any) {
         stopLoading();
 

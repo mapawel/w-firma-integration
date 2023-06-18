@@ -6,7 +6,8 @@ import { useDataAndDataFilters } from '@/data-providers/filters-data/use-data-an
 import { columns } from './columns.data';
 
 const InvoiceTable: FC = () => {
-    const { data, sortParam, sortDirect, handleSort } = useDataAndDataFilters();
+    const { data, sortParam, sortDirect, handleSort, skip } =
+        useDataAndDataFilters();
 
     return (
         <div className="overflow-hidden rounded-xl border border-primary">
@@ -14,6 +15,7 @@ const InvoiceTable: FC = () => {
                 <thead className="bg-primary ">
                     <tr>
                         <th></th>
+                        <th>Lp.:</th>
                         {columns.map(({ heading, accessor }) => (
                             <th
                                 key={accessor}
@@ -40,18 +42,21 @@ const InvoiceTable: FC = () => {
                 </thead>
                 <tbody>
                     {data?.map(
-                        ({
-                            id,
-                            supplierCode,
-                            productCode,
-                            quantity,
-                            netPrice,
-                            currency,
-                            invoice,
-                            supplier,
-                            status,
-                            addedAt,
-                        }) => (
+                        (
+                            {
+                                id,
+                                supplierCode,
+                                productCode,
+                                quantity,
+                                netPrice,
+                                currency,
+                                invoice,
+                                supplier,
+                                status,
+                                addedAt,
+                            },
+                            index,
+                        ) => (
                             <tr
                                 key={id}
                                 className="border-t-[1px] border-primary"
@@ -63,6 +68,9 @@ const InvoiceTable: FC = () => {
                                         value=""
                                         className="h-6 w-6 rounded border-secondary bg-white focus:ring-1"
                                     />
+                                </td>
+                                <td className="border-l-[1px] border-primary px-5 py-1">
+                                    {skip + index + 1}
                                 </td>
                                 <td className="border-l-[1px] border-primary px-5 py-1">
                                     {supplier}
