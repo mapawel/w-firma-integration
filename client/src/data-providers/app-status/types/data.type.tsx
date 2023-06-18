@@ -3,4 +3,4 @@ export type Data = {
     detailsArr: string[];
     callbackClearInfo?: () => void;
     callbackClearInfoLabel?: string;
-}
+};

@@ -19,6 +19,7 @@
     "react-portal": "^4.2.2",
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
+    "react-select": "^5.7.3",
     "styled-components": "^6.0.0-rc.1",
     "swr": "^2.1.5",
     "typescript": "^4.9.5",

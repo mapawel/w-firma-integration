@@ -1,5 +1,5 @@
 import { upladProductdToDB } from '@/domains/invoice-upload/actions/upload-products-to-db';
-import { upladProductsForOrders } from '@/domains/order/actions/upload-product-for-orders'
+import { upladProductsForOrders } from '@/domains/order/actions/upload-product-for-orders';
 import NavTemplate from '@/ui/components/templates/Nav-template';
 import { ClientRoutes } from '@/navigation/routes/client.routes';
 import { FC } from 'react';

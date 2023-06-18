@@ -1,4 +1,4 @@
-import { Data } from "../../types/data.type";
+import { Data } from '../../types/data.type';
 
 export enum ActionType {
     LOADING = 'loading',

@@ -7,7 +7,7 @@ export type ProductQueryParams = {
     productCode: string;
     currency: string;
     supplier: Supplier;
-    status: Status;
+    status: Status | 'all';
     invoice: string;
     sortParam: keyof ProductResDTO;
     sortDirect: 'ASC' | 'DESC';

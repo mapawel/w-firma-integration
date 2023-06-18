@@ -6,15 +6,22 @@ import {
 } from '@/data-providers/app-status/use-app-status';
 import { ProductQueryParams } from '../queries/product-query-params.type';
 
-export const fetchProducts = async (url: string, queryParams: ProductQueryParams) => {
+export const fetchProducts = async (
+    url: string,
+    queryParams: ProductQueryParams,
+) => {
     try {
         const queryString = new URLSearchParams(queryParams).toString();
+
         startLoading();
-        const { data: responseData }: { data: any } = await axios.get(`${url}?${queryString}`, {
-            headers: {
-                'Content-Type': 'application/json',
+        const { data: responseData }: { data: any } = await axios.get(
+            `${url}?${queryString}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             },
-        });
+        );
         stopLoading();
 
         return responseData;

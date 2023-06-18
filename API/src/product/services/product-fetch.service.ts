@@ -31,23 +31,51 @@ export class ProductFetchService {
                 skip,
             }: ProductQueryParams = productQueryParams;
 
-            const allProducts: Product[] = await this.productRepository.find({
-                where: {
+            const queryBuilder = this.productRepository
+                .createQueryBuilder('product')
+                .leftJoinAndSelect('product.productCode', 'productCode')
+                .leftJoinAndSelect('product.invoice', 'invoice')
+                .orderBy(`product.${sortParam}`, sortDirect)
+                .take(records)
+                .skip(skip);
+
+            if (supplierCode) {
+                queryBuilder.andWhere('product.supplierCode = :supplierCode', {
                     supplierCode,
+                });
+            }
+            if (currency) {
+                queryBuilder.andWhere('product.currency = :currency', {
                     currency,
+                });
+            }
+            if (supplier) {
+                queryBuilder.andWhere('product.supplier = :supplier', {
                     supplier,
-                    status,
-                    productCode:
-                        productCode === 'null' ? IsNull() : { PN: productCode },
-                    invoice: { number: invoice },
-                },
-                relations: ['productCode', 'invoice'],
-                order: {
-                    [sortParam]: sortDirect,
-                },
-                take: records,
-                skip,
-            });
+                });
+            }
+            if (status) {
+                if (status !== 'all')
+                    queryBuilder.andWhere('product.status = :status', {
+                        status,
+                    });
+            }
+            if (productCode) {
+                if (productCode === 'null') {
+                    queryBuilder.andWhere('product.productCode IS NULL');
+                } else {
+                    queryBuilder.andWhere('productCode.PN = :productCode', {
+                        productCode,
+                    });
+                }
+            }
+            if (invoice) {
+                queryBuilder.andWhere('invoice.number = :invoiceNumber', {
+                    invoiceNumber: invoice,
+                });
+            }
+
+            const allProducts: Product[] = await queryBuilder.getMany();
 
             return allProducts.map((product: Product) =>
                 productResDtoMapper(product),

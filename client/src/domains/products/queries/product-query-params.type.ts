@@ -13,4 +13,5 @@ export type ProductQueryParams = {
     sortDirect?: 'ASC' | 'DESC';
     records?: string;
     skip?: string;
+    addedAt?: string;
 };
