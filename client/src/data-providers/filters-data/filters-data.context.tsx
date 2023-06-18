@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 export const DataAndDataFiltersCtx = createContext<{
     data: ProductResDTO[];
+    count: number;
     filterStatus: Status;
     filterInvoice: string;
     handleSort: (param: keyof ProductResDTO) => void;
@@ -14,8 +15,13 @@ export const DataAndDataFiltersCtx = createContext<{
     setDropdownOpen: Dispatch<SetStateAction<boolean>>;
     buttonRef: React.RefObject<HTMLButtonElement> | null;
     handlers: Record<string, Dispatch<SetStateAction<any>>>;
+    records: number;
+    setRecords: Dispatch<SetStateAction<number>>;
+    skip: number;
+    setSkip: Dispatch<SetStateAction<number>>;
 }>({
     data: [],
+    count: 0,
     filterStatus: Status.all,
     filterInvoice: 'all',
     handleSort: () => {},
@@ -28,4 +34,8 @@ export const DataAndDataFiltersCtx = createContext<{
         setFilterStatus: () => {},
         setFilterInvoice: () => {},
     },
+    records: 50,
+    setRecords: () => {},
+    skip: 0,
+    setSkip: () => {},
 });

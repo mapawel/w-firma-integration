@@ -72,6 +72,7 @@ export class ProductUploadService {
                     await this.createNewProductEntity(
                         product,
                         codeTranslation,
+                        codeTranslation ? Status.NEW : Status.NEW_WARN,
                         this.currentInvoiceEntity,
                         userId,
                     );
@@ -106,6 +107,7 @@ export class ProductUploadService {
     private async createNewProductEntity(
         product: ProductCreateDTO,
         productCode: CodeTranslation | null,
+        status: Status,
         currentInvoiceEntity: Invoice,
         userId: string,
     ): Promise<Product> {
@@ -114,7 +116,7 @@ export class ProductUploadService {
                 ...product,
                 productCode: productCode || undefined,
                 invoice: currentInvoiceEntity,
-                status: Status.NEW,
+                status,
                 addedBy: userId,
                 addedAt: new Date(Date.now()),
             });

@@ -1,4 +1,4 @@
-import { ProductResDTO } from "@/domains/products/dto/product-res.dto";
+import { ProductResDTO } from '@/domains/products/dto/product-res.dto';
 
 export const columns: { heading: string; accessor: keyof ProductResDTO }[] = [
     {

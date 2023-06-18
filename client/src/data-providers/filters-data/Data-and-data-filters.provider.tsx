@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { DataAndDataFiltersCtx } from './filters-data.condext';
+import { DataAndDataFiltersCtx } from './filters-data.context';
 import { Status } from '@/domains/products/status/status.enum';
 import { ProductResDTO } from '@/domains/products/dto/product-res.dto';
 import { ProductQueryParams } from '@/domains/products/queries/product-query-params.type';
@@ -16,6 +16,8 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
     const buttonRef = useRef<HTMLButtonElement>(null);
     const [sortParam, setSortParam] = useState<keyof ProductResDTO>('addedAt');
     const [sortDirect, setSortDirect] = useState<'ASC' | 'DESC'>('DESC');
+    const [records, setRecords] = useState<number>(50);
+    const [skip, setSkip] = useState<number>(0);
     const [filterStatus, setFilterStatus] = useState(Status.all);
     const [filterInvoice, setFilterInvoice] = useState('all');
     const handlers = {
@@ -27,7 +29,7 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
         status: filterStatus,
         sortParam,
         sortDirect,
-        records: '50',
+        records: String(records),
     };
 
     const { data }: { data: ProductResDTO[] } = useSWR(
@@ -64,6 +66,7 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
         <DataAndDataFiltersCtx.Provider
             value={{
                 data,
+                count: data?.length,
                 filterStatus,
                 filterInvoice,
                 handleSort,
@@ -73,6 +76,10 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
                 setDropdownOpen,
                 buttonRef,
                 handlers,
+                records,
+                setRecords,
+                skip,
+                setSkip,
             }}
         >
             {children}
