@@ -11,12 +11,10 @@ const InvoicesView: FC = () => {
         <DataAndDataFiltersProvider>
             <PaginationProvider>
                 <NavTemplate>
-                    <div className="inline-block">
-                        <TableTopHeader />
-                        <TablePagination />
-                        <InvoiceTable />
-                        <TablePagination />
-                    </div>
+                    <TableTopHeader />
+                    <TablePagination />
+                    <InvoiceTable />
+                    <TablePagination />
                 </NavTemplate>
             </PaginationProvider>
         </DataAndDataFiltersProvider>

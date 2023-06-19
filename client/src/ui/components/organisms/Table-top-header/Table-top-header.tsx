@@ -58,12 +58,12 @@ const TableTopHeader: FC = () => {
                     <button
                         ref={buttonRef}
                         id="actionsDropdownButton"
-                        data-dropdown-toggle="actionsDropdown"
-                        className="flex w-full cursor-pointer items-center justify-center rounded-md border border-secondaryLight px-5 py-2 text-sm font-medium text-secondary shadow-sm transition duration-150 hover:border-primary hover:bg-primary hover:text-white focus:border-primary focus:bg-primary focus:text-white md:w-auto [&:focus>svg]:fill-white [&:hover>svg]:fill-white"
+                        className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-primary px-5 py-2 text-sm font-medium text-white shadow-sm transition duration-150 hover:border-primary hover:bg-primaryHover hover:text-white focus:border-primary focus:bg-primary focus:text-white 
+                        md:w-auto [&:focus>svg]:fill-white [&:hover>svg]:fill-white"
                         type="button"
                         onClick={() => setDropdownOpen(!isDropdownOpen)}
                     >
-                        <CollapseArrow className="h-7 w-7 fill-secondary" />
+                        <CollapseArrow className="h-7 w-7 fill-white" />
                         Actions
                     </button>
 

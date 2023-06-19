@@ -24,7 +24,7 @@ export const fetchProducts = async (
             },
         );
         stopLoading();
-
+        
         return data;
     } catch (err: any) {
         stopLoading();
