@@ -8,27 +8,38 @@ import { selectStyle } from './select-style';
 import { statusOptionsForSelect as statusOptions } from '@/domains/products/status/status-options-for-select';
 import { useDataAndDataFilters } from '@/data-providers/filters-data/use-data-and-data-filters';
 
-const mockOptions = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-];
-
 const TableTopHeader: FC = () => {
-    const { isDropdownOpen, setDropdownOpen, buttonRef, handlers } =
-        useDataAndDataFilters();
+    const {
+        isDropdownOpen,
+        setDropdownOpen,
+        buttonRef,
+        setFilterInvoice,
+        setFilterStatus,
+        uniqueInvoices,
+    } = useDataAndDataFilters();
 
     return (
-        <div className="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0">
+        <div className="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0 shadow-md border-primary rounded-lg mb-10">
             <div className="w-full md:w-3/4">
                 <form className="flex items-center gap-4">
                     <Select
-                        isMulti
-                        options={mockOptions}
+                        options={[
+                            {
+                                value: 'all',
+                                label: 'all',
+                            },
+                            ...uniqueInvoices.map((invoice) => ({
+                                value: invoice,
+                                label: invoice,
+                            })),
+                        ]}
                         className="w-full"
                         name="invoice"
-                        placeholder="Faktury..."
+                        placeholder="Faktura..."
                         styles={selectStyle}
+                        onChange={(selected) =>
+                            setFilterInvoice(selected?.value || 'all')
+                        }
                     />
                     <Select
                         options={statusOptions}
@@ -37,9 +48,7 @@ const TableTopHeader: FC = () => {
                         placeholder="Status..."
                         styles={selectStyle}
                         onChange={(selected) =>
-                            handlers.setFilterStatus(
-                                selected?.value || Status.all,
-                            )
+                            setFilterStatus(selected?.value || Status.all)
                         }
                     />
                 </form>
@@ -50,7 +59,7 @@ const TableTopHeader: FC = () => {
                         ref={buttonRef}
                         id="actionsDropdownButton"
                         data-dropdown-toggle="actionsDropdown"
-                        className="flex w-full cursor-pointer items-center justify-center rounded-lg border border-secondaryLight p-4 text-[12px] text-sm font-medium text-secondary shadow-sm hover:border-primary hover:bg-primary hover:text-white focus:border-primary focus:bg-primary focus:text-white md:w-auto [&:focus>svg]:fill-white [&:hover>svg]:fill-white"
+                        className="flex w-full cursor-pointer items-center justify-center rounded-md border border-secondaryLight px-5 py-2 text-sm font-medium text-secondary shadow-sm transition duration-150 hover:border-primary hover:bg-primary hover:text-white focus:border-primary focus:bg-primary focus:text-white md:w-auto [&:focus>svg]:fill-white [&:hover>svg]:fill-white"
                         type="button"
                         onClick={() => setDropdownOpen(!isDropdownOpen)}
                     >

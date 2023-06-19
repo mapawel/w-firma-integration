@@ -21,13 +21,10 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
     const [skip, setSkip] = useState<number>(0);
     const [filterStatus, setFilterStatus] = useState(Status.all);
     const [filterInvoice, setFilterInvoice] = useState('all');
-    const handlers = {
-        setFilterStatus,
-        setFilterInvoice,
-    };
 
     const queryParams: ProductQueryParams = {
         status: filterStatus,
+        invoice: filterInvoice,
         sortParam,
         sortDirect,
         records: String(records),
@@ -73,6 +70,7 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
             value={{
                 data: data?.products || [],
                 count: data?.totalProducts || 0,
+                uniqueInvoices: data?.uniqueInvoiceNumbers || [],
                 filterStatus,
                 filterInvoice,
                 handleSort,
@@ -81,7 +79,8 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
                 isDropdownOpen,
                 setDropdownOpen,
                 buttonRef,
-                handlers,
+                setFilterStatus,
+                setFilterInvoice,
                 records,
                 setRecords,
                 skip,

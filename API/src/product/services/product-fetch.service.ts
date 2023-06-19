@@ -71,9 +71,10 @@ export class ProductFetchService {
                 }
             }
             if (invoice) {
-                queryBuilder.andWhere('invoice.number = :invoiceNumber', {
-                    invoiceNumber: invoice,
-                });
+                if (invoice !== 'all')
+                    queryBuilder.andWhere('invoice.number = :invoiceNumber', {
+                        invoiceNumber: invoice,
+                    });
             }
 
             const products: Product[] = await queryBuilder.getMany();
@@ -86,6 +87,7 @@ export class ProductFetchService {
                     .orderBy('invoice.number')
                     .distinctOn(['invoice.number'])
                     .select('invoice.number')
+                    .where({})
                     .getRawMany(),
             ]);
 

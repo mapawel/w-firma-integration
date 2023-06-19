@@ -15,7 +15,9 @@ const InvoiceTable: FC = () => {
                 <thead className="bg-primary ">
                     <tr>
                         <th></th>
-                        <th>Lp.:</th>
+                        <th className="px-5 py-1 font-semibold text-white">
+                            Lp.
+                        </th>
                         {columns.map(({ heading, accessor }) => (
                             <th
                                 key={accessor}
