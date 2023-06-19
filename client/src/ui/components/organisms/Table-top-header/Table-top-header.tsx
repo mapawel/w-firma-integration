@@ -19,7 +19,7 @@ const TableTopHeader: FC = () => {
     } = useDataAndDataFilters();
 
     return (
-        <div className="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0 shadow-md border-primary rounded-lg mb-10">
+        <div className="mb-10 flex flex-col items-center justify-between space-y-3 rounded-lg border-primary p-4 shadow-md md:flex-row md:space-x-4 md:space-y-0">
             <div className="w-full md:w-3/4">
                 <form className="flex items-center gap-4">
                     <Select
