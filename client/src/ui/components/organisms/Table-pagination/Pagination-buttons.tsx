@@ -23,7 +23,7 @@ const PaginationButtons: FC = () => {
                         'ml-0 h-full rounded-l-lg ' + paginationButtonBaseStyle
                     }
                 >
-                    <Prev className="h-5 w-5 fill-secondary" />
+                    <Prev className="h-5 w-5 fill-secondaryLight" />
                 </button>
             </li>
 
@@ -80,7 +80,7 @@ const PaginationButtons: FC = () => {
                         'ml-0 h-full rounded-r-lg ' + paginationButtonBaseStyle
                     }
                 >
-                    <Next className="h-5 w-5 fill-secondary" />
+                    <Next className="h-5 w-5 fill-secondaryLight" />
                 </button>
             </li>
         </ul>

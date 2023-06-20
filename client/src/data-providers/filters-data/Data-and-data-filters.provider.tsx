@@ -16,7 +16,7 @@ interface IProps {
 export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
-    const [sortParam, setSortParam] = useState<keyof ProductResDTO>('addedAt')
+    const [sortParam, setSortParam] = useState<keyof ProductResDTO>('addedAt');
     const [sortDirect, setSortDirect] = useState<'ASC' | 'DESC'>('DESC');
     const [records, setRecords] = useState<number>(50);
     const [skip, setSkip] = useState<number>(0);
@@ -110,7 +110,7 @@ var mock: {
             supplier: Supplier.AB,
             status: Status.NEW,
             addedBy: 'exampleUserId',
-            addedAt: new Date() ,
+            addedAt: new Date(),
             updatedBy: '',
             updatedAt: new Date(),
         },

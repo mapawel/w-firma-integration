@@ -64,11 +64,11 @@ const InvoiceTable: FC = () => {
                                         className={`mr-3 inline-block h-4 w-4 fill-white ${
                                             sortParam === accessor &&
                                             sortDirect === 'DESC' &&
-                                            'rotate-90'
+                                            'rotate-90 fill-red-300'
                                         } ${
                                             sortParam === accessor &&
                                             sortDirect === 'ASC' &&
-                                            'rotate-[-90deg]'
+                                            'rotate-[-90deg] fill-red-300'
                                         }`}
                                     />
                                 </button>
@@ -99,7 +99,7 @@ const InvoiceTable: FC = () => {
                                     key={id}
                                     className={
                                         checked.includes(id)
-                                            ? 'bg-gray-200'
+                                            ? 'bg-gray-200 dark:bg-gray-800'
                                             : ''
                                     }
                                 >
