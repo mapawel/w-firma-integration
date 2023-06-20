@@ -21,11 +21,10 @@ export const selectStyle = {
         minHeight: '3rem',
         height: '3rem',
         background: 'white',
-        
+
         '@media (prefers-color-scheme: dark)': {
             background: 'black',
-          },
-
+        },
     }),
     option: (baseStyles: {}, state: any) => ({
         ...baseStyles,
@@ -36,7 +35,7 @@ export const selectStyle = {
         '@media (prefers-color-scheme: dark)': {
             backgroundColor: state.isFocused ? '#5F5F5F' : 'black',
             color: state.isFocused ? 'white' : '#B1B1B1',
-          },
+        },
     }),
     menu: (baseStyles: {}, state: any) => ({
         ...baseStyles,
@@ -44,7 +43,7 @@ export const selectStyle = {
         '@media (prefers-color-scheme: dark)': {
             backgroundColor: 'black',
             border: '1px solid #5F5F5F',
-          },
+        },
     }),
     singleValue: (baseStyles: {}, state: any) => ({
         ...baseStyles,
@@ -55,7 +54,7 @@ export const selectStyle = {
 
         '@media (prefers-color-scheme: dark)': {
             color: 'white',
-          },
+        },
     }),
     valueContainer: (baseStyles: {}, state: any) => ({
         ...baseStyles,
