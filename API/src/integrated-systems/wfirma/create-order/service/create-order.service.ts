@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    RequestTimeoutException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
@@ -103,6 +107,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
                 info: createOrdersInfo,
             };
         } catch (err) {
+            if (err instanceof RequestTimeoutException) throw err;
             throw new CreateOrderException(
                 `problem with creating order in w-firma, product ids: ${productsIds}`,
                 {
@@ -159,6 +164,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
 
             return this.uploadInvoiceStatus;
         } catch (err) {
+            if (err instanceof RequestTimeoutException) throw err;
             throw new CreateOrderException(
                 'Problem with uploading orders to W-Firma while splitting them to invoices',
                 {
@@ -179,6 +185,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
             this.uploadInvoiceStatus.push(invoiceFeedback);
             currentInvoiceProducts.length = 0;
         } catch (err) {
+            if (err instanceof RequestTimeoutException) throw err;
             throw new CreateOrderException(
                 'problem with uploading one invoice products',
                 {
@@ -200,6 +207,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
                 )}${this.configService.get('W_FIRMA_COMPANY_ID')}`,
                 this.buildRequestData(products),
                 {
+                    timeout: 30000,
                     headers: {
                         accessKey: this.configService.get('ACCESS_KEY', ''),
                         secretKey: this.configService.get('SECRET_KEY', ''),
@@ -207,7 +215,6 @@ export class CreateOrderService extends CreateOrderBaseClass {
                     },
                 },
             );
-
             if (data?.status?.code === 'OK') {
                 await this.productRepository.update(
                     {
@@ -220,11 +227,9 @@ export class CreateOrderService extends CreateOrderBaseClass {
                     products[0].invoice.number
                 }. Ilość produktów na zamówieniu: ${
                     products.length
-                }. Wartość netto faktury: ${products.reduce(
-                    (acc: number, curr: Product) =>
-                        acc + curr.netPrice * curr.quantity,
-                    0,
-                )} ${products[0].currency}`;
+                }. Wartość netto faktury: ${this.calcTotalAndFix(products)} ${
+                    products[0].currency
+                }`;
             } else {
                 await this.productRepository.update(
                     {
@@ -236,8 +241,20 @@ export class CreateOrderService extends CreateOrderBaseClass {
                 return `Błąd dla faktury: ${products[0].invoice.number} -> ${data?.status?.code}`;
             }
         } catch (err) {
+            await this.productRepository.update(
+                {
+                    id: In(products.map((product: Product) => product.id)),
+                },
+                { status: Status.ERROR },
+            );
+
+            if (err?.code === 'ECONNRESET')
+                throw new RequestTimeoutException(
+                    'Aplikacja nie otrzymała odpowiedzi od W-Firma w żądanym czasie, ale nie oznacza to, że zamówienia dla podanych faktur nie zostały stworzone. Sprawdź to najpierw w W-Firma, jeśli zamówienia zostały stworzone, obsłuż niepoprawnie wyświetlany status dla załadowanych produktów',
+                );
+
             throw new CreateOrderException(
-                `Problem with uploading order to W-Firma for invocie: ${products[0].invoice.number}`,
+                `Problem with uploading order to W-Firma for invocie...: ${products[0].invoice.number}`,
                 {
                     cause: err,
                 },
@@ -313,6 +330,16 @@ export class CreateOrderService extends CreateOrderBaseClass {
             }
         }
         `;
+    }
+
+    private calcTotalAndFix(products: Product[]): string {
+        return products
+            .reduce(
+                (acc: number, curr: Product) =>
+                    acc + curr.netPrice * curr.quantity,
+                0,
+            )
+            .toFixed(2);
     }
 
     private resetClassFields(): void {

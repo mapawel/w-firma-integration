@@ -39,7 +39,7 @@ const InvoiceTable: FC = () => {
 
     return (
         <div className="inline-block overflow-hidden rounded-xl border border-primary">
-            <table className="m-[-1px] min-w-[1135px] border-collapse">
+            <table className="m-[-1px] min-w-[1200px] border-collapse">
                 <thead className=" bg-primary">
                     <tr>
                         <th className=" border border-primary">
@@ -61,14 +61,12 @@ const InvoiceTable: FC = () => {
                             >
                                 <button onClick={() => handleSort(accessor)}>
                                     <Triangle
-                                        className={`mr-3 inline-block h-4 w-4 fill-white ${
-                                            sortParam === accessor &&
-                                            sortDirect === 'DESC' &&
-                                            'rotate-90 fill-red-300'
-                                        } ${
-                                            sortParam === accessor &&
-                                            sortDirect === 'ASC' &&
-                                            'rotate-[-90deg] fill-red-300'
+                                        className={`${
+                                            sortParam === accessor
+                                            ? sortDirect === 'DESC'
+                                            ? 'mr-3 inline-block h-4 w-4 rotate-90 fill-red-300'
+                                            : 'mr-3 inline-block h-4 w-4 rotate-[-90deg] fill-red-300'
+                                            : 'mr-3 inline-block h-4 w-4 fill-white'
                                         }`}
                                     />
                                 </button>

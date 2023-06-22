@@ -26,15 +26,6 @@ const PaginationButtons: FC = () => {
                     <Prev className="h-5 w-5 fill-secondaryLight" />
                 </button>
             </li>
-
-            {/* {(() => {
-                console.log(
-                    'pageNumbersAvailable ----> ',
-                    pageNumbersAvailable,
-                );
-                return <></>;
-            })()} */}
-
             <li>
                 <button
                     onClick={() => handleSwitchPage(1)}

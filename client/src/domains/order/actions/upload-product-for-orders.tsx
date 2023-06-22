@@ -24,6 +24,11 @@ export const upladProductsForOrders = async (
     } catch (err: any) {
         stopLoading();
 
+        if (err.response.status === 408)
+            return setAppData({
+                mainInfo: `Coś nie tak z połączeniem do W-Firma. Wskazówka: ${err.response.data.message}`,
+                detailsArr: [],
+            });
         if (err.response.status === 400)
             return setAppData({
                 mainInfo: 'Coś nie tak z wysłanymi danymi. Wskazówki:',
