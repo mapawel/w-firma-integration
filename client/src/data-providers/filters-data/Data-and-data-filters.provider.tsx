@@ -7,7 +7,6 @@ import { fetchProducts } from '@/domains/products/actions/fetch-products';
 import useSWR, { SWRResponse } from 'swr';
 import { APIRoutes } from '@/navigation/routes/api.routes';
 import { ResponseFromProductFetchDTO } from '@/domains/products/dto/response-from-product-fetch.dto';
-import { Supplier } from '@/domains/supplier/supppliers.enum';
 
 interface IProps {
     children: React.ReactNode;
@@ -20,8 +19,8 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
     const [sortDirect, setSortDirect] = useState<'ASC' | 'DESC'>('DESC');
     const [records, setRecords] = useState<number>(50);
     const [skip, setSkip] = useState<number>(0);
-    const [filterStatus, setFilterStatus] = useState(Status.all);
-    const [filterInvoice, setFilterInvoice] = useState('all');
+    const [filterStatus, setFilterStatus] = useState<Status | 'all'>('all');
+    const [filterInvoice, setFilterInvoice] = useState<string>('all');
 
     const queryParams: ProductQueryParams = {
         status: filterStatus,

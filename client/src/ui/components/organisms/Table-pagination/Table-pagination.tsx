@@ -9,7 +9,7 @@ export const TablePagination: FC = () => {
 
     return (
         <nav className="flex flex-col items-start justify-between space-y-3 p-4 md:flex-row md:items-center md:space-y-0">
-             <span className="text-m font-normal text-secondaryLight dark:text-gray-400">
+            <span className="text-m font-normal text-secondaryLight dark:text-gray-400">
                 <span className="font-semibold text-secondary dark:text-white">
                     {range}
                 </span>

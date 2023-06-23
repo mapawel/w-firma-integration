@@ -1,9 +1,7 @@
 import { FC } from 'react';
 import { ReactComponent as CollapseArrow } from '@/assets/icons/collapse-arrow.svg';
-// import { ReactComponent as Filter } from '@/assets/icons/filter.svg';
 import { TableDropdown } from '@/ui/components/molecules/Table-dropdown';
 import Select from 'react-select';
-import { Status } from '@/domains/products/status/status.enum';
 import { selectStyle } from './select-style';
 import { statusOptionsForSelect as statusOptions } from '@/domains/products/status/status-options-for-select';
 import { useDataAndDataFilters } from '@/data-providers/filters-data/use-data-and-data-filters';
@@ -48,7 +46,7 @@ const TableTopHeader: FC = () => {
                         placeholder="Status..."
                         styles={selectStyle}
                         onChange={(selected) =>
-                            setFilterStatus(selected?.value || Status.all)
+                            setFilterStatus(selected?.value || 'all')
                         }
                     />
                 </form>

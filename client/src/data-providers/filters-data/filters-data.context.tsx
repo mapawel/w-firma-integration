@@ -7,7 +7,7 @@ export const DataAndDataFiltersCtx = createContext<{
     data: ProductResDTO[];
     count: number;
     uniqueInvoices: string[];
-    filterStatus: Status;
+    filterStatus: Status | 'all';
     filterInvoice: string;
     handleSort: (param: keyof ProductResDTO) => void;
     sortParam: keyof ProductResDTO;
@@ -25,7 +25,7 @@ export const DataAndDataFiltersCtx = createContext<{
     data: [],
     count: 0,
     uniqueInvoices: [],
-    filterStatus: Status.all,
+    filterStatus: 'all',
     filterInvoice: 'all',
     handleSort: () => {},
     sortParam: 'addedAt',

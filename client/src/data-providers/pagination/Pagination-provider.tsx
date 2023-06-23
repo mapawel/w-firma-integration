@@ -37,21 +37,21 @@ export const PaginationProvider: FC<IProps> = ({ children }) => {
 
     const pageNumbersAvailable = useMemo(() => {
         const pages = [];
-    
+
         if (activePage >= 4 && lastPageNo > 6) {
-          for (let i = activePage - 1; i < lastPageNo; i++) {
-            if (i > activePage + 2) break;
-            pages.push(i);
-          }
+            for (let i = activePage - 1; i < lastPageNo; i++) {
+                if (i > activePage + 2) break;
+                pages.push(i);
+            }
         } else {
-          for (let i = 2; i < lastPageNo; i++) {
-            if (i > 5) break;
-            pages.push(i);
-          }
+            for (let i = 2; i < lastPageNo; i++) {
+                if (i > 5) break;
+                pages.push(i);
+            }
         }
-    
+
         return pages;
-      }, [activePage, lastPageNo]);
+    }, [activePage, lastPageNo]);
 
     return (
         <PaginationContext.Provider

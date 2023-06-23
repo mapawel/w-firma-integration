@@ -5,6 +5,7 @@ import { getFormattedDateAndTime } from '@/global-helpers/get-formatted-date-and
 import { useDataAndDataFilters } from '@/data-providers/filters-data/use-data-and-data-filters';
 import { columns } from './columns.data';
 import { Status } from '@/domains/products/status/status.enum';
+import { StatusBadge } from '../../atoms/Status-badge';
 
 const InvoiceTable: FC = () => {
     const { data, sortParam, sortDirect, handleSort, skip } =
@@ -63,10 +64,10 @@ const InvoiceTable: FC = () => {
                                     <Triangle
                                         className={`${
                                             sortParam === accessor
-                                            ? sortDirect === 'DESC'
-                                            ? 'mr-3 inline-block h-4 w-4 rotate-90 fill-red-300'
-                                            : 'mr-3 inline-block h-4 w-4 rotate-[-90deg] fill-red-300'
-                                            : 'mr-3 inline-block h-4 w-4 fill-white'
+                                                ? sortDirect === 'DESC'
+                                                    ? 'mr-3 inline-block h-4 w-4 rotate-90 fill-red-300'
+                                                    : 'mr-3 inline-block h-4 w-4 rotate-[-90deg] fill-red-300'
+                                                : 'mr-3 inline-block h-4 w-4 fill-white'
                                         }`}
                                     />
                                 </button>
@@ -138,8 +139,8 @@ const InvoiceTable: FC = () => {
                                     <td className=" border border-primary px-5 py-1">
                                         {currency}
                                     </td>
-                                    <td className=" border border-primary px-5 py-1">
-                                        {status}
+                                    <td className=" border border-primary px-5 py-1 text-center">
+                                        <StatusBadge status={status} />
                                     </td>
                                     <td className=" border border-primary px-5 py-1">
                                         {getFormattedDateAndTime(addedAt)}

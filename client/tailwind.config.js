@@ -28,6 +28,8 @@ module.exports = {
                 ctaHover: '#7c3836',
                 lightGlass: '#4F8CBA1A',
                 darkGlass: '#001015A4',
+                warn: '#B4AD4C',
+                success: '#2A7320',
               },
               fontWeight: {
                 light: '300',
