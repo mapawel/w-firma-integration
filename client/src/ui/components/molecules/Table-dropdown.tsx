@@ -33,7 +33,9 @@ export const TableDropdown: FC<IProps> = ({ isDropdownOpen }) => {
                 </ul>
             ) : (
                 <div className="m-6">
-                    <span className='text-secondaryLight text-center block italic'>zaznacz produkty</span>
+                    <span className="block text-center italic text-secondaryLight">
+                        zaznacz produkty
+                    </span>
                 </div>
             )}
         </div>
