@@ -16,6 +16,7 @@ const TableTopHeader: FC = () => {
         uniqueInvoices,
     } = useDataAndDataFilters();
 
+
     return (
         <div className="mb-10 flex flex-col items-center justify-between space-y-3 rounded-lg border-primary p-4 shadow-md md:flex-row md:space-x-4 md:space-y-0">
             <div className="w-full md:w-3/4">
@@ -55,7 +56,6 @@ const TableTopHeader: FC = () => {
                 <div className="relative flex w-full items-center space-x-3 md:w-auto">
                     <button
                         ref={buttonRef}
-                        id="actionsDropdownButton"
                         className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-primary px-5 py-2 text-sm font-medium text-white shadow-sm transition duration-150 hover:border-primary hover:bg-primaryHover hover:text-white focus:border-primary focus:bg-primary focus:text-white 
                         md:w-auto [&:focus>svg]:fill-white [&:hover>svg]:fill-white"
                         type="button"

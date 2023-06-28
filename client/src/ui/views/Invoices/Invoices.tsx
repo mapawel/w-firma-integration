@@ -5,17 +5,20 @@ import { DataAndDataFiltersProvider } from '@/data-providers/filters-data/Data-a
 import InvoiceTable from '@/ui/components/organisms/Invoice-table/Invoice-table';
 import { PaginationProvider } from '@/data-providers/pagination/Pagination-provider';
 import { TablePagination } from '@/ui/components/organisms/Table-pagination/Table-pagination';
+import { CheckboxesProvider } from '@/data-providers/check-boxes-provider/Check-boxes.provider';
 
 const InvoicesView: FC = () => {
     return (
         <DataAndDataFiltersProvider>
             <PaginationProvider>
-                <NavTemplate>
-                    <TableTopHeader />
-                    <TablePagination />
-                    <InvoiceTable />
-                    <TablePagination />
-                </NavTemplate>
+                <CheckboxesProvider>
+                    <NavTemplate>
+                        <TableTopHeader />
+                        <TablePagination />
+                        <InvoiceTable />
+                        <TablePagination />
+                    </NavTemplate>
+                </CheckboxesProvider>
             </PaginationProvider>
         </DataAndDataFiltersProvider>
     );

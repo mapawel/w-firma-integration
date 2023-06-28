@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { toFixedNum } from '@/global-helpers/to-fixed-num';
 import { ReactComponent as Triangle } from '@/assets/icons/triangle.svg';
 import { getFormattedDateAndTime } from '@/global-helpers/get-formatted-date-and-time';
@@ -6,37 +6,14 @@ import { useDataAndDataFilters } from '@/data-providers/filters-data/use-data-an
 import { columns } from './columns.data';
 import { Status } from '@/domains/products/status/status.enum';
 import { StatusBadge } from '../../atoms/Status-badge';
+import { useCheckboxes } from '@/data-providers/check-boxes-provider/use-check-boxes';
 
 const InvoiceTable: FC = () => {
     const { data, sortParam, sortDirect, handleSort, skip } =
         useDataAndDataFilters();
-    const allCheckableIds: number[] = data
-        .map(({ id, status }: { id: number; status: Status }) =>
-            status !== Status.SUCCESS ? id : null,
-        )
-        .filter((item: number | null) => item !== null) as number[];
 
-    const [checked, setChecked] = useState<number[]>([]);
-    const [areAllChecked, setAllChecked] = useState<boolean>(false);
-
-    const handleCheckboxChange = (id: number) => {
-        if (checked.includes(id)) {
-            setChecked((prev) => prev.filter((item) => item !== id));
-        } else {
-            setChecked((prev) => [...prev, id]);
-        }
-    };
-
-    const handleCheckAll = () => {
-        setChecked((prev) => {
-            if (prev.length === allCheckableIds.length) {
-                setAllChecked(false);
-                return [];
-            }
-            setAllChecked(true);
-            return allCheckableIds;
-        });
-    };
+    const { checked, areAllChecked, handleCheckboxChange, handleCheckAll } =
+        useCheckboxes();
 
     return (
         <div className="inline-block overflow-hidden rounded-xl border border-primary">

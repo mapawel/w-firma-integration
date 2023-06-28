@@ -11,7 +11,7 @@ export const StatusBadge = ({ status }: { status: Status }) => {
 
     return (
         <span
-            className={`m-auto inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${statusColor[status]}`}
+            className={`m-auto inline-flex rounded-full px-2 text-xs font-semibold leading-5 text-white ${statusColor[status]}`}
         >
             {statusOptionsTranslations[status]}
         </span>
