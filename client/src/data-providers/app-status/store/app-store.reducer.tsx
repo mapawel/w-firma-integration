@@ -18,6 +18,7 @@ export function reducer(state: IState, { type, payload }: IAction): IState {
                     mainInfo: payload.mainInfo,
                     detailsArr: payload.detailsArr,
                     callbackClearInfo: payload.callbackClearInfo,
+                    callbackClearInfoLabel: payload.callbackClearInfoLabel,
                 },
             };
         case ActionType.CLEAN_DATA:

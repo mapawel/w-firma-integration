@@ -16,8 +16,8 @@ export const upladProductdToDB = async (
 
         const { data: responseData }: { data: BulkUploadResDTO } =
             await axios.post(
-                APIRoutes.UPLOAD_OR_FETCH_PRODUCTS,
-                uploadData.data,
+                APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS,
+                { productsArray: uploadData.data },
                 {
                     headers: {
                         'Content-Type': 'application/json',

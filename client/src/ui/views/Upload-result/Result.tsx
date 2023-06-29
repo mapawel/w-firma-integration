@@ -60,7 +60,7 @@ const ResultView: FC = () => {
         }
 
         const createOrdersInfo: CreateOrderResDTO | void =
-            await upladProductsForOrders(responseData.productIds);
+            await upladProductsForOrders(responseData.productIds, navigate);
         if (!createOrdersInfo) return;
         setAppData({
             mainInfo: 'Informacja o statusie dodawania zamówień do W-Firma:',

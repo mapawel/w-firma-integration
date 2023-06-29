@@ -32,7 +32,7 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
     };
 
     const { data }: SWRResponse<ResponseFromProductFetchDTO | void> = useSWR(
-        [APIRoutes.UPLOAD_OR_FETCH_PRODUCTS, queryParams],
+        [APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS, queryParams],
         ([url, params]) => fetchProducts(url, params),
     );
 

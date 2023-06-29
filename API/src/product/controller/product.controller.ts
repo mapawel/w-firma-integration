@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body, Delete } from '@nestjs/common';
 import { Routes } from 'src/routes/Routes.enum';
 import { ProductCreateDTO } from '../dto/product-create.dto';
 import { ProductFetchService } from '../services/product-fetch.service';
@@ -7,6 +7,8 @@ import { ProductQuery } from '../decorators/product-query-param.decorator';
 import { ProductQueryParams } from '../types/product-query-params.type';
 import { BulkUploadResDTO } from '../dto/bulk-upload-res-dto';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
+import { ProductDeleteResDTO } from '../dto/product-delete-res.dto';
+import { ProductCreatePayloadDTO } from '../dto/product-create-payload.dto';
 // import { UserId } from 'src/decorators/user-id.decorator';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.PRODUCTS_ROUTE}`)
@@ -18,11 +20,11 @@ export class ProductController {
 
     @Post()
     public async createProducts(
-        @Body() productsArray: ProductCreateDTO[],
+        @Body() createProductsPayload: ProductCreatePayloadDTO,
         // @UserId() userId: string,
     ): Promise<BulkUploadResDTO> {
         return await this.productUploadService.uploadBulkProducts(
-            productsArray,
+            createProductsPayload.productsArray,
             'exampleUserId',
         );
     }
@@ -34,5 +36,12 @@ export class ProductController {
         return await this.productFetchService.getAllProducts(
             productQueryParams,
         );
+    }
+
+    @Delete()
+    public async deleteProducts(
+        @Body() productIdsArray: number[],
+    ): Promise<ProductDeleteResDTO> {
+        return await this.productUploadService.deleteProducts(productIdsArray);
     }
 }

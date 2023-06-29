@@ -59,7 +59,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
                         },
                     },
                 );
-
+            //TODO validation of data status if not OK (check with w-firma docs)
             return mapToSystemProductResDto(data);
         } catch (err) {
             throw new CreateOrderException(
@@ -98,7 +98,10 @@ export class CreateOrderService extends CreateOrderBaseClass {
             }
 
             if (productErrors.length > 0)
-                throw new BadRequestException(productErrors);
+                throw new BadRequestException([
+                    'Produkty dodano do bazy, aby móc dodać je później do zamówienia, ale nie udało się na wszystkie z nich stworzyć zamówienia w W-Firmie. Sprawdź tabelę z produktami!',
+                    ...productErrors,
+                ]);
 
             const createOrdersInfo: string[] =
                 await this.splitUploadOrdersToSystem(productsToOrder);
@@ -108,6 +111,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
             };
         } catch (err) {
             if (err instanceof RequestTimeoutException) throw err;
+            if (err instanceof BadRequestException) throw err;
             throw new CreateOrderException(
                 `problem with creating order in w-firma, product ids: ${productsIds}`,
                 {
