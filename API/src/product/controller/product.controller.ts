@@ -1,9 +1,7 @@
-import { Controller, Post, Get, Body, Delete } from '@nestjs/common';
+import { Controller, Post, Get, Body, Delete, Query } from '@nestjs/common';
 import { Routes } from 'src/routes/Routes.enum';
-import { ProductCreateDTO } from '../dto/product-create.dto';
 import { ProductFetchService } from '../services/product-fetch.service';
 import { ProductUploadService } from '../services/product-upload.service';
-import { ProductQuery } from '../decorators/product-query-param.decorator';
 import { ProductQueryParams } from '../types/product-query-params.type';
 import { BulkUploadResDTO } from '../dto/bulk-upload-res-dto';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
@@ -31,7 +29,7 @@ export class ProductController {
 
     @Get()
     public async getProducts(
-        @ProductQuery() productQueryParams: ProductQueryParams,
+        @Query() productQueryParams: ProductQueryParams,
     ): Promise<CompleteResponseDTO> {
         return await this.productFetchService.getAllProducts(
             productQueryParams,
