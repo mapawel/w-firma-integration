@@ -1,4 +1,11 @@
-import { Controller, Post, Get, Body, Inject } from '@nestjs/common';
+import {
+    Controller,
+    Post,
+    Get,
+    Body,
+    Inject,
+    ParseArrayPipe,
+} from '@nestjs/common';
 import { Routes } from '../../../routes/Routes.enum';
 import { CreateOrderBaseClass } from '../interface/create-order.base-class';
 import { CreateOrderResDTO } from '../../../integrated-systems/wfirma/create-order/dto/create-order-res.dto';
@@ -17,7 +24,7 @@ export class CreateOrderController {
 
     @Post()
     public async createSystemOrder(
-        @Body() productIds: number[],
+        @Body(new ParseArrayPipe({ items: Number })) productIds: number[],
     ): Promise<CreateOrderResDTO> {
         return await this.createOrderService.createSystemOrder(productIds);
     }

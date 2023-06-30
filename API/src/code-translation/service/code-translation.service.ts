@@ -3,7 +3,7 @@ import { CodeTranslationCreateDTO } from '../dto/code-translation-create.dto';
 import { CodeTranslation } from '../entity/Code-translation.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CodeTranslationParams } from '../types/code-translation-params.type';
+import { CodeTranslationParamsDTO } from '../dto/code-translation-params.dto';
 import { CodeTranslationException } from '../exceptions/code-translation.exception';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class CodeTranslationService {
     ) {}
 
     public async getCodeTranslations(
-        codeTranslationParams: CodeTranslationParams,
+        codeTranslationParams: CodeTranslationParamsDTO,
     ): Promise<CodeTranslation[]> {
         try {
             const {
@@ -25,7 +25,7 @@ export class CodeTranslationService {
                 sortDirect,
                 records,
                 skip,
-            }: CodeTranslationParams = codeTranslationParams;
+            }: CodeTranslationParamsDTO = codeTranslationParams;
 
             return await this.codeTranslationRepository.find({
                 where: {

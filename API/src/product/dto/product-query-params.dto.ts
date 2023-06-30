@@ -1,10 +1,9 @@
 import { IsEnum, IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Supplier } from '../../supplier/supppliers.enum';
-import { ProductResDTO } from '../dto/product-res.dto';
 import { Status } from '../status/status.enum';
 import { Transform } from 'class-transformer';
 
-export class ProductQueryParams {
+export class ProductQueryParamsDTO {
     @IsString()
     @IsOptional()
     supplierCode?: string;
@@ -31,6 +30,7 @@ export class ProductQueryParams {
 
     @IsIn([
         'addedAt',
+        'updatedAt',
         'invoice',
         'supplierCode',
         'productCode',

@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserData } from '../../decorators/user-data.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { UserId } from 'src/decorators/user-id.decorator';
+import { GetTokenDTO } from '../dto/get-token.dto';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.AUTH_ROUTE}`)
 export class AuthController {
@@ -22,10 +23,10 @@ export class AuthController {
 
     @Get(Routes.AUTH_CALLBACK_ROUTE)
     public async getToken(
-        @Query('code') code: string,
+        @Query() getTokenDTO: GetTokenDTO,
         @Res({ passthrough: true }) res: Response,
     ) {
-        const token: string = await this.authService.getToken(code);
+        const token: string = await this.authService.getToken(getTokenDTO.code);
         res.cookie('access_token', token, {
             httpOnly: true,
             signed: true,

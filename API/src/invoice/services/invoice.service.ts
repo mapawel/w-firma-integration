@@ -1,14 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Invoice } from '../entity/Invoice.entity';
 import { InvoiceResDTO } from '../dto/invoice-res.dto';
-// import { InvoiceCreateDTO } from '../dto/invoice-create.dto';
-import { InvoiceUpdateDTO } from '../dto/invoice-update.dto';
 import { invoiceResDtoMapper } from '../dto/invoice-res-dto.mapper';
 import { InvoiceException } from '../exceptions/invoice.exception';
 import { Supplier } from '../../supplier/supppliers.enum';
-import { InvoiceQueryParams } from '../types/invoce-query-params.type';
+import { InvoiceQueryParamsDTO } from '../dto/invoce-query-params.dto';
 
 @Injectable()
 export class InvoiceService {
@@ -18,7 +16,7 @@ export class InvoiceService {
     ) {}
 
     public async getAllInvoices(
-        invoiceQueryParams: InvoiceQueryParams,
+        invoiceQueryParams: InvoiceQueryParamsDTO,
     ): Promise<InvoiceResDTO[]> {
         try {
             const {
@@ -28,7 +26,7 @@ export class InvoiceService {
                 sortDirect,
                 records,
                 skip,
-            }: InvoiceQueryParams = invoiceQueryParams;
+            }: InvoiceQueryParamsDTO = invoiceQueryParams;
 
             const allInvoices: Invoice[] = await this.invoiceRepository.find({
                 where: {
@@ -114,60 +112,60 @@ export class InvoiceService {
     //     }
     // }
 
-    public async updateInvoice(
-        invoiceId: number,
-        invoiceUpdateDTO: InvoiceUpdateDTO,
-        updatedBy: string,
-    ): Promise<InvoiceResDTO> {
-        try {
-            const result: UpdateResult = await this.invoiceRepository.update(
-                invoiceId,
-                {
-                    updatedBy,
-                    updatedAt: new Date(Date.now()),
-                    ...invoiceUpdateDTO,
-                },
-            );
-            if (!result.affected)
-                throw new NotFoundException(
-                    'Cannot update invoice! Resource not found.',
-                );
+    // public async updateInvoice(
+    //     invoiceId: number,
+    //     invoiceUpdateDTO: InvoiceUpdateDTO,
+    //     updatedBy: string,
+    // ): Promise<InvoiceResDTO> {
+    //     try {
+    //         const result: UpdateResult = await this.invoiceRepository.update(
+    //             invoiceId,
+    //             {
+    //                 updatedBy,
+    //                 updatedAt: new Date(Date.now()),
+    //                 ...invoiceUpdateDTO,
+    //             },
+    //         );
+    //         if (!result.affected)
+    //             throw new NotFoundException(
+    //                 'Cannot update invoice! Resource not found.',
+    //             );
 
-            const updatedInvoice: InvoiceResDTO = await this.getInvoiceById(
-                invoiceId,
-            );
-            return updatedInvoice;
-        } catch (err) {
-            if (err instanceof NotFoundException) throw err;
-            throw new InvoiceException(
-                `Error while updating invoice in DB with passed id: ${invoiceId}, payload: ${JSON.stringify(
-                    invoiceUpdateDTO,
-                    null,
-                    2,
-                )}.`,
-                { cause: err },
-            );
-        }
-    }
+    //         const updatedInvoice: InvoiceResDTO = await this.getInvoiceById(
+    //             invoiceId,
+    //         );
+    //         return updatedInvoice;
+    //     } catch (err) {
+    //         if (err instanceof NotFoundException) throw err;
+    //         throw new InvoiceException(
+    //             `Error while updating invoice in DB with passed id: ${invoiceId}, payload: ${JSON.stringify(
+    //                 invoiceUpdateDTO,
+    //                 null,
+    //                 2,
+    //             )}.`,
+    //             { cause: err },
+    //         );
+    //     }
+    // }
 
-    public async deleteInvoice(invoiceId: number): Promise<true> {
-        try {
-            const result: DeleteResult = await this.invoiceRepository.delete(
-                invoiceId,
-            );
-            if (!result.affected)
-                throw new NotFoundException(
-                    'Cannot delete invoice! Resource not found.',
-                );
-            return true;
-        } catch (err) {
-            if (err instanceof NotFoundException) throw err;
-            throw new InvoiceException(
-                `Error while deleting invoice in DB with passed id: ${invoiceId}`,
-                { cause: err },
-            );
-        }
-    }
+    // public async deleteInvoice(invoiceId: number): Promise<true> {
+    //     try {
+    //         const result: DeleteResult = await this.invoiceRepository.delete(
+    //             invoiceId,
+    //         );
+    //         if (!result.affected)
+    //             throw new NotFoundException(
+    //                 'Cannot delete invoice! Resource not found.',
+    //             );
+    //         return true;
+    //     } catch (err) {
+    //         if (err instanceof NotFoundException) throw err;
+    //         throw new InvoiceException(
+    //             `Error while deleting invoice in DB with passed id: ${invoiceId}`,
+    //             { cause: err },
+    //         );
+    //     }
+    // }
 
     public async findOrCreateInvoiceEntity(
         invoiceNo: string,

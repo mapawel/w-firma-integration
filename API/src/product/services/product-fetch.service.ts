@@ -3,10 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../entity/Product.entity';
 import { productResDtoMapper } from '../dto/product-res-dto.mapper';
-import { ProductQueryParams } from '../types/product-query-params.type';
+import { ProductQueryParamsDTO } from '../dto/product-query-params.dto';
 import { ProductException } from '../exceptions/product.exception';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
-import { Invoice } from 'src/invoice/entity/Invoice.entity';
 
 @Injectable()
 export class ProductFetchService {
@@ -16,7 +15,7 @@ export class ProductFetchService {
     ) {}
 
     public async getAllProducts(
-        productQueryParams: ProductQueryParams,
+        productQueryParams: ProductQueryParamsDTO,
     ): Promise<CompleteResponseDTO> {
         try {
             const {
@@ -30,7 +29,7 @@ export class ProductFetchService {
                 sortDirect,
                 records,
                 skip,
-            }: ProductQueryParams = productQueryParams;
+            }: ProductQueryParamsDTO = productQueryParams;
 
             const queryBuilder = this.productRepository
                 .createQueryBuilder('product')

@@ -1,8 +1,9 @@
 import { Controller, Post, Get, Body, Delete, Query } from '@nestjs/common';
+import { ParseArrayPipe } from '@nestjs/common';
 import { Routes } from 'src/routes/Routes.enum';
 import { ProductFetchService } from '../services/product-fetch.service';
 import { ProductUploadService } from '../services/product-upload.service';
-import { ProductQueryParams } from '../types/product-query-params.type';
+import { ProductQueryParamsDTO } from '../dto/product-query-params.dto';
 import { BulkUploadResDTO } from '../dto/bulk-upload-res-dto';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
 import { ProductDeleteResDTO } from '../dto/product-delete-res.dto';
@@ -29,7 +30,7 @@ export class ProductController {
 
     @Get()
     public async getProducts(
-        @Query() productQueryParams: ProductQueryParams,
+        @Query() productQueryParams: ProductQueryParamsDTO,
     ): Promise<CompleteResponseDTO> {
         return await this.productFetchService.getAllProducts(
             productQueryParams,
@@ -38,7 +39,8 @@ export class ProductController {
 
     @Delete()
     public async deleteProducts(
-        @Body() productIdsArray: number[],
+        @Body(new ParseArrayPipe({ items: Number, separator: ',' }))
+        productIdsArray: number[],
     ): Promise<ProductDeleteResDTO> {
         return await this.productUploadService.deleteProducts(productIdsArray);
     }

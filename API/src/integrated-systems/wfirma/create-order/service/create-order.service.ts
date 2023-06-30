@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
     BadRequestException,
     Injectable,
+    NotFoundException,
     RequestTimeoutException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,7 +13,6 @@ import { FromSystemProductsResDTO } from '../dto/from-system-products-res.dto';
 import { CreateOrderBaseClass } from '../../../../integrations/create-order/interface/create-order.base-class';
 import { mapToSystemProductResDto } from '../dto/system-product.mapper';
 import { Product } from '../../../../product/entity/Product.entity';
-import { temporaryAbContractorId } from 'data/ab.data';
 import { CreateOrderResDTO } from '../dto/create-order-res.dto';
 import { Status } from '../../../../product/status/status.enum';
 import { CreateOrderException } from '../../../../integrations/create-order/exceptions/create-order.exception';
@@ -88,7 +88,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
                 .getMany();
 
             if (!productsToOrder.length)
-                throw new Error(
+                throw new NotFoundException(
                     'No passed products found in DB to generate orders with them!',
                 );
 
@@ -112,6 +112,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
         } catch (err) {
             if (err instanceof RequestTimeoutException) throw err;
             if (err instanceof BadRequestException) throw err;
+            if (err instanceof NotFoundException) throw err;
             throw new CreateOrderException(
                 `problem with creating order in w-firma, product ids: ${productsIds}`,
                 {
@@ -219,6 +220,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
                     },
                 },
             );
+            console.log('data ----> ', data.warehouse_documents?.[0]);
             if (data?.status?.code === 'OK') {
                 await this.productRepository.update(
                     {
@@ -302,7 +304,10 @@ export class CreateOrderService extends CreateOrderBaseClass {
                             "date": "${this.formatDate(new Date())}",
                             "currency": "${products[0].currency}",
                             "contractor": {
-                                "id": ${temporaryAbContractorId}
+                                "id": ${this.configService.get(
+                                    'TEMPORARY_AB_CONTRACOTR_ID',
+                                    '',
+                                )}
                             },
                             "description": "${products[0].invoice.number}",
                             "warehouse_document_contents": {

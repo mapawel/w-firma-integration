@@ -1,9 +1,15 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Query,
+    ParseArrayPipe,
+} from '@nestjs/common';
 import { Routes } from 'src/routes/Routes.enum';
 import { CodeTranslationService } from '../service/code-translation.service';
 import { CodeTranslationCreateDTO } from '../dto/code-translation-create.dto';
-import { CodeTranslationQuery } from '../decorators/code-translation-query-param.decorator';
-import { CodeTranslationParams } from '../types/code-translation-params.type';
+import { CodeTranslationParamsDTO } from '../dto/code-translation-params.dto';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.CODE_TRANSLATIONS_ROUTE}`)
 export class CodeTranslationController {
@@ -13,7 +19,7 @@ export class CodeTranslationController {
 
     @Get()
     public async getCodeTranslations(
-        @CodeTranslationQuery() codeTranslationParams: CodeTranslationParams,
+        @Query() codeTranslationParams: CodeTranslationParamsDTO,
     ) {
         return await this.codeTranslationService.getCodeTranslations(
             codeTranslationParams,
@@ -22,7 +28,8 @@ export class CodeTranslationController {
 
     @Post()
     public async createCodeTranslations(
-        @Body() codeTranslationCreateDTOs: CodeTranslationCreateDTO[],
+        @Body(new ParseArrayPipe({ items: CodeTranslationCreateDTO }))
+        codeTranslationCreateDTOs: CodeTranslationCreateDTO[],
     ): Promise<any> {
         return await this.codeTranslationService.createOrUpdateCodeTranslations(
             codeTranslationCreateDTOs,
