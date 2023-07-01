@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useCallback, SyntheticEvent } from 'react';
 import { toFixedNum } from '@/global-helpers/to-fixed-num';
 import { ReactComponent as Triangle } from '@/assets/icons/triangle.svg';
 import { getFormattedDateAndTime } from '@/global-helpers/get-formatted-date-and-time';
@@ -7,15 +7,41 @@ import { columns } from './columns.data';
 import { Status } from '@/domains/products/status/status.enum';
 import { StatusBadge } from '../../atoms/Status-badge';
 import { useCheckboxes } from '@/data-providers/check-boxes-provider/use-check-boxes';
+import { patchProductCode } from '@/domains/products/actions/patch-product-code';
+import { setAppData } from '@/data-providers/app-status/use-app-status';
 
 const InvoiceTable: FC = () => {
-    const { data, sortParam, sortDirect, handleSort, skip } =
+    const { data, mutate, sortParam, sortDirect, handleSort, skip } =
         useDataAndDataFilters();
 
     const { checked, areAllChecked, handleCheckboxChange, handleCheckAll } =
         useCheckboxes();
 
     const [updatingId, setUpdatingId] = useState<number | null>(null);
+
+    const handleSubmit = useCallback(
+        async (e: SyntheticEvent) => {
+            e.preventDefault();
+            const target = e.target as typeof e.target & {
+                productCode: { value: string };
+            };
+            if (!updatingId || !target.productCode) return;
+
+            const patchResult: { info: string } = await patchProductCode(
+                updatingId,
+                target.productCode.value,
+            );
+            setUpdatingId(null);
+
+            if (!patchResult) return;
+            setAppData({
+                mainInfo: patchResult.info,
+                detailsArr: [],
+            });
+            mutate();
+        },
+        [updatingId, mutate],
+    );
 
     return (
         <div className="inline-block overflow-hidden rounded-xl border border-primary">
@@ -107,7 +133,10 @@ const InvoiceTable: FC = () => {
                                         {productCode || (
                                             <>
                                                 {updatingId === id ? (
-                                                    <form className="flex items-center justify-between">
+                                                    <form
+                                                        className="flex items-center justify-between"
+                                                        onSubmit={handleSubmit}
+                                                    >
                                                         <input
                                                             id="productCode"
                                                             name="productCode"

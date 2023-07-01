@@ -1,3 +1,3 @@
-export type ProductDeleteResDTO = {
+export type ProductPatchOrDeleteResDTO = {
     info: string;
 };

@@ -14,7 +14,7 @@ import { ProductUploadService } from '../services/product-upload.service';
 import { ProductQueryParamsDTO } from '../dto/product-query-params.dto';
 import { BulkUploadResDTO } from '../dto/bulk-upload-res-dto';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
-import { ProductDeleteResDTO } from '../dto/product-delete-res.dto';
+import { ProductPatchOrDeleteResDTO } from '../dto/product-delete-res.dto';
 import { ProductCreatePayloadDTO } from '../dto/product-create-payload.dto';
 import { ProductPatchDTO } from '../dto/product-patch.dto';
 // import { UserId } from 'src/decorators/user-id.decorator';
@@ -50,7 +50,7 @@ export class ProductController {
     public async updateProductCode(
         @Body() patchData: ProductPatchDTO,
         // @UserId() userId: string,
-    ): Promise<string> {
+    ): Promise<ProductPatchOrDeleteResDTO> {
         return await this.productFetchAndDeleteAndPatchService.updateProductCode(
             patchData,
             'exampleUserId',
@@ -61,7 +61,7 @@ export class ProductController {
     public async deleteProducts(
         @Body(new ParseArrayPipe({ items: Number, separator: ',' }))
         productIdsArray: number[],
-    ): Promise<ProductDeleteResDTO> {
+    ): Promise<ProductPatchOrDeleteResDTO> {
         return await this.productFetchAndDeleteAndPatchService.deleteProducts(
             productIdsArray,
         );

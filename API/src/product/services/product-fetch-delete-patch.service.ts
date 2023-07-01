@@ -7,7 +7,7 @@ import { ProductQueryParamsDTO } from '../dto/product-query-params.dto';
 import { ProductException } from '../exceptions/product.exception';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
 import { Status } from '../status/status.enum';
-import { ProductDeleteResDTO } from '../dto/product-delete-res.dto';
+import { ProductPatchOrDeleteResDTO } from '../dto/product-delete-res.dto';
 import { ProductPatchDTO } from '../dto/product-patch.dto';
 import { CodeTranslation } from 'src/code-translation/entity/Code-translation.entity';
 import { CodeTranslationService } from 'src/code-translation/service/code-translation.service';
@@ -123,7 +123,7 @@ export class ProductFetchAndDeleteAndPatchService {
 
     public async deleteProducts(
         productIds: number[],
-    ): Promise<ProductDeleteResDTO> {
+    ): Promise<ProductPatchOrDeleteResDTO> {
         try {
             await this.validateToDelete(productIds);
             const { affected }: { affected?: number | null | undefined } =
@@ -153,7 +153,7 @@ export class ProductFetchAndDeleteAndPatchService {
     public async updateProductCode(
         patchData: ProductPatchDTO,
         userId: string,
-    ): Promise<string> {
+    ): Promise<ProductPatchOrDeleteResDTO> {
         try {
             const { productId, productCode }: ProductPatchDTO = patchData;
 
@@ -204,7 +204,9 @@ export class ProductFetchAndDeleteAndPatchService {
                 userId,
             );
 
-            return `Tłumaczenie kodu dostawcy ${product.supplierCode} na kod produktu ${productCode} zostało dodane. Dopisano je do WSZYSTKICH produktów o kodzie dostawcy: ${product.supplierCode}.`;
+            return {
+                info: `Tłumaczenie kodu dostawcy ${product.supplierCode} na kod produktu ${productCode} zostało dodane. Dopisano je do WSZYSTKICH produktów o kodzie dostawcy: ${product.supplierCode}.`,
+            };
         } catch (err) {
             if (err instanceof NotFoundException) throw err;
             throw new ProductException(
