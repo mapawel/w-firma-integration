@@ -45,6 +45,7 @@ export const CheckboxesProvider: FC<IProps> = ({ children }) => {
         <CheckboxesContext.Provider
             value={{
                 checked,
+                setChecked,
                 areAllChecked,
                 handleCheckboxChange,
                 handleCheckAll,

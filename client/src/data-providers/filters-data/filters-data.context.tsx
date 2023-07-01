@@ -21,6 +21,7 @@ export const DataAndDataFiltersCtx = createContext<{
     setRecords: Dispatch<SetStateAction<number>>;
     skip: number;
     setSkip: Dispatch<SetStateAction<number>>;
+    mutate: () => void;
 }>({
     data: [],
     count: 0,
@@ -39,4 +40,5 @@ export const DataAndDataFiltersCtx = createContext<{
     setRecords: () => {},
     skip: 0,
     setSkip: () => {},
+    mutate: () => {},
 });

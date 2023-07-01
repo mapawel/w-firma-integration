@@ -11,7 +11,7 @@ import {
 } from '@/data-providers/app-status/use-app-status';
 import { setAppDataAsDBUpload } from './helpers/set-app-data-db-upload';
 import { BulkUploadResDTO } from '../../../domains/invoice-upload/types/bulk-upload-res.dto';
-import { CreateOrderResDTO } from '../../../domains/order/types/create-order-res.dto';
+import { CreateOrderResDTO } from '../../../domains/order/dto/create-order-res.dto';
 import { UploadResultInside } from '@/ui/components/organisms/Upload-result-inside';
 
 const ResultView: FC = () => {
@@ -53,7 +53,7 @@ const ResultView: FC = () => {
         if (!responseData) return;
         if (!responseData.canAutoProceed) {
             return setAppDataAsDBUpload(
-                'Produkty dodano do bazy danych, ale napotkanu problemy. Nie można było od razu stworzyć zamówień w W-Firma.',
+                'Produkty dodano do bazy danych, ale napotkano problemy. Nie można było od razu stworzyć zamówień w W-Firma.',
                 responseData,
                 navigate,
             );

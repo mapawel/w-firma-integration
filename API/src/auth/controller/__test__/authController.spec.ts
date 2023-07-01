@@ -55,7 +55,7 @@ describe('authController', () => {
     });
 
     describe('getToken', () => {
-        it('should return return redirect', async () => {
+        it('should return redirect', async () => {
             // given
             const exampleToken = 'access_token';
             const getTokenSpy = jest
@@ -63,7 +63,7 @@ describe('authController', () => {
                 .mockResolvedValue(exampleToken);
 
             //when
-            await authController.getToken('code', responseMock);
+            await authController.getToken({ code: 'code' }, responseMock);
 
             //then
             expect(getTokenSpy).toBeCalledTimes(1);

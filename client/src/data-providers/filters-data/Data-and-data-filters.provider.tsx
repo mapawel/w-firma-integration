@@ -31,7 +31,7 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
         skip: String(skip),
     };
 
-    const { data }: SWRResponse<ResponseFromProductFetchDTO | void> = useSWR(
+    const { data, mutate }: SWRResponse<ResponseFromProductFetchDTO | void> = useSWR(
         [APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS, queryParams],
         ([url, params]) => fetchProducts(url, params),
     );
@@ -47,17 +47,14 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (
-                buttonRef.current &&
-                !buttonRef.current.contains(event.target as Node)
-            )
+            if (isDropdownOpen && event.target !== buttonRef.current)
                 setDropdownOpen(false);
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('click', handleClickOutside);
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('click', handleClickOutside);
         };
     });
 
@@ -85,6 +82,7 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
                 setRecords,
                 skip,
                 setSkip,
+                mutate,
             }}
         >
             {children}

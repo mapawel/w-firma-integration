@@ -1,12 +1,59 @@
+import { useCallback } from 'react';
 import { useCheckboxes } from '@/data-providers/check-boxes-provider/use-check-boxes';
 import { FC } from 'react';
+import { deleteProducts } from '@/domains/products/actions/delete-products';
+import { useNavigate } from 'react-router-dom';
+import { useDataAndDataFilters } from '@/data-providers/filters-data/use-data-and-data-filters';
+import { upladProductsForOrders } from '@/domains/order/actions/upload-product-for-orders';
+import { CreateOrderResDTO } from '@/domains/order/dto/create-order-res.dto';
+import { refreshCodeIds } from '@/domains/invoice-upload/actions/refresh-code-ids';
+import {
+    cleanAppData,
+    setAppData,
+} from '@/data-providers/app-status/use-app-status';
+import { ClientRoutes } from '@/navigation/routes/client.routes';
+import { DeleteProductsResDTO } from '@/domains/products/dto/delete-products-res.dto';
 
 interface IProps {
     isDropdownOpen: boolean;
 }
 
 export const TableDropdown: FC<IProps> = ({ isDropdownOpen }) => {
-    const { checked } = useCheckboxes();
+    const { checked, setChecked } = useCheckboxes();
+    const navigate = useNavigate();
+    const { mutate } = useDataAndDataFilters();
+
+    const handleCreateOrder = useCallback(async () => {
+        await refreshCodeIds();
+        const createOrdersInfo: CreateOrderResDTO | void =
+            await upladProductsForOrders(checked, navigate);
+        if (!createOrdersInfo) return;
+        setAppData({
+            mainInfo: 'Informacja o statusie dodawania zamówień do W-Firma:',
+            detailsArr: createOrdersInfo.info,
+            callbackClearInfo: () => {
+                cleanAppData();
+                navigate(ClientRoutes.INVOICES, { replace: true });
+            },
+            callbackClearInfoLabel: 'OK',
+        });
+        setChecked([]);
+        mutate();
+    }, [checked, mutate, navigate, setChecked]);
+
+    const handleDelete = useCallback(async () => {
+        const deleteProductsInfo: DeleteProductsResDTO | void =
+            await deleteProducts(checked);
+
+        if (!deleteProductsInfo) return;
+        setAppData({
+            mainInfo: deleteProductsInfo.info,
+            detailsArr: [],
+        });
+
+        setChecked([]);
+        mutate();
+    }, [checked, mutate, setChecked]);
 
     return (
         <div
@@ -17,16 +64,22 @@ export const TableDropdown: FC<IProps> = ({ isDropdownOpen }) => {
         >
             {checked.length > 0 ? (
                 <ul
-                    className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                    className="rounded-lg border border-secondaryLight py-1 text-sm text-gray-700 dark:border-secondary dark:text-gray-200"
                     aria-labelledby="actionsDropdownButton"
                 >
                     <li>
-                        <button className="w-full border-none bg-transparent px-4 py-2 uppercase hover:bg-secondaryLight hover:text-white dark:hover:bg-secondary">
+                        <button
+                            onClick={handleCreateOrder}
+                            className="w-full border-none bg-transparent px-4 py-2 uppercase hover:bg-secondaryLight hover:text-white dark:hover:bg-secondary"
+                        >
                             Stwórz zamówienie
                         </button>
                     </li>
                     <li>
-                        <button className="w-full border-none bg-transparent px-4 py-2 uppercase hover:bg-secondaryLight hover:text-white dark:hover:bg-secondary">
+                        <button
+                            onClick={handleDelete}
+                            className="w-full border-none bg-transparent px-4 py-2 uppercase hover:bg-secondaryLight hover:text-white dark:hover:bg-secondary"
+                        >
                             Usuń zaznaczone
                         </button>
                     </li>

@@ -6,7 +6,7 @@ import {
     cleanAppData,
 } from '@/data-providers/app-status/use-app-status';
 import { APIRoutes } from '@/navigation/routes/api.routes';
-import { CreateOrderResDTO } from '@/domains/order/types/create-order-res.dto';
+import { CreateOrderResDTO } from '@/domains/order/dto/create-order-res.dto';
 import { NavigateFunction } from 'react-router-dom';
 
 export const upladProductsForOrders = async (

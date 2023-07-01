@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Product } from '../entity/Product.entity';
 import { productResDtoMapper } from '../dto/product-res-dto.mapper';
 import { ProductQueryParamsDTO } from '../dto/product-query-params.dto';
 import { ProductException } from '../exceptions/product.exception';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
+import { Status } from '../status/status.enum';
+import { ProductDeleteResDTO } from '../dto/product-delete-res.dto';
 
 @Injectable()
-export class ProductFetchService {
+export class ProductFetchAndDeleteService {
     constructor(
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
@@ -108,6 +110,59 @@ export class ProductFetchService {
                     null,
                     2,
                 )}`,
+                {
+                    cause: err,
+                },
+            );
+        }
+    }
+
+    public async deleteProducts(
+        productIds: number[],
+    ): Promise<ProductDeleteResDTO> {
+        try {
+            await this.validateToDelete(productIds);
+            const { affected }: { affected?: number | null | undefined } =
+                await this.productRepository.delete(productIds);
+
+            if (affected !== productIds.length)
+                throw new NotFoundException(
+                    `Deleted products: ${affected}. Not found: ${
+                        productIds.length - (affected || 0)
+                    }.`,
+                );
+
+            return {
+                info: `Deleted all required products.`,
+            };
+        } catch (err) {
+            if (err instanceof NotFoundException) throw err;
+            throw new ProductException(
+                `Error while deleting products. Product ids: ${productIds}.`,
+                {
+                    cause: err,
+                },
+            );
+        }
+    }
+
+    private async validateToDelete(productIds: number[]): Promise<void> {
+        try {
+            const products: Product[] = await this.productRepository.find({
+                where: {
+                    id: In(productIds),
+                    status: Status.SUCCESS,
+                },
+            });
+
+            if (products.length) {
+                throw new ProductException(
+                    `Error while validating products to delete. Al least one product tried to delete is with status SUCCESS, not allowed to delete. Product ids: ${productIds}.`,
+                );
+            }
+        } catch (err) {
+            throw new ProductException(
+                `Error while validating products to delete. Product ids: ${productIds}.`,
                 {
                     cause: err,
                 },

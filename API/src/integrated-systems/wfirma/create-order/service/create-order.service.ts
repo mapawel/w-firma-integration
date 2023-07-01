@@ -99,7 +99,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
 
             if (productErrors.length > 0)
                 throw new BadRequestException([
-                    'Produkty dodano do bazy, aby móc dodać je później do zamówienia, ale nie udało się na wszystkie z nich stworzyć zamówienia w W-Firmie. Sprawdź tabelę z produktami!',
+                    'Produkty są dodane do bazy, aby móc dodać je do zamówienia, ale nie udało się na wszystkie z nich stworzyć zamówienia w W-Firmie. Sprawdź to w tabeli z produktami!',
                     ...productErrors,
                 ]);
 
@@ -132,6 +132,9 @@ export class CreateOrderService extends CreateOrderBaseClass {
 
             if (!systemProduct)
                 return `Dla produktu ${product.supplierCode}, PN: ${product.productCode.PN} nie można odszukać id produktu w W-Firma. Jeśli dodałeś produkt w W-firma niedawno, spróbuj odświeżyć stronę.`;
+
+            if (![Status.NEW, Status.ERROR].includes(product.status))
+                return `Status produkt ${product.supplierCode} uniemożliwia dodanie go do zamówienia.`;
 
             return null;
         } catch (err) {
@@ -220,7 +223,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
                     },
                 },
             );
-            console.log('data ----> ', data.warehouse_documents?.[0]);
+
             if (data?.status?.code === 'OK') {
                 await this.productRepository.update(
                     {
