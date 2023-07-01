@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { toFixedNum } from '@/global-helpers/to-fixed-num';
 import { ReactComponent as Triangle } from '@/assets/icons/triangle.svg';
 import { getFormattedDateAndTime } from '@/global-helpers/get-formatted-date-and-time';
@@ -14,6 +14,8 @@ const InvoiceTable: FC = () => {
 
     const { checked, areAllChecked, handleCheckboxChange, handleCheckAll } =
         useCheckboxes();
+
+    const [updatingId, setUpdatingId] = useState<number | null>(null);
 
     return (
         <div className="inline-block overflow-hidden rounded-xl border border-primary">
@@ -102,7 +104,51 @@ const InvoiceTable: FC = () => {
                                         {invoice}
                                     </td>
                                     <td className=" border border-primary px-5 py-1">
-                                        {productCode}
+                                        {productCode || (
+                                            <>
+                                                {updatingId === id ? (
+                                                    <form className="flex items-center justify-between">
+                                                        <input
+                                                            id="productCode"
+                                                            name="productCode"
+                                                            type="text"
+                                                            className="h-6 w-36 border border-secondaryLight bg-transparent px-2 py-1"
+                                                        />
+                                                        <button
+                                                            type="submit"
+                                                            onClick={() =>
+                                                                setUpdatingId(
+                                                                    id,
+                                                                )
+                                                            }
+                                                            className="cursor-pointer rounded-sm bg-primary px-2 py-1 text-xs uppercase hover:bg-primaryHover"
+                                                        >
+                                                            OK
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                setUpdatingId(
+                                                                    null,
+                                                                )
+                                                            }
+                                                            className="cursor-pointer rounded-sm bg-cta px-2 py-1 text-xs uppercase hover:bg-ctaHover"
+                                                        >
+                                                            X
+                                                        </button>
+                                                    </form>
+                                                ) : (
+                                                    <button
+                                                        onClick={() =>
+                                                            setUpdatingId(id)
+                                                        }
+                                                        className="cursor-pointer rounded-lg border border-cta px-4 py-1 text-xs uppercase hover:bg-cta"
+                                                    >
+                                                        uzupełnij
+                                                    </button>
+                                                )}
+                                            </>
+                                        )}
                                     </td>
                                     <td className=" border border-primary px-5 py-1">
                                         {supplierCode}

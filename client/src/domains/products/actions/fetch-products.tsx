@@ -12,7 +12,7 @@ export const fetchProducts = async (
     queryParams: ProductQueryParams,
 ) => {
     const timer = startLoading();
-    
+
     try {
         const queryString = new URLSearchParams(queryParams).toString();
 
