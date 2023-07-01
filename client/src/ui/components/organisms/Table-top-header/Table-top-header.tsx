@@ -21,6 +21,7 @@ const TableTopHeader: FC = () => {
             <div className="w-full md:w-3/4">
                 <form className="flex items-center gap-4">
                     <Select
+                        id="invoice"
                         options={[
                             {
                                 value: 'all',
@@ -40,6 +41,7 @@ const TableTopHeader: FC = () => {
                         }
                     />
                     <Select
+                        id="status"
                         options={statusOptions}
                         className="w-full"
                         name="status"

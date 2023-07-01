@@ -23,16 +23,16 @@ const AuthProvider: FC<IProps> = ({ children }) => {
     const [user, setUser] = useState<IUser | null>(null);
 
     const fetchUser = useCallback(async (): Promise<IUser | null> => {
+        const timer = startLoading();
         try {
-            startLoading();
             const { data }: { data: IUser } = await axios.get(
                 APIRoutes.AUTH_GET_USER,
             );
 
-            stopLoading();
+            stopLoading(timer);
             return data;
         } catch {
-            stopLoading();
+            stopLoading(timer);
 
             //TODO FOR DEVELOPMENT
 

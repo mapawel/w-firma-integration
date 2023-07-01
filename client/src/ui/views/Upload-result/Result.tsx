@@ -9,10 +9,10 @@ import {
     cleanAppData,
     setAppData,
 } from '@/data-providers/app-status/use-app-status';
-import { setAppDataAsDBUpload } from './helpers/set-app-data-db-upload';
 import { BulkUploadResDTO } from '../../../domains/invoice-upload/types/bulk-upload-res.dto';
 import { CreateOrderResDTO } from '../../../domains/order/dto/create-order-res.dto';
 import { UploadResultInside } from '@/ui/components/organisms/Upload-result-inside';
+import { buildFeedbackModalDetails } from './helpers/build-feedback-modal-details';
 
 const ResultView: FC = () => {
     const navigate = useNavigate();
@@ -33,13 +33,17 @@ const ResultView: FC = () => {
             totalQty,
             totalValue,
         });
-
         if (!responseData) return;
-        setAppDataAsDBUpload(
-            'Pomyślnie dodano produkty do bazy danych.',
-            responseData,
-            navigate,
-        );
+
+        setAppData({
+            mainInfo: 'Pomyślnie dodano produkty do bazy danych.',
+            detailsArr: buildFeedbackModalDetails(responseData),
+            callbackClearInfo: () => {
+                cleanAppData();
+                navigate(ClientRoutes.INVOICES, { replace: true });
+            },
+            callbackClearInfoLabel: 'Sprawdź w tabeli',
+        });
     };
 
     const handleCreateOrders = async (): Promise<void> => {
@@ -49,19 +53,12 @@ const ResultView: FC = () => {
             totalQty,
             totalValue,
         });
-
         if (!responseData) return;
-        if (!responseData.canAutoProceed) {
-            return setAppDataAsDBUpload(
-                'Produkty dodano do bazy danych, ale napotkano problemy. Nie można było od razu stworzyć zamówień w W-Firma.',
-                responseData,
-                navigate,
-            );
-        }
 
         const createOrdersInfo: CreateOrderResDTO | void =
             await upladProductsForOrders(responseData.productIds, navigate);
         if (!createOrdersInfo) return;
+
         setAppData({
             mainInfo: 'Informacja o statusie dodawania zamówień do W-Firma:',
             detailsArr: createOrdersInfo.info,

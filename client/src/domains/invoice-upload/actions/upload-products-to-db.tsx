@@ -11,9 +11,9 @@ import { BulkUploadResDTO } from '@/domains/invoice-upload/types/bulk-upload-res
 export const upladProductdToDB = async (
     uploadData: UploadResDTO,
 ): Promise<BulkUploadResDTO | void> => {
-    try {
-        startLoading();
+    const timer = startLoading();
 
+    try {
         const { data: responseData }: { data: BulkUploadResDTO } =
             await axios.post(
                 APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS,
@@ -24,10 +24,10 @@ export const upladProductdToDB = async (
                     },
                 },
             );
-        stopLoading();
+        stopLoading(timer);
         return responseData;
     } catch (err: any) {
-        stopLoading();
+        stopLoading(timer);
 
         if (err.response.status === 400)
             return setAppData({

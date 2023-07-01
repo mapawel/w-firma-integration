@@ -14,10 +14,11 @@ export const upladFileForm = async (
     formRef: React.RefObject<HTMLFormElement>,
     navigate: NavigateFunction,
 ) => {
+    const timer = startLoading();
+
     try {
-        startLoading();
         if (!formRef.current) {
-            stopLoading();
+            stopLoading(timer);
             return setAppData({
                 mainInfo: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
                 detailsArr: [],
@@ -41,7 +42,7 @@ export const upladFileForm = async (
             },
         );
         formRef.current.reset();
-        stopLoading();
+        stopLoading(timer);
 
         return navigate(ClientRoutes.UPLOAD_RESULT, {
             state: {
@@ -50,7 +51,7 @@ export const upladFileForm = async (
         });
     } catch (err: any) {
         formRef.current?.reset();
-        stopLoading();
+        stopLoading(timer);
 
         if (err.response.status === 400)
             return setAppData({

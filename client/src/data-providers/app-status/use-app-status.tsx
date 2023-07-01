@@ -9,6 +9,8 @@ import { store } from '@/data-providers/app-status/store/app-status-store';
 import { reducer } from '@/data-providers/app-status/store/app-store.reducer';
 import { initialState } from '@/data-providers/app-status/store/app-store-initial.state';
 
+const delayTimerMs = 300;
+
 const useAppStatus = () => {
     const [state, dispatch] = useReducer<
         (state: IState, action: IAction) => IState
@@ -28,10 +30,13 @@ const useAppStatus = () => {
 };
 
 export const startLoading = () =>
-    setTimeout(() => store.dispatch({ type: ActionType.LOADING }));
+    setTimeout(
+        () => store.dispatch({ type: ActionType.LOADING }),
+        delayTimerMs,
+    );
 
 export const stopLoading = (timer?: any) => {
-    if (timer) clearInterval(timer);
+    if (timer) clearTimeout(timer);
     store.dispatch({ type: ActionType.LOADED });
 };
 

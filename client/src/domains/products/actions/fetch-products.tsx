@@ -11,10 +11,11 @@ export const fetchProducts = async (
     url: string,
     queryParams: ProductQueryParams,
 ) => {
+    const timer = startLoading();
+    
     try {
         const queryString = new URLSearchParams(queryParams).toString();
 
-        startLoading();
         const { data }: { data: ResponseFromProductFetchDTO } = await axios.get(
             `${url}?${queryString}`,
             {
@@ -23,11 +24,11 @@ export const fetchProducts = async (
                 },
             },
         );
-        stopLoading();
+        stopLoading(timer);
 
         return data;
     } catch (err: any) {
-        stopLoading();
+        stopLoading(timer);
 
         if (err.response.status === 400)
             return setAppData({

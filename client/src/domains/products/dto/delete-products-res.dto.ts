@@ -1,3 +1,3 @@
 export type DeleteProductsResDTO = {
-    info: string
+    info: string;
 };

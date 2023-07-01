@@ -7,17 +7,17 @@ import {
 import { APIRoutes } from '@/navigation/routes/api.routes';
 
 export const refreshCodeIds = async (): Promise<boolean | void> => {
-    try {
-        startLoading();
+    const timer = startLoading();
 
+    try {
         const { data: responseData }: { data: boolean } = await axios.get(
             APIRoutes.REFRESH_CODE_IDS,
         );
 
-        stopLoading();
+        stopLoading(timer);
         return responseData;
     } catch (err: any) {
-        stopLoading();
+        stopLoading(timer);
         return setAppData({
             mainInfo: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
             detailsArr: [],

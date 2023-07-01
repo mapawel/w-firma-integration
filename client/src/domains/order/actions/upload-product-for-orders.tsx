@@ -8,53 +8,50 @@ import {
 import { APIRoutes } from '@/navigation/routes/api.routes';
 import { CreateOrderResDTO } from '@/domains/order/dto/create-order-res.dto';
 import { NavigateFunction } from 'react-router-dom';
+import { ClientRoutes } from '@/navigation/routes/client.routes';
+
+const redirect = (navigate: NavigateFunction) => {
+    cleanAppData();
+    navigate(ClientRoutes.INVOICES, { replace: true });
+};
 
 export const upladProductsForOrders = async (
     productIds: number[],
     navigate: NavigateFunction,
 ): Promise<CreateOrderResDTO | void> => {
-    try {
-        startLoading();
+    const timer = startLoading();
 
+    try {
         const { data: responseData }: { data: CreateOrderResDTO } =
             await axios.post(APIRoutes.UPLOAD_ORDERS, productIds, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-        stopLoading();
+        stopLoading(timer);
         return responseData;
     } catch (err: any) {
-        stopLoading();
+        stopLoading(timer);
 
         if (err.response.status === 408)
             return setAppData({
                 mainInfo: `Coś nie tak z połączeniem do W-Firma. Wskazówka: ${err.response.data.message}`,
                 detailsArr: [],
-                callbackClearInfo: () => {
-                    cleanAppData();
-                    navigate('/', { replace: true });
-                },
-                callbackClearInfoLabel: 'Wróć do strony głównej',
+                callbackClearInfo: () => redirect(navigate),
+                callbackClearInfoLabel: 'Sprawdź w tabeli',
             });
         if (err.response.status === 400)
             return setAppData({
                 mainInfo: 'Coś nie tak z wysłanymi danymi. Wskazówki:',
                 detailsArr: err.response.data.message,
-                callbackClearInfo: () => {
-                    cleanAppData();
-                    navigate('/', { replace: true });
-                },
-                callbackClearInfoLabel: 'Wróć do strony głównej',
+                callbackClearInfo: () => redirect(navigate),
+                callbackClearInfoLabel: 'Sprawdź w tabeli',
             });
         return setAppData({
             mainInfo: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
             detailsArr: [],
-            callbackClearInfo: () => {
-                cleanAppData();
-                navigate('/', { replace: true });
-            },
-            callbackClearInfoLabel: 'Wróć do strony głównej',
+            callbackClearInfo: () => redirect(navigate),
+            callbackClearInfoLabel: 'Sprawdź w tabeli',
         });
     }
 };

@@ -23,6 +23,7 @@ export const TablePagination: FC = () => {
                 <span className="text-sm">na stronę:</span>
                 <form>
                     <Select
+                        id="records"
                         options={options}
                         value={{
                             value: records,

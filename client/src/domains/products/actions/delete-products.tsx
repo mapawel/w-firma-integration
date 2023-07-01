@@ -7,8 +7,9 @@ import {
 import { APIRoutes } from '@/navigation/routes/api.routes';
 
 export const deleteProducts = async (productIds: number[]) => {
+    const timer = startLoading();
+    
     try {
-        startLoading();
         const { data }: { data: any } = await axios.delete(
             APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS,
             {
@@ -18,11 +19,11 @@ export const deleteProducts = async (productIds: number[]) => {
                 },
             },
         );
-        stopLoading();
+        stopLoading(timer);
 
         return data;
     } catch (err: any) {
-        stopLoading();
+        stopLoading(timer);
 
         if (err.response.status === 404)
             return setAppData({

@@ -31,10 +31,11 @@ export const DataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
         skip: String(skip),
     };
 
-    const { data, mutate }: SWRResponse<ResponseFromProductFetchDTO | void> = useSWR(
-        [APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS, queryParams],
-        ([url, params]) => fetchProducts(url, params),
-    );
+    const { data, mutate }: SWRResponse<ResponseFromProductFetchDTO | void> =
+        useSWR(
+            [APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS, queryParams],
+            ([url, params]) => fetchProducts(url, params),
+        );
 
     const handleSort = (param: keyof ProductResDTO) => {
         if (param === sortParam) {
