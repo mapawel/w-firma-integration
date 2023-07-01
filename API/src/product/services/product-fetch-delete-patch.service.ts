@@ -197,11 +197,64 @@ export class ProductFetchAndDeleteAndPatchService {
                 throw new Error(
                     `Nie można dodać tłumaczenia kodu produktu o kodzie dostawcy: ${product.supplierCode}.`,
                 );
-            return `Tłumaczenie kodu dostawcy ${product.supplierCode} na kod produktu ${productCode} zostało dodane. Dopisano do produktu: ${product.supplierCode}.`;
+
+            await this.patchSameProductSupplierNames(
+                product.supplierCode,
+                addedCodeTranslation[0],
+                userId,
+            );
+
+            return `Tłumaczenie kodu dostawcy ${product.supplierCode} na kod produktu ${productCode} zostało dodane. Dopisano je do WSZYSTKICH produktów o kodzie dostawcy: ${product.supplierCode}.`;
         } catch (err) {
             if (err instanceof NotFoundException) throw err;
             throw new ProductException(
                 `Error while updating product code. Product id: ${patchData.productId}.`,
+                {
+                    cause: err,
+                },
+            );
+        }
+    }
+
+    private async patchSameProductSupplierNames(
+        supplierCode: string,
+        codeTranslation: CodeTranslation,
+        userId: string,
+    ): Promise<true> {
+        try {
+            let successCount = 0;
+            const productsToPatch: Product[] =
+                await this.productRepository.find({
+                    where: {
+                        supplierCode,
+                        productCode: IsNull(),
+                        status: Status.NEW_WARN,
+                    },
+                });
+
+            for (const product of productsToPatch) {
+                const { affected }: { affected?: number | null | undefined } =
+                    await this.productRepository.update(
+                        { id: product.id },
+                        {
+                            productCode: codeTranslation,
+                            updatedBy: userId,
+                            updatedAt: new Date(),
+                            status: Status.NEW,
+                        },
+                    );
+                if (affected !== 1)
+                    throw new Error(
+                        'Error while patching product with the same supplier names as currently patched product.',
+                    );
+                successCount++;
+            }
+            if (successCount !== productsToPatch.length)
+                throw new Error('Not all products were patched ! ! !');
+            return true;
+        } catch (err) {
+            throw new ProductException(
+                `Error while patching product with the same supplier names as currently patched product. Supplier code: ${supplierCode}.`,
                 {
                     cause: err,
                 },
