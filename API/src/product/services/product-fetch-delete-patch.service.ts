@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Code, In, IsNull, Repository } from 'typeorm';
 import { Product } from '../entity/Product.entity';
 import { productResDtoMapper } from '../dto/product-res-dto.mapper';
 import { ProductQueryParamsDTO } from '../dto/product-query-params.dto';
@@ -8,12 +8,16 @@ import { ProductException } from '../exceptions/product.exception';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
 import { Status } from '../status/status.enum';
 import { ProductDeleteResDTO } from '../dto/product-delete-res.dto';
+import { ProductPatchDTO } from '../dto/product-patch.dto';
+import { CodeTranslation } from 'src/code-translation/entity/Code-translation.entity';
+import { CodeTranslationService } from 'src/code-translation/service/code-translation.service';
 
 @Injectable()
-export class ProductFetchAndDeleteService {
+export class ProductFetchAndDeleteAndPatchService {
     constructor(
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
+        private readonly codeTranslationService: CodeTranslationService,
     ) {}
 
     public async getAllProducts(
@@ -139,6 +143,65 @@ export class ProductFetchAndDeleteService {
             if (err instanceof NotFoundException) throw err;
             throw new ProductException(
                 `Error while deleting products. Product ids: ${productIds}.`,
+                {
+                    cause: err,
+                },
+            );
+        }
+    }
+
+    public async updateProductCode(
+        patchData: ProductPatchDTO,
+        userId: string,
+    ): Promise<string> {
+        try {
+            const { productId, productCode }: ProductPatchDTO = patchData;
+
+            const product: Product | null =
+                await this.productRepository.findOne({
+                    where: {
+                        id: productId,
+                        productCode: IsNull(),
+                    },
+                });
+
+            if (!product)
+                throw new NotFoundException(
+                    `Product not found or productCode for this product is already set.`,
+                );
+
+            const addedCodeTranslation: CodeTranslation[] =
+                await this.codeTranslationService.createOrUpdateCodeTranslations(
+                    [
+                        {
+                            supplier: product.supplier,
+                            supplierCode: product.supplierCode,
+                            PN: productCode,
+                        },
+                    ],
+                    userId,
+                );
+
+            const { affected }: { affected?: number | null | undefined } =
+                await this.productRepository.update(
+                    { id: productId },
+                    {
+                        productCode: addedCodeTranslation[0],
+                        updatedBy: userId,
+                        updatedAt: new Date(),
+                        status: Status.NEW,
+                    },
+                );
+
+            if (affected !== 1)
+                throw new Error(
+                    `Nie można dodać tłumaczenia kodu produktu o kodzie dostawcy: ${product.supplierCode}.`,
+                );
+            return `Tłumaczenie kodu dostawcy ${product.supplierCode} na kod produktu ${productCode} zostało dodane. Dopisano do produktu: ${product.supplierCode}.`;
+        } catch (err) {
+            if (err instanceof NotFoundException) throw err;
+            throw new ProductException(
+                `Error while updating product code. Product id: ${patchData.productId}.`,
                 {
                     cause: err,
                 },

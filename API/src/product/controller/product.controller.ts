@@ -1,19 +1,28 @@
-import { Controller, Post, Get, Body, Delete, Query } from '@nestjs/common';
+import {
+    Controller,
+    Post,
+    Get,
+    Body,
+    Delete,
+    Query,
+    Patch,
+} from '@nestjs/common';
 import { ParseArrayPipe } from '@nestjs/common';
 import { Routes } from 'src/routes/Routes.enum';
-import { ProductFetchAndDeleteService } from '../services/product-fetch-and-delete.service';
+import { ProductFetchAndDeleteAndPatchService } from '../services/product-fetch-delete-patch.service';
 import { ProductUploadService } from '../services/product-upload.service';
 import { ProductQueryParamsDTO } from '../dto/product-query-params.dto';
 import { BulkUploadResDTO } from '../dto/bulk-upload-res-dto';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
 import { ProductDeleteResDTO } from '../dto/product-delete-res.dto';
 import { ProductCreatePayloadDTO } from '../dto/product-create-payload.dto';
+import { ProductPatchDTO } from '../dto/product-patch.dto';
 // import { UserId } from 'src/decorators/user-id.decorator';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.PRODUCTS_ROUTE}`)
 export class ProductController {
     constructor(
-        private readonly productFetchAndDeleteService: ProductFetchAndDeleteService,
+        private readonly productFetchAndDeleteAndPatchService: ProductFetchAndDeleteAndPatchService,
         private readonly productUploadService: ProductUploadService,
     ) {}
 
@@ -32,8 +41,19 @@ export class ProductController {
     public async getProducts(
         @Query() productQueryParams: ProductQueryParamsDTO,
     ): Promise<CompleteResponseDTO> {
-        return await this.productFetchAndDeleteService.getAllProducts(
+        return await this.productFetchAndDeleteAndPatchService.getAllProducts(
             productQueryParams,
+        );
+    }
+
+    @Patch()
+    public async updateProductCode(
+        @Body() patchData: ProductPatchDTO,
+        // @UserId() userId: string,
+    ): Promise<string> {
+        return await this.productFetchAndDeleteAndPatchService.updateProductCode(
+            patchData,
+            'exampleUserId',
         );
     }
 
@@ -42,7 +62,7 @@ export class ProductController {
         @Body(new ParseArrayPipe({ items: Number, separator: ',' }))
         productIdsArray: number[],
     ): Promise<ProductDeleteResDTO> {
-        return await this.productFetchAndDeleteService.deleteProducts(
+        return await this.productFetchAndDeleteAndPatchService.deleteProducts(
             productIdsArray,
         );
     }

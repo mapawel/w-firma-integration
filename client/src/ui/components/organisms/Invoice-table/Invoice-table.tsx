@@ -112,6 +112,7 @@ const InvoiceTable: FC = () => {
                                                             id="productCode"
                                                             name="productCode"
                                                             type="text"
+                                                            autoFocus={true}
                                                             className="h-6 w-36 border border-secondaryLight bg-transparent px-2 py-1"
                                                         />
                                                         <button
