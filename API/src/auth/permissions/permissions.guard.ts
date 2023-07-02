@@ -15,7 +15,6 @@ export class PermissionsGuard implements CanActivate {
             PERMISSIONS_KEY,
             context.getHandler(),
         );
-
         const userPermissions = context.getArgs()[0].user.permissions;
 
         if (!requiredPermissions) {

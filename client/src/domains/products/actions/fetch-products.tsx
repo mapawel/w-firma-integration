@@ -30,6 +30,12 @@ export const fetchProducts = async (
     } catch (err: any) {
         stopLoading(timer);
 
+        if (err.response.status === 403)
+            return setAppData({
+                mainInfo: 'Nie masz dpstępu do tych danych lub tej czynności!',
+                detailsArr: [],
+            });
+
         if (err.response.status === 400)
             return setAppData({
                 mainInfo: 'Coś nie tak z wysłanymi danymi. Wskazówki:',

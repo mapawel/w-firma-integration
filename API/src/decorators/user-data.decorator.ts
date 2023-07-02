@@ -5,7 +5,7 @@ export const UserData = createParamDecorator(
         const request = ctx.switchToHttp().getRequest();
 
         const name: string | undefined =
-            request?.user?.[`${process.env.AUTH0_NAMESPACE}/userInfo`].name;
+            request?.user?.[`${process.env.AUTH0_NAMESPACE}/userInfo`]?.name;
         const roles: string[] | undefined =
             request?.user?.[`${process.env.AUTH0_NAMESPACE}/roles`];
 

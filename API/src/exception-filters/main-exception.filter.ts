@@ -6,6 +6,7 @@ import {
     BadRequestException,
     NotFoundException,
     RequestTimeoutException,
+    ForbiddenException,
 } from '@nestjs/common';
 import { Response } from 'express';
 
@@ -19,6 +20,9 @@ export class MainExceptionFilter implements ExceptionFilter {
             exception instanceof HttpException ? exception.getStatus() : 500;
 
         this.logException(exception);
+
+        if (exception instanceof ForbiddenException)
+            return response.status(status).json(exception.getResponse());
 
         if (exception instanceof RequestTimeoutException)
             return response.status(status).json(exception.getResponse());
