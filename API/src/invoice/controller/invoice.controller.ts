@@ -19,8 +19,8 @@ export class InvoiceController {
         private readonly configService: ConfigService,
     ) {}
 
-    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    // @Permissions([PermissionsEnum.READ_TEMPLATES])
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions([PermissionsEnum.READ_PRODUCTS])
     @Get()
     async getInvoiceByNumber(
         @Query() invoiceQueryParams: InvoiceQueryParamsDTO,
@@ -28,8 +28,8 @@ export class InvoiceController {
         return await this.invoiceService.getAllInvoices(invoiceQueryParams);
     }
 
-    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    // @Permissions([PermissionsEnum.READ_TEMPLATES])
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions([PermissionsEnum.READ_PRODUCTS])
     @Get(':id')
     async getInvoiceById(
         @Param() invoiceParams: InvoiceParamsDTO,

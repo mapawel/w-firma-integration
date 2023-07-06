@@ -31,6 +31,8 @@ export class ProductController {
         private readonly productUploadService: ProductUploadService,
     ) {}
 
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions([PermissionsEnum.ADD_PRODUCTS])
     @Post()
     public async createProducts(
         @Body() createProductsPayload: ProductCreatePayloadDTO,
@@ -53,6 +55,8 @@ export class ProductController {
         );
     }
 
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions([PermissionsEnum.UPDATE_PRODUCTS])
     @Patch()
     public async updateProductCode(
         @Body() patchData: ProductPatchDTO,
@@ -64,6 +68,8 @@ export class ProductController {
         );
     }
 
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions([PermissionsEnum.REMOVE_PRODUCTS])
     @Delete()
     public async deleteProducts(
         @Body(new ParseArrayPipe({ items: Number, separator: ',' }))
