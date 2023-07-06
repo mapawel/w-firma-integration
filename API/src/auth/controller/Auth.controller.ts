@@ -1,11 +1,10 @@
+import { Response } from 'express';
 import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ConfigService } from '@nestjs/config';
 import { AuthService } from '../service/auth.service';
 import { Routes } from '../../routes/Routes.enum';
-import { Response } from 'express';
-import { ConfigService } from '@nestjs/config';
 import { UserData } from '../../decorators/user-data.decorator';
-import { AuthGuard } from '@nestjs/passport';
-import { UserId } from 'src/decorators/user-id.decorator';
 import { GetTokenDTO } from '../dto/get-token.dto';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.AUTH_ROUTE}`)

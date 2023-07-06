@@ -15,6 +15,7 @@ import { PermissionsGuard } from '../../auth/permissions/permissions.guard';
 import { PermissionsEnum } from '../../auth/permissions/permissions.enum';
 import { AuthGuard } from '@nestjs/passport';
 import { Permissions } from '../../auth/permissions/permissions.decorator';
+import { UserId } from '../../decorators/user-id.decorator';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.CODE_TRANSLATIONS_ROUTE}`)
 export class CodeTranslationController {
@@ -39,10 +40,11 @@ export class CodeTranslationController {
     public async createCodeTranslations(
         @Body(new ParseArrayPipe({ items: CodeTranslationCreateDTO }))
         codeTranslationCreateDTOs: CodeTranslationCreateDTO[],
+        @UserId() userId: string,
     ): Promise<any> {
         return await this.codeTranslationService.createOrUpdateCodeTranslations(
             codeTranslationCreateDTOs,
-            'exxampleUserId',
+            userId,
         );
     }
 }
