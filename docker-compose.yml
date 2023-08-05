@@ -1,50 +1,50 @@
 services:
-    client:
-        build:
-            dockerfile: Dockerfile
-            context: .
-            target: development
-        volumes:
-            - ./client:/usr/app/WIntegration/client
-            - /usr/app/WIntegration/client/node_modules
-        working_dir: /usr/app/WIntegration/client
-        command: npm start
-        ports:
-            - 3000:3000
-        depends_on:
-            - api
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - ./client:/usr/app/WIntegration/client
+      - /usr/app/WIntegration/client/node_modules
+    working_dir: /usr/app/WIntegration/client
+    command: npm start
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
 
-    api:
-        build:
-            dockerfile: Dockerfile
-            context: .
-            target: development
-        volumes:
-            - ./client/build:/usr/app/WIntegration/client/build
-            - ./API:/usr/app/WIntegration/API
-            - /usr/app/WIntegration/API/node_modules
-        working_dir: /usr/app/WIntegration/API
-        command: npm run start:dev
-        ports:
-            - 3005:3005
-        depends_on:
-            - postgres
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - ./client/build:/usr/app/WIntegration/client/build
+      - ./API:/usr/app/WIntegration/API
+      - /usr/app/WIntegration/API/node_modules
+    working_dir: /usr/app/WIntegration/API
+    command: npm run start:dev
+    ports:
+      - 3005:3005
+    depends_on:
+      - postgres
 
-    postgres:
-        image: postgres
-        env_file:
-            - ./API/.env
-        restart: always
-        ports:
-            - 5432:5432
-        volumes:
-            - postgres:/var/lib/postgresql/data
+  postgres:
+    image: postgres
+    env_file:
+      - ./API/.env
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
 
-    adminer:
-        image: adminer
-        restart: always
-        ports:
-            - 8080:8080
+#    adminer:
+#        image: adminer
+#        restart: always
+#        ports:
+#            - 8080:8080
 
 volumes:
-    postgres:
+  postgres:

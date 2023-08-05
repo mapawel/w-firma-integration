@@ -15,8 +15,8 @@ export class AuthController {
     ) {}
 
     @Get()
-    public startAuth(@Res() res: Response) {
-        const url = this.authService.getAuthUrl();
+    public async startAuth(@Res() res: Response) {
+        const url = await this.authService.getAuthUrl();
         return res.redirect(url);
     }
 
@@ -25,7 +25,8 @@ export class AuthController {
         @Query() getTokenDTO: GetTokenDTO,
         @Res({ passthrough: true }) res: Response,
     ) {
-        const token: string = await this.authService.getToken(getTokenDTO.code);
+        const { code, state } = getTokenDTO;
+        const token: string = await this.authService.getToken(code, state);
         res.cookie('access_token', token, {
             httpOnly: true,
             signed: true,

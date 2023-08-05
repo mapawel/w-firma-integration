@@ -1,10 +1,24 @@
-import { FC } from 'react';
-import NavTemplate from '@/ui/components/templates/Nav-template';
+import { FC } from "react";
+import NavTemplate from "@/ui/components/templates/Nav-template";
+import useAuth from "@/data-providers/auth/use-auth";
+import { IUser } from "@/data-providers/auth/interfaces/user.interface";
 
 const SettingsView: FC = () => {
+    const user: IUser | null = useAuth();
     return (
         <NavTemplate>
-            <h1>Settings view</h1>
+            <div className="rounded-xl border border-gray-100 p-4 shadow-md sm:p-6 lg:p-8">
+                <h1 className="text-3xl font-semibold">Dane bieżącego konta:</h1>
+                <div className="my-5">
+                    <h2 className="text-secondary text-xl font-semibold">Nazwa użytkownika:</h2>
+                    <p className="text-primary font-bold ml-3">{user?.name}</p>
+                </div>
+                <div className="my-5">
+                    <h2 className="text-secondary text-xl font-semibold">Rola użytkownika:</h2>
+                    <p className="text-primary font-bold ml-3">{user?.roles}</p>
+                </div>
+
+            </div>
         </NavTemplate>
     );
 };

@@ -5,4 +5,9 @@ export class GetTokenDTO {
     @IsNotEmpty()
     @MaxLength(80)
     code: string;
+
+    @IsString()
+    @IsNotEmpty()
+    @MaxLength(300)
+    state: string;
 }

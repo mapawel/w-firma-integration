@@ -1,8 +1,8 @@
-import { FC } from 'react';
-import useAuth from '@/data-providers/auth/use-auth';
-import { IUser } from '@/data-providers/auth/interfaces/user.interface';
-import { APIRoutes } from '@/navigation/routes/api.routes';
-import { ReactComponent as Logo } from '@/assets/logo/logo.svg';
+import { FC } from "react";
+import useAuth from "@/data-providers/auth/use-auth";
+import { IUser } from "@/data-providers/auth/interfaces/user.interface";
+import { APIRoutes } from "@/navigation/routes/api.routes";
+import { ReactComponent as Logo } from "@/assets/logo/logo.svg";
 
 const Navbar: FC = (): JSX.Element => {
     const user: IUser | null = useAuth();
@@ -29,7 +29,7 @@ const Navbar: FC = (): JSX.Element => {
                             : APIRoutes.AUTH_LOGIN
                     }
                 >
-                    {user?.name ? 'Logout' : 'Login'}
+                    {user?.name ? "Logout" : "Login"}
                 </a>
             </div>
         </div>
