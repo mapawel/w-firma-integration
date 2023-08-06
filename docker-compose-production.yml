@@ -10,6 +10,8 @@ services:
       - postgres
     env_file:
       - ./API/.env
+      - ./API/.env.auth
+      - ./API/.env.wfirma
 
   postgres:
     image: postgres

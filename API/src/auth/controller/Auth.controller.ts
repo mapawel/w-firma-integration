@@ -17,6 +17,7 @@ export class AuthController {
     @Get()
     public async startAuth(@Res() res: Response) {
         const url = await this.authService.getAuthUrl();
+        console.log('url: ', url);
         return res.redirect(url);
     }
 

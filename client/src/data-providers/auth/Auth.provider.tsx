@@ -1,9 +1,13 @@
-import { FC, useCallback, useEffect, useState } from "react";
-import axios from "axios";
-import { setAppData, startLoading, stopLoading } from "@/data-providers/app-status/use-app-status";
-import { IUser } from "./interfaces/user.interface";
-import { authContext } from "./auth.context";
-import { APIRoutes } from "@/navigation/routes/api.routes";
+import { FC, useCallback, useEffect, useState } from 'react';
+import axios from 'axios';
+import {
+    setAppData,
+    startLoading,
+    stopLoading,
+} from '@/data-providers/app-status/use-app-status';
+import { IUser } from './interfaces/user.interface';
+import { authContext } from './auth.context';
+import { APIRoutes } from '@/navigation/routes/api.routes';
 
 // FOR DEVELOPMENT !!!
 // const mockUser: IUser = {
@@ -22,7 +26,7 @@ const AuthProvider: FC<IProps> = ({ children }) => {
         const timer = startLoading();
         try {
             const { data }: { data: IUser } = await axios.get(
-                APIRoutes.AUTH_GET_USER
+                APIRoutes.AUTH_GET_USER,
             );
 
             stopLoading(timer);
@@ -34,7 +38,7 @@ const AuthProvider: FC<IProps> = ({ children }) => {
 
             setAppData({
                 mainInfo: "Couldn't fetch user!",
-                detailsArr: []
+                detailsArr: [],
             });
             return null;
         }

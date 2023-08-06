@@ -49,4 +49,4 @@ COPY --chown=node:node --from=build /usr/app/WIntegration/API/.env ./WIntegratio
 COPY --chown=node:node --from=build /usr/app/WIntegration/API/dist ./WIntegration/API/dist
 COPY --chown=node:node --from=build /usr/app/WIntegration/client/build ./WIntegration/client/build
 
-CMD [ "node", "WIntegration/API/dist/main.js" ]
+CMD [ "node", "WIntegration/API/dist/src/main.js" ]

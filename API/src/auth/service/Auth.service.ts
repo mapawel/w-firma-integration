@@ -66,6 +66,10 @@ export class AuthService {
             scope: this.AUTH0_SCOPE,
             state: signedNonce,
         });
+        console.log(
+            'redirect url: ',
+            `${this.BASE_URL}${Routes.BASE_API_ROUTE}${Routes.AUTH_ROUTE}${Routes.AUTH_CALLBACK_ROUTE}`,
+        );
         return `${this.AUTH0_BASE_URL}${this.AUTH0_AUTHORIZE_ROUTE}?${queryParams}`;
     }
 
@@ -126,7 +130,7 @@ export class AuthService {
         try {
             const queryParams: URLSearchParams = new URLSearchParams({
                 client_id: this.AUTH0_CLIENT_ID,
-                returnTo: 'http://localhost:3005',
+                returnTo: this.BASE_URL,
             });
 
             return `${this.AUTH0_BASE_URL}/v2/logout?${queryParams}`;
