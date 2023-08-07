@@ -1,4 +1,5 @@
 import { IsString } from 'class-validator';
+import { UploadType } from '../types';
 
 export class UploadDTO {
     @IsString()
@@ -6,4 +7,7 @@ export class UploadDTO {
 
     @IsString()
     cur: string;
+
+    @IsString()
+    type: UploadType;
 }

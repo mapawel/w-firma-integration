@@ -1,10 +1,10 @@
 import {
+    Body,
     Controller,
     Get,
-    Post,
-    Body,
-    Query,
     ParseArrayPipe,
+    Post,
+    Query,
     UseGuards,
 } from '@nestjs/common';
 import { Routes } from '../../routes/Routes.enum';

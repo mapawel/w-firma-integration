@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Supplier } from '../../supplier/supppliers.enum';
 import { Product } from '../../product/entity/Product.entity';
 
@@ -28,6 +28,8 @@ export class CodeTranslation {
     @Column({ nullable: true })
     updatedAt: Date;
 
-    @OneToMany(() => Product, (product) => product.productCode)
+    @OneToMany(() => Product, (product) => product.productCode, {
+        cascade: true,
+    })
     products: Product[];
 }

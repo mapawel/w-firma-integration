@@ -1,15 +1,27 @@
 export const temporaryAbUserSetHeadings = {
-    invoiceNumber: 'numer fak',
-    supplierCode: 'Inde',
-    quantity: 'Ilość',
-    netPrice: 'Cena net',
+    products: {
+        invoiceNumber: 'numer fak',
+        supplierCode: 'Inde',
+        quantity: 'Ilość',
+        netPrice: 'Cena net',
+    },
+    codes: {
+        supplierCode: 'supplierCode',
+        PN: 'PN',
+    },
 };
 
 export const temporaryAbUserSetHeddingsTranslation = {
-    'numer fak': 'invoiceNumber',
-    Inde: 'supplierCode',
-    Ilość: 'quantity',
-    'Cena net': 'netPrice',
+    products: {
+        'numer fak': 'invoiceNumber',
+        Inde: 'supplierCode',
+        Ilość: 'quantity',
+        'Cena net': 'netPrice',
+    },
+    codes: {
+        supplierCode: 'supplierCode',
+        PN: 'PN',
+    },
 };
 
 // to translate what is above before putting it into DB

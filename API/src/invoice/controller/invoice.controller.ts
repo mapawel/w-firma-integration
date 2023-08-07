@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { Routes } from 'src/routes/Routes.enum';
 import { InvoiceService } from '../services/invoice.service';
 // import { InvoiceCreateDTO } from '../dto/invoice-create.dto';
@@ -36,43 +36,4 @@ export class InvoiceController {
     ): Promise<InvoiceResDTO> {
         return await this.invoiceService.getInvoiceById(invoiceParams.id);
     }
-
-    // PROBABLY TO REMOVE
-
-    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    // @Permissions([PermissionsEnum.CREATE_TEMPLATES])
-    // @Post()
-    // async createInvoice(
-    //     @Body() invoiceCreateDTO: InvoiceCreateDTO,
-    //     // @UserId() userId: string,
-    // ): Promise<InvoiceResDTO> {
-    //     return await this.invoiceService.createInvoice(
-    //         invoiceCreateDTO,
-    //         // userId,
-    //         'exampleUserId',
-    //     );
-    // }
-
-    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    // @Permissions([PermissionsEnum.UPDATES_TEMPLATES])
-    // @Patch(':id')
-    // async updateInvoice(
-    //     @Param('id') invoiceId: number,
-    //     @Body() invoiceUpdateDTO: InvoiceUpdateDTO,
-    //     // @UserId() userId: string,
-    // ): Promise<InvoiceResDTO> {
-    //     return await this.invoiceService.updateInvoice(
-    //         invoiceId,
-    //         invoiceUpdateDTO,
-    //         // userId,
-    //         'exampleUserId',
-    //     );
-    // }
-
-    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    // @Permissions([PermissionsEnum.DELETE_TEMPLATES])
-    // @Delete(':id')
-    // async deleteInvoice(@Param('id') invoiceId: number): Promise<true> {
-    //     return await this.invoiceService.deleteInvoice(invoiceId);
-    // }
 }

@@ -1,6 +1,6 @@
 import { ProductType } from './Product.type';
 
-export type UploadResDTO = {
+export type UploadProductsResDTO = {
     totalValue: number;
     totalQty: number;
     totalPositions: number;

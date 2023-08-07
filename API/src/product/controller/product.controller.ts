@@ -1,14 +1,15 @@
 import {
-    Controller,
-    Post,
-    Get,
     Body,
+    Controller,
     Delete,
-    Query,
+    Get,
+    ParseArrayPipe,
     Patch,
+    Post,
+    Query,
     UseGuards,
 } from '@nestjs/common';
-import { ParseArrayPipe } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Routes } from '../../routes/Routes.enum';
 import { ProductFetchAndDeleteAndPatchService } from '../services/product-fetch-delete-patch.service';
 import { ProductUploadService } from '../services/product-upload.service';
@@ -20,9 +21,8 @@ import { ProductCreatePayloadDTO } from '../dto/product-create-payload.dto';
 import { ProductPatchDTO } from '../dto/product-patch.dto';
 import { UserId } from '../../decorators/user-id.decorator';
 import { Permissions } from '../../auth/permissions/permissions.decorator';
-import { PermissionsGuard } from 'src/auth/permissions/permissions.guard';
 import { PermissionsEnum } from '../../auth/permissions/permissions.enum';
-import { AuthGuard } from '@nestjs/passport';
+import { PermissionsGuard } from '../../auth/permissions/permissions.guard';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.PRODUCTS_ROUTE}`)
 export class ProductController {

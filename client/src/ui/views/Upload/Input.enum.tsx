@@ -1,5 +1,6 @@
 export enum Input {
-    SUPPLIER = 'supplier',
-    FILE = 'file',
-    CUR = 'cur',
+    SUPPLIER = "supplier",
+    FILE = "file",
+    CUR = "cur",
+    TYPE = "type",
 }

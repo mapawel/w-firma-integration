@@ -1,30 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import * as csv from 'csvtojson/v2';
 import {
-    temporaryAbUserSetHeddingsTranslation,
     temporaryAbUserSetHeadings,
+    temporaryAbUserSetHeddingsTranslation,
 } from '../../../data/ab.data';
 import { ProductCreateDTO } from 'src/product/dto/product-create.dto';
-import { RowData } from '../types';
+import { RowData, UploadType } from '../types';
 import { ProductCreateDtoMapper } from '../mapper/upload-dto.mapper';
 import { createUploadSettings } from '../settings/create-upload.settings';
 import { ProductCreateDtoValidator } from '../validator/upoad-dto.validator';
-import { UploadResDTO } from '../dto/upload-res.dto';
+import { UploadCodesResDto } from '../dto/upload-codes-res.dto';
 import { Status } from 'src/product/status/status.enum';
 import { ProceedFileReqDTO } from '../dto/proceed-file-req.dto';
 import { UploadFileException } from '../exceptions/upload-file.exception';
+import { CodeTranslationCreateDTO } from '../../code-translation/dto/code-translation-create.dto';
+import { UploadProductsResDTO } from '../dto/upload-products-res.dto';
 
 @Injectable()
 export class UploadService {
     private currentSupplierUserSetHeddingsTranslation: Record<string, string>;
     private currentSupplierUserSetHeadings: Record<string, string>;
 
-    public async proceedFile(proceedFileData: ProceedFileReqDTO) {
+    public async proceedFile(
+        proceedFileData: ProceedFileReqDTO,
+    ): Promise<UploadProductsResDTO | UploadCodesResDto> {
         try {
+            const {
+                params: { type },
+            }: { params: { type: UploadType } } = proceedFileData;
+
             this.currentSupplierUserSetHeddingsTranslation =
-                temporaryAbUserSetHeddingsTranslation; //TODO take from DB by supplier
-            this.currentSupplierUserSetHeadings = temporaryAbUserSetHeadings; //TODO take from DB by supplier
-            return await this.proceedFileByRows(proceedFileData);
+                temporaryAbUserSetHeddingsTranslation[type]; //TODO take from DB by supplier
+            this.currentSupplierUserSetHeadings =
+                temporaryAbUserSetHeadings[type]; //TODO take from DB by supplier
+
+            if (type === UploadType.CODES)
+                return await this.proceedCodesFileByRows(proceedFileData);
+            if (type === UploadType.PRODUCTS)
+                return await this.proceedProductsFileByRows(proceedFileData);
+            throw new Error('no upload type specified');
         } catch (err) {
             throw new UploadFileException('Error while uploading file', {
                 cause: err,
@@ -32,9 +46,9 @@ export class UploadService {
         }
     }
 
-    private async proceedFileByRows(
+    private async proceedProductsFileByRows(
         proceedFileData: ProceedFileReqDTO,
-    ): Promise<UploadResDTO> {
+    ): Promise<UploadProductsResDTO> {
         try {
             const {
                 file,
@@ -59,7 +73,7 @@ export class UploadService {
                         );
 
                     const createProductDTO =
-                        await ProductCreateDtoValidator.createDtoAndValidate(
+                        await ProductCreateDtoValidator.createDtoAndValidate<ProductCreateDTO>(
                             ProductCreateDTO,
                             {
                                 ...productRow,
@@ -88,6 +102,64 @@ export class UploadService {
                 totalPositions,
                 data,
                 status: Status.NEW,
+            };
+        } catch (err) {
+            throw new UploadFileException(
+                'Error while proceeding file by rows',
+                {
+                    cause: err,
+                },
+            );
+        }
+    }
+
+    private async proceedCodesFileByRows(
+        proceedFileData: ProceedFileReqDTO,
+    ): Promise<UploadCodesResDto> {
+        try {
+            const {
+                file,
+                params: { supplier },
+            } = proceedFileData;
+
+            const settings = createUploadSettings(
+                this.currentSupplierUserSetHeadings,
+            );
+            const data: CodeTranslationCreateDTO[] = [];
+            let totalPositions = 0;
+
+            await csv(settings)
+                .fromString(file.buffer.toString())
+                .subscribe(async (csvLine, productLineNo) => {
+                    const codesRow: RowData =
+                        ProductCreateDtoMapper.mapFileRowToProductCreateDTO(
+                            csvLine,
+                            this.currentSupplierUserSetHeddingsTranslation,
+                        );
+
+                    const codeTranslationCreateDTO =
+                        await ProductCreateDtoValidator.createDtoAndValidate<CodeTranslationCreateDTO>(
+                            CodeTranslationCreateDTO,
+                            {
+                                ...codesRow,
+                                supplier,
+                            },
+                            productLineNo,
+                        );
+
+                    totalPositions += 1;
+
+                    data.push(codeTranslationCreateDTO);
+                })
+                .on('error', () => {
+                    return false;
+                });
+
+            if (data.length === 0) throw new Error('No data in file found!');
+
+            return {
+                totalPositions,
+                data,
             };
         } catch (err) {
             throw new UploadFileException(

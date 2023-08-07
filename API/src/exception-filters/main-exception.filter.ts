@@ -18,7 +18,7 @@ export class MainExceptionFilter implements ExceptionFilter {
 
         const status =
             exception instanceof HttpException ? exception.getStatus() : 500;
-        console.log(exception);
+
         this.logException(exception);
 
         if (exception instanceof ForbiddenException)

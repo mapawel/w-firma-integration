@@ -14,6 +14,7 @@ export class ProductCreateDtoMapper {
             if (!newKey) throw new Error('No match');
             newLine[newKey] = value;
         });
+
         return newLine;
     }
 

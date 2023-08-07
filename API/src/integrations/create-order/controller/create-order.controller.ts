@@ -1,17 +1,17 @@
 import {
-    Controller,
-    Post,
-    Get,
     Body,
+    Controller,
+    Get,
     Inject,
     ParseArrayPipe,
+    Post,
     UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { PermissionsGuard } from '../../../auth/permissions/permissions.guard';
 import { Routes } from '../../../routes/Routes.enum';
 import { CreateOrderBaseClass } from '../interface/create-order.base-class';
 import { CreateOrderResDTO } from '../../../integrated-systems/wfirma/create-order/dto/create-order-res.dto';
-import { AuthGuard } from '@nestjs/passport';
-import { PermissionsGuard } from '../../../auth/permissions/permissions.guard';
 import { PermissionsEnum } from '../../../auth/permissions/permissions.enum';
 import { Permissions } from '../../../auth/permissions/permissions.decorator';
 
