@@ -1,7 +1,7 @@
-import { FC } from "react";
-import { toFixedNum } from "@/global-helpers/to-fixed-num";
-import { UploadProductsResDTO } from "@/ui/views/Upload-result/Upload-prods-result.type";
-import ProductTable from "./Product-table";
+import { FC } from 'react';
+import { toFixedNum } from '@/global-helpers/to-fixed-num';
+import { UploadProductsResDTO } from '@/ui/views/Upload-result/Upload-prods-result.type';
+import ProductTable from './Product-table';
 
 interface IProps {
     uploadResult: UploadProductsResDTO;
@@ -11,16 +11,16 @@ interface IProps {
 }
 
 export const UploadResultInside: FC<IProps> = ({
-                                                   uploadResult,
-                                                   handleCreateOrders,
-                                                   handleSaveToDB,
-                                                   handleCancel
-                                               }) => {
+    uploadResult,
+    handleCreateOrders,
+    handleSaveToDB,
+    handleCancel,
+}) => {
     const {
         data = [],
         totalPositions = 0,
         totalQty = 0,
-        totalValue = 0
+        totalValue = 0,
     } = uploadResult;
     return (
         <>
