@@ -12,6 +12,7 @@ services:
       - ./API/.env
       - ./API/.env.auth
       - ./API/.env.wfirma
+    restart: always
 
   postgres:
     image: postgres
