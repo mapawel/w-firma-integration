@@ -44,8 +44,8 @@ export class ProductController {
         );
     }
 
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions([PermissionsEnum.READ_PRODUCTS])
+    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    // @Permissions([PermissionsEnum.READ_PRODUCTS])
     @Get()
     public async getProducts(
         @Query() productQueryParams: ProductQueryParamsDTO,

@@ -15,7 +15,7 @@ services:
     restart: always
 
   postgres:
-    image: postgres
+    image: postgres:15
     env_file:
       - ./API/.env
     restart: always

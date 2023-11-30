@@ -31,7 +31,7 @@ import { CreateOrderModule } from './integrations/create-order/create-order.modu
                 password: configService.get('POSTGRES_PASSWORD'),
                 database: configService.get('POSTGRES_DB'),
                 entities: [__dirname + '/**/*.entity{.ts,.js}'],
-                synchronize: false,
+                synchronize: true, // todo
                 logNotifications: true,
             }),
             inject: [ConfigService],
