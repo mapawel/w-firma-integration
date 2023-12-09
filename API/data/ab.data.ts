@@ -9,6 +9,11 @@ export const temporaryAbUserSetHeadings = {
         supplierCode: 'supplierCode',
         PN: 'PN',
     },
+    sale: {
+        supplierCode: 'Inde',
+        quantity: 'Ilość',
+        netPrice: 'Cena net',
+    },
 };
 
 export const temporaryAbUserSetHeddingsTranslation = {
@@ -21,6 +26,11 @@ export const temporaryAbUserSetHeddingsTranslation = {
     codes: {
         supplierCode: 'supplierCode',
         PN: 'PN',
+    },
+    sale: {
+        Inde: 'supplierCode',
+        Ilość: 'quantity',
+        'Cena net': 'netPrice',
     },
 };
 

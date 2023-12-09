@@ -12,7 +12,7 @@ import { UploadResultInside } from "@/ui/components/organisms/Upload-result-insi
 import { buildFeedbackModalDetails } from "./helpers/build-feedback-modal-details";
 import { UploadTypeEnum } from "@/ui/views/Upload/data/Upload-type.enum";
 
-const ResultView: FC = () => {
+const ResultSaleView: FC = () => {
     const navigate = useNavigate();
     const { state }: { state: { uploadResult: UploadProductsResDTO } } =
         useLocation();
@@ -21,8 +21,8 @@ const ResultView: FC = () => {
             data = [],
             totalPositions = 0,
             totalQty = 0,
-            totalValue = 0,
-        } = {},
+            totalValue = 0
+        } = {}
     } = state || {};
 
     const handleSaveToDB = async (): Promise<void> => {
@@ -30,18 +30,18 @@ const ResultView: FC = () => {
             data,
             totalPositions,
             totalQty,
-            totalValue,
+            totalValue
         });
         if (!responseData) return;
 
         setAppData({
-            mainInfo: 'Pomyślnie dodano produkty do bazy danych.',
+            mainInfo: "Pomyślnie dodano produkty pod rezerwację do bazy danych.",
             detailsArr: buildFeedbackModalDetails(responseData),
             callbackClearInfo: () => {
                 cleanAppData();
                 navigate(ClientRoutes.INVOICES, { replace: true });
             },
-            callbackClearInfoLabel: 'Sprawdź w tabeli',
+            callbackClearInfoLabel: "Sprawdź w tabeli rezerwacji"
         });
     };
 
@@ -50,7 +50,7 @@ const ResultView: FC = () => {
             data,
             totalPositions,
             totalQty,
-            totalValue,
+            totalValue
         });
         if (!responseData) return;
 
@@ -59,13 +59,13 @@ const ResultView: FC = () => {
         if (!createOrdersInfo) return;
 
         setAppData({
-            mainInfo: 'Informacja o statusie dodawania zamówień do W-Firma:',
+            mainInfo: "Informacja o statusie dodawania rezerwacji do W-Firma:",
             detailsArr: createOrdersInfo.info,
             callbackClearInfo: () => {
                 cleanAppData();
-                navigate('/', { replace: true });
+                navigate("/", { replace: true });
             },
-            callbackClearInfoLabel: 'Wróć do strony głównej',
+            callbackClearInfoLabel: "Wróć do strony głównej"
         });
     };
 
@@ -82,11 +82,11 @@ const ResultView: FC = () => {
                     handleCancel={handleCancel}
                     handleCreateOrders={handleCreateOrders}
                     handleSaveToDB={handleSaveToDB}
-                    viewType={UploadTypeEnum.PRODUCTS}
+                    viewType={UploadTypeEnum.SALE}
                 />
             </NavTemplate>
         </>
     );
 };
 
-export default ResultView;
+export default ResultSaleView;

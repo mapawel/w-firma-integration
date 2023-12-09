@@ -1,5 +1,5 @@
 export enum UploadTypeEnum {
-    PRODUCTS = "products",
-    CODES = "codes",
-    SALE = "sale",
+    PRODUCTS = 'products',
+    CODES = 'codes',
+    SALE = 'sale',
 }

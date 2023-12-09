@@ -15,6 +15,8 @@ import { ProceedFileReqDTO } from '../dto/proceed-file-req.dto';
 import { UploadFileException } from '../exceptions/upload-file.exception';
 import { CodeTranslationCreateDTO } from '../../code-translation/dto/code-translation-create.dto';
 import { UploadProductsResDTO } from '../dto/upload-products-res.dto';
+import { SaleProductCreateDto } from '../../sale-product/dto/sale-product-create.dto';
+import { UploadSaleProductsResDTO } from '../dto/upload-sale-products-res.dto';
 
 @Injectable()
 export class UploadService {
@@ -23,7 +25,9 @@ export class UploadService {
 
     public async proceedFile(
         proceedFileData: ProceedFileReqDTO,
-    ): Promise<UploadProductsResDTO | UploadCodesResDto> {
+    ): Promise<
+        UploadProductsResDTO | UploadCodesResDto | UploadSaleProductsResDTO
+    > {
         try {
             const {
                 params: { type },
@@ -38,11 +42,83 @@ export class UploadService {
                 return await this.proceedCodesFileByRows(proceedFileData);
             if (type === UploadType.PRODUCTS)
                 return await this.proceedProductsFileByRows(proceedFileData);
+            if (type === UploadType.SALE)
+                return await this.proceedReservationFileByRows(proceedFileData);
             throw new Error('no upload type specified');
         } catch (err) {
             throw new UploadFileException('Error while uploading file', {
                 cause: err,
             });
+        }
+    }
+
+    private async proceedReservationFileByRows(
+        proceedFileData: ProceedFileReqDTO,
+    ): Promise<UploadSaleProductsResDTO> {
+        try {
+            const {
+                file,
+                params: { currency, supplier },
+            } = proceedFileData;
+
+            const settings = createUploadSettings(
+                this.currentSupplierUserSetHeadings,
+            );
+            const data: SaleProductCreateDto[] = [];
+            let totalValue = 0;
+            let totalQty = 0;
+            let totalPositions = 0;
+
+            await csv(settings)
+                .fromString(file.buffer.toString())
+                .subscribe(async (csvLine, productLineNo) => {
+                    const productRow: RowData =
+                        ProductCreateDtoMapper.mapFileRowToProductCreateDTO(
+                            csvLine,
+                            this.currentSupplierUserSetHeddingsTranslation,
+                        );
+
+                    const createSaleProductDTO: SaleProductCreateDto =
+                        await ProductCreateDtoValidator.createDtoAndValidate<SaleProductCreateDto>(
+                            SaleProductCreateDto,
+                            {
+                                ...productRow,
+                                currency,
+                                supplier,
+                            },
+                            productLineNo,
+                        );
+
+                    totalValue +=
+                        createSaleProductDTO.quantity *
+                        createSaleProductDTO.netPrice;
+                    totalQty += createSaleProductDTO.quantity;
+                    totalPositions += 1;
+
+                    data.push(createSaleProductDTO);
+                })
+                .on('error', () => {
+                    return false;
+                });
+
+            if (data.length === 0) throw new Error('No data in file found!');
+
+            return {
+                totalValue,
+                totalQty,
+                totalPositions,
+                data,
+                status: Status.NEW,
+            };
+        } catch (err) {
+            console.log('===================================> err > ', err);
+
+            throw new UploadFileException(
+                'Error while proceeding file by rows',
+                {
+                    cause: err,
+                },
+            );
         }
     }
 

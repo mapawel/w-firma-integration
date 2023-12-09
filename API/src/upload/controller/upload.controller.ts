@@ -14,6 +14,7 @@ import { UploadDTO } from '../dto/upload.dto';
 import { Routes } from '../../routes/Routes.enum';
 import { UploadProductsResDTO } from '../dto/upload-products-res.dto';
 import { UploadCodesResDto } from '../dto/upload-codes-res.dto';
+import { UploadSaleProductsResDTO } from '../dto/upload-sale-products-res.dto';
 
 @Controller(Routes.BASE_API_ROUTE)
 export class FileController {
@@ -34,10 +35,9 @@ export class FileController {
             }),
         )
         file: Express.Multer.File,
-    ): Promise<UploadProductsResDTO | UploadCodesResDto> {
-        console.log('===================================> body > ', body);
-
-        throw new Error('test przerwa');
+    ): Promise<
+        UploadProductsResDTO | UploadCodesResDto | UploadSaleProductsResDTO
+    > {
         return await this.uploadService.proceedFile({
             file,
             params: {

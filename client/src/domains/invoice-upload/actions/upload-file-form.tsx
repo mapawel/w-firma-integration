@@ -7,6 +7,7 @@ import { NavigateFunction } from "react-router-dom";
 import { UploadProductsResDTO } from "@/ui/views/Upload-result/Upload-prods-result.type";
 import { UploadCodesResDTO } from "@/ui/views/Upload-result/Upload-codes-result.type";
 import { UploadTypeEnum } from "@/ui/views/Upload/data/Upload-type.enum";
+import { UploadSaleResDTO } from "@/ui/views/Upload-result/Upload-sale-result.type";
 
 export const upladFileForm = async (
     formRef: React.RefObject<HTMLFormElement>,
@@ -34,7 +35,7 @@ export const upladFileForm = async (
             });
         }
 
-        const { data }: { data: UploadProductsResDTO | UploadCodesResDTO } =
+        const { data }: { data: UploadProductsResDTO | UploadCodesResDTO | UploadSaleResDTO } =
             await axios.post(APIRoutes.UPLOAD_FILE, form, {
                 headers: {
                     "Content-Type": "multipart/form-data"
@@ -42,7 +43,6 @@ export const upladFileForm = async (
             });
         formRef.current?.reset();
         stopLoading(timer);
-
 
         const type = form.get(Input.TYPE);
 
@@ -87,5 +87,10 @@ export const upladFileForm = async (
 
 const validateForm = (form: FormData): string | void => {
     if (!form.get(Input.TYPE)) return "Próba ładowania nieznanego typu danych.";
-    if (!form.get(Input.FILE) || !form.get(Input.SUPPLIER) || !form.get(Input.CUR)) return "Nie wybrano wszystkich wymaganych opcji formularza.";
+    if (
+        !form.get(Input.FILE) ||
+        !form.get(Input.SUPPLIER) ||
+        !form.get(Input.CUR)
+    )
+        return "Nie wybrano wszystkich wymaganych opcji formularza.";
 };
