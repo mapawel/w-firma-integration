@@ -11,6 +11,7 @@ import { UploadModule } from './upload/upload.module';
 import { ProductModule } from './product/product.module';
 import { CodeTranslationModule } from './code-translation/code-translation.module';
 import { CreateOrderModule } from './integrations/create-order/create-order.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
     imports: [
@@ -42,6 +43,7 @@ import { CreateOrderModule } from './integrations/create-order/create-order.modu
         ProductModule,
         CodeTranslationModule,
         CreateOrderModule,
+        CustomerModule,
     ],
     controllers: [],
     providers: [

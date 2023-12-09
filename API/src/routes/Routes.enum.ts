@@ -7,6 +7,7 @@ export enum Routes {
     AUTH_LOGOUT_ROUTE = '/logout',
     UPLOAD_ROUTE = '/upload',
     PRODUCTS_ROUTE = '/products',
+    CUSTOMERS_ROUTE = '/customers',
     CODE_TRANSLATIONS_ROUTE = '/code-translations',
     ORDERS_ROUTE = '/orders',
     ORDERS_ROUTE_REFRESH = '/refresh',

@@ -5,16 +5,11 @@ import {
     ParseArrayPipe,
     Post,
     Query,
-    UseGuards,
 } from '@nestjs/common';
 import { Routes } from '../../routes/Routes.enum';
 import { CodeTranslationService } from '../service/code-translation.service';
 import { CodeTranslationCreateDTO } from '../dto/code-translation-create.dto';
 import { CodeTranslationParamsDTO } from '../dto/code-translation-params.dto';
-import { PermissionsGuard } from '../../auth/permissions/permissions.guard';
-import { PermissionsEnum } from '../../auth/permissions/permissions.enum';
-import { AuthGuard } from '@nestjs/passport';
-import { Permissions } from '../../auth/permissions/permissions.decorator';
 import { UserId } from '../../decorators/user-id.decorator';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.CODE_TRANSLATIONS_ROUTE}`)
@@ -23,8 +18,8 @@ export class CodeTranslationController {
         private readonly codeTranslationService: CodeTranslationService,
     ) {}
 
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions([PermissionsEnum.READ_PRODUCTS])
+    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    // @Permissions([PermissionsEnum.READ_PRODUCTS])
     @Get()
     public async getCodeTranslations(
         @Query() codeTranslationParams: CodeTranslationParamsDTO,
@@ -34,8 +29,8 @@ export class CodeTranslationController {
         );
     }
 
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions([PermissionsEnum.UPDATE_SETTINGS])
+    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    // @Permissions([PermissionsEnum.UPDATE_SETTINGS])
     @Post()
     public async createCodeTranslations(
         @Body(new ParseArrayPipe({ items: CodeTranslationCreateDTO }))

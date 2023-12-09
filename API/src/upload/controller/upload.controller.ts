@@ -35,6 +35,9 @@ export class FileController {
         )
         file: Express.Multer.File,
     ): Promise<UploadProductsResDTO | UploadCodesResDto> {
+        console.log('===================================> body > ', body);
+
+        throw new Error('test przerwa');
         return await this.uploadService.proceedFile({
             file,
             params: {
