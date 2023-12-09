@@ -1,4 +1,4 @@
-import { SaleProductType } from "@/ui/views/Upload-result/Sale-product.type";
+import { SaleProductType } from '@/ui/views/Upload-result/Sale-product.type';
 
 export type UploadSaleResDTO = {
     totalValue: number;

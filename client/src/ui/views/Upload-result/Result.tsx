@@ -1,16 +1,19 @@
-import { upladProductdToDB } from "@/domains/invoice-upload/actions/upload-products-to-db";
-import { upladProductsForOrders } from "@/domains/order/actions/upload-product-for-orders";
-import NavTemplate from "@/ui/components/templates/Nav-template";
-import { ClientRoutes } from "@/navigation/routes/client.routes";
-import { FC } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { UploadProductsResDTO } from "./Upload-prods-result.type";
-import { cleanAppData, setAppData } from "@/data-providers/app-status/use-app-status";
-import { BulkUploadResDTO } from "../../../domains/invoice-upload/types/bulk-upload-res.dto";
-import { CreateOrderResDTO } from "../../../domains/order/dto/create-order-res.dto";
-import { UploadResultInside } from "@/ui/components/organisms/Upload-result-inside";
-import { buildFeedbackModalDetails } from "./helpers/build-feedback-modal-details";
-import { UploadTypeEnum } from "@/ui/views/Upload/data/Upload-type.enum";
+import { upladProductdToDB } from '@/domains/invoice-upload/actions/upload-products-to-db';
+import { upladProductsForOrders } from '@/domains/order/actions/upload-product-for-orders';
+import NavTemplate from '@/ui/components/templates/Nav-template';
+import { ClientRoutes } from '@/navigation/routes/client.routes';
+import { FC } from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { UploadProductsResDTO } from './Upload-prods-result.type';
+import {
+    cleanAppData,
+    setAppData,
+} from '@/data-providers/app-status/use-app-status';
+import { BulkUploadResDTO } from '../../../domains/invoice-upload/types/bulk-upload-res.dto';
+import { CreateOrderResDTO } from '../../../domains/order/dto/create-order-res.dto';
+import { UploadResultInside } from '@/ui/components/organisms/Upload-result-inside';
+import { buildFeedbackModalDetails } from './helpers/build-feedback-modal-details';
+import { UploadTypeEnum } from '@/ui/views/Upload/data/Upload-type.enum';
 
 const ResultView: FC = () => {
     const navigate = useNavigate();
