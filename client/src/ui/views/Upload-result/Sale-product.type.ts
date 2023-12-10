@@ -3,5 +3,6 @@ export type SaleProductType = {
     quantity: number;
     netPrice: number;
     currency: string;
-    supplier: string;
+    customerId: string;
+    supplier: never
 };

@@ -5,4 +5,5 @@ export type ProductType = {
     currency: string;
     supplier: string;
     invoiceNumber: string;
+    customerId: never
 };

@@ -1,6 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Status } from '../status/status.enum';
-import { Supplier } from '../../supplier/supppliers.enum';
 import { CodeTranslation } from 'src/code-translation/entity/Code-translation.entity';
 
 @Entity()
@@ -28,7 +27,7 @@ export class SaleProduct {
     currency: string;
 
     @Column()
-    supplier: Supplier;
+    customerId: string;
 
     @Column()
     status: Status;

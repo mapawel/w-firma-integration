@@ -12,6 +12,7 @@ import { ProductModule } from './product/product.module';
 import { CodeTranslationModule } from './code-translation/code-translation.module';
 import { CreateOrderModule } from './integrations/create-order/create-order.module';
 import { CustomerModule } from './customer/customer.module';
+import { SaleProductModule } from './sale-product/sale-product.module';
 
 @Module({
     imports: [
@@ -44,6 +45,7 @@ import { CustomerModule } from './customer/customer.module';
         CodeTranslationModule,
         CreateOrderModule,
         CustomerModule,
+        SaleProductModule,
     ],
     controllers: [],
     providers: [

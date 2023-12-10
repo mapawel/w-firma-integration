@@ -84,7 +84,7 @@ export class UploadService {
                             {
                                 ...productRow,
                                 currency,
-                                supplier,
+                                customerId: supplier,
                             },
                             productLineNo,
                         );
@@ -111,8 +111,6 @@ export class UploadService {
                 status: Status.NEW,
             };
         } catch (err) {
-            console.log('===================================> err > ', err);
-
             throw new UploadFileException(
                 'Error while proceeding file by rows',
                 {

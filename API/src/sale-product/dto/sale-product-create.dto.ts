@@ -25,5 +25,5 @@ export class SaleProductCreateDto {
     currency: string;
 
     @IsString()
-    supplier: string;
+    customerId: string;
 }
