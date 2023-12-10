@@ -1,15 +1,18 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { Routes } from '../../routes/Routes.enum';
 import { SaleProductUploadService } from '../services/sale-product-upload.service';
 import { BulkSaleUploadResDto } from '../dto/bulk-sale-upload-res-dto';
 import { UserId } from '../../decorators/user-id.decorator';
 import { SaleProductCreatePayloadDto } from '../dto/sale-product-create-payload.dto';
+import { SaleProductCrudService } from '../services/sale-product-crud.service';
+import { SaleProductQueryParamsDTO } from '../dto/sale-product-query-params.dto';
+import { SaleProductGetResponseDTO } from '../dto/sale-product-get-response.dto';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.SALE_PRODUCTS_ROUTE}`)
 export class SaleProductController {
     constructor(
-        // private readonly productFetchAndDeleteAndPatchService: ProductFetchAndDeleteAndPatchService,
         private readonly saleProductUploadService: SaleProductUploadService,
+        private readonly saleProductCrudService: SaleProductCrudService,
     ) {}
 
     // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
@@ -26,18 +29,17 @@ export class SaleProductController {
         );
     }
 
-    //
-    // // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    // // @Permissions([PermissionsEnum.READ_PRODUCTS])
-    // @Get()
-    // public async getProducts(
-    //     @Query() productQueryParams: ProductQueryParamsDTO,
-    // ): Promise<CompleteResponseDTO> {
-    //     return await this.productFetchAndDeleteAndPatchService.getAllProducts(
-    //         productQueryParams,
-    //     );
-    // }
-    //
+    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    // @Permissions([PermissionsEnum.READ_PRODUCTS])
+    @Get()
+    public async getProducts(
+        @Query() saleProductQueryParams: SaleProductQueryParamsDTO,
+    ): Promise<SaleProductGetResponseDTO> {
+        return await this.saleProductCrudService.getAllSaleProducts(
+            saleProductQueryParams,
+        );
+    }
+
     // // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
     // // @Permissions([PermissionsEnum.UPDATE_PRODUCTS])
     // @Patch()
@@ -45,7 +47,7 @@ export class SaleProductController {
     //     @Body() patchData: ProductPatchDTO,
     //     @UserId() userId: string,
     // ): Promise<ProductPatchOrDeleteResDTO> {
-    //     return await this.productFetchAndDeleteAndPatchService.updateProductCode(
+    //     return await this.saleProductCrudService.updateSaleProductCode(
     //         patchData,
     //         userId,
     //     );
@@ -58,7 +60,7 @@ export class SaleProductController {
     //     @Body(new ParseArrayPipe({ items: Number, separator: ',' }))
     //     productIdsArray: number[],
     // ): Promise<ProductPatchOrDeleteResDTO> {
-    //     return await this.productFetchAndDeleteAndPatchService.deleteProducts(
+    //     return await this.saleProductCrudService.deleteSaleProducts(
     //         productIdsArray,
     //     );
     // }

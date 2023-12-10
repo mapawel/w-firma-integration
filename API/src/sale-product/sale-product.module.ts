@@ -4,10 +4,11 @@ import { CodeTranslation } from '../code-translation/entity/Code-translation.ent
 import { SaleProduct } from './entity/Sale-product.entity';
 import { SaleProductController } from './controller/sale-product.controller';
 import { SaleProductUploadService } from './services/sale-product-upload.service';
+import { SaleProductCrudService } from './services/sale-product-crud.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([SaleProduct, CodeTranslation])],
     controllers: [SaleProductController],
-    providers: [SaleProductUploadService],
+    providers: [SaleProductUploadService, SaleProductCrudService],
 })
 export class SaleProductModule {}

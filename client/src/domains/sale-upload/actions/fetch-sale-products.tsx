@@ -1,18 +1,18 @@
 import axios from "axios";
 import { setAppData, startLoading, stopLoading } from "@/data-providers/app-status/use-app-status";
-import { ResponseFromProductFetchDTO } from "../dto/response-from-product-fetch.dto";
-import { ProductQueryParams } from "@/domains/products/queries/product-query-params.type";
+import { ResponseFromSaleProductFetchDto } from "@/domains/sale-upload/dto/response-from-sale-product-fetch.dto";
+import { SaleProductQueryParams } from "@/domains/sale-upload/queries/sale-product-query-params.type";
 
-export const fetchProducts = async (
+export const fetchSaleProducts = async (
     url: string,
-    queryParams: ProductQueryParams
+    queryParams: SaleProductQueryParams
 ) => {
     const timer = startLoading();
 
     try {
         const queryString = new URLSearchParams(queryParams).toString();
 
-        const { data }: { data: ResponseFromProductFetchDTO } = await axios.get(
+        const { data }: { data: ResponseFromSaleProductFetchDto } = await axios.get(
             `${url}?${queryString}`,
             {
                 headers: {

@@ -8,6 +8,12 @@ export class SaleProduct {
     id: number;
 
     @Column()
+    customerId: string;
+
+    @Column({ nullable: true })
+    reservationId: string;
+
+    @Column()
     supplierCode: string;
 
     @ManyToOne(
@@ -25,9 +31,6 @@ export class SaleProduct {
 
     @Column()
     currency: string;
-
-    @Column()
-    customerId: string;
 
     @Column()
     status: Status;
