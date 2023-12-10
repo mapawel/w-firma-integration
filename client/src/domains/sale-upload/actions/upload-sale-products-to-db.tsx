@@ -1,11 +1,15 @@
-import axios from "axios";
-import { setAppData, startLoading, stopLoading } from "@/data-providers/app-status/use-app-status";
-import { APIRoutes } from "@/navigation/routes/api.routes";
-import { BulkSaleUploadResDTO } from "@/domains/sale-upload/types/bulk-sale-upload-res.dto";
-import { UploadSaleResDTO } from "@/ui/views/Upload-result/Upload-sale-result.type";
+import axios from 'axios';
+import {
+    setAppData,
+    startLoading,
+    stopLoading,
+} from '@/data-providers/app-status/use-app-status';
+import { APIRoutes } from '@/navigation/routes/api.routes';
+import { BulkSaleUploadResDTO } from '@/domains/sale-upload/types/bulk-sale-upload-res.dto';
+import { UploadSaleResDTO } from '@/ui/views/Upload-result/Upload-sale-result.type';
 
 export const uploadSaleProductToDB = async (
-    uploadData: UploadSaleResDTO
+    uploadData: UploadSaleResDTO,
 ): Promise<BulkSaleUploadResDTO | void> => {
     const timer = startLoading();
 
@@ -16,9 +20,9 @@ export const uploadSaleProductToDB = async (
                 { productsArray: uploadData.data },
                 {
                     headers: {
-                        "Content-Type": "application/json"
-                    }
-                }
+                        'Content-Type': 'application/json',
+                    },
+                },
             );
         stopLoading(timer);
         return responseData;
@@ -27,12 +31,12 @@ export const uploadSaleProductToDB = async (
 
         if (err.response.status === 400)
             return setAppData({
-                mainInfo: "Coś nie tak z wysłanymi danymi. Wskazówki:",
-                detailsArr: err.response.data.message
+                mainInfo: 'Coś nie tak z wysłanymi danymi. Wskazówki:',
+                detailsArr: err.response.data.message,
             });
         return setAppData({
-            mainInfo: "Ups, coś poszło nie tak. Spróbuj ponownie.",
-            detailsArr: []
+            mainInfo: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
+            detailsArr: [],
         });
     }
 };

@@ -1,10 +1,10 @@
-import { FC } from "react";
-import { toFixedNum } from "@/global-helpers/to-fixed-num";
-import { UploadProductsResDTO } from "@/ui/views/Upload-result/Upload-prods-result.type";
-import ProductTable from "./Product-table";
-import { UploadTypeEnum } from "@/ui/views/Upload/data/Upload-type.enum";
-import { UploadSaleResDTO } from "@/ui/views/Upload-result/Upload-sale-result.type";
-import { CustomersResDTO } from "@/domains/customers/dto/customers-res.dto";
+import { FC } from 'react';
+import { toFixedNum } from '@/global-helpers/to-fixed-num';
+import { UploadProductsResDTO } from '@/ui/views/Upload-result/Upload-prods-result.type';
+import ProductTable from './Product-table';
+import { UploadTypeEnum } from '@/ui/views/Upload/data/Upload-type.enum';
+import { UploadSaleResDTO } from '@/ui/views/Upload-result/Upload-sale-result.type';
+import { CustomersResDTO } from '@/domains/customers/dto/customers-res.dto';
 
 interface IProps {
     uploadResult: UploadProductsResDTO | UploadSaleResDTO;
@@ -16,23 +16,28 @@ interface IProps {
 }
 
 export const UploadResultInside: FC<IProps> = ({
-                                                   uploadResult,
-                                                   handleCreateOrders,
-                                                   handleSaveToDB,
-                                                   handleCancel,
-                                                   viewType,
-                                                   customers
-                                               }) => {
+    uploadResult,
+    handleCreateOrders,
+    handleSaveToDB,
+    handleCancel,
+    viewType,
+    customers,
+}) => {
     const {
         data = [],
         totalPositions = 0,
         totalQty = 0,
-        totalValue = 0
+        totalValue = 0,
     } = uploadResult;
 
-    const getCustomerNameById = (customerId: string, customers: CustomersResDTO[] | undefined) => {
-        if (!customers || !customers.length) return "";
-        return customers.find((customer: CustomersResDTO) => customer.id === customerId)?.name;
+    const getCustomerNameById = (
+        customerId: string,
+        customers: CustomersResDTO[] | undefined,
+    ) => {
+        if (!customers || !customers.length) return '';
+        return customers.find(
+            (customer: CustomersResDTO) => customer.id === customerId,
+        )?.name;
     };
 
     return (
@@ -44,8 +49,8 @@ export const UploadResultInside: FC<IProps> = ({
                 <div>
                     <h3 className="text-xl">
                         {viewType === UploadTypeEnum.SALE
-                            ? "Klient:"
-                            : "Dostawca:"}
+                            ? 'Klient:'
+                            : 'Dostawca:'}
                     </h3>
                     <h3 className="text-xl">Ilość pozycji:</h3>
                     <h3 className="text-xl">Ilość szt:</h3>
@@ -54,7 +59,10 @@ export const UploadResultInside: FC<IProps> = ({
                 <div>
                     <p className="text-right text-xl font-semibold">
                         {viewType === UploadTypeEnum.SALE
-                            ? getCustomerNameById(data?.[0]?.customerId, customers)
+                            ? getCustomerNameById(
+                                  data?.[0]?.customerId,
+                                  customers,
+                              )
                             : data?.[0]?.supplier?.toUpperCase()}
                     </p>
                     <p className="text-right text-xl font-semibold">
@@ -79,8 +87,8 @@ export const UploadResultInside: FC<IProps> = ({
                     onClick={handleCreateOrders}
                 >
                     {viewType === UploadTypeEnum.SALE
-                        ? "ŁADUJ REZERWACJĘ DO W-FIRMY!"
-                        : "ŁADUJ ZAMÓWIENIE DO W-FIRMY!"}
+                        ? 'ŁADUJ REZERWACJĘ DO W-FIRMY!'
+                        : 'ŁADUJ ZAMÓWIENIE DO W-FIRMY!'}
                 </button>
                 <button
                     className="rounded-md bg-secondary px-5 py-2.5 text-sm text-white transition duration-150 hover:bg-secondaryLight"

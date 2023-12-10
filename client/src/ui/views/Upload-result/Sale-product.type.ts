@@ -4,5 +4,5 @@ export type SaleProductType = {
     netPrice: number;
     currency: string;
     customerId: string;
-    supplier: never
+    supplier: never;
 };

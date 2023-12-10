@@ -1,35 +1,38 @@
-import NavTemplate from "@/ui/components/templates/Nav-template";
-import { ClientRoutes } from "@/navigation/routes/client.routes";
-import { FC } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { UploadCodesResDTO } from "@/ui/views/Upload-result/Upload-codes-result.type";
-import { toFixedNum } from "@/global-helpers/to-fixed-num";
-import { uploadCodesToDB } from "@/domains/invoice-upload/actions/upload-codes-to-db";
-import { cleanAppData, setAppData } from "@/data-providers/app-status/use-app-status";
+import NavTemplate from '@/ui/components/templates/Nav-template';
+import { ClientRoutes } from '@/navigation/routes/client.routes';
+import { FC } from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { UploadCodesResDTO } from '@/ui/views/Upload-result/Upload-codes-result.type';
+import { toFixedNum } from '@/global-helpers/to-fixed-num';
+import { uploadCodesToDB } from '@/domains/invoice-upload/actions/upload-codes-to-db';
+import {
+    cleanAppData,
+    setAppData,
+} from '@/data-providers/app-status/use-app-status';
 
 const ResultViewCodes: FC = () => {
     const navigate = useNavigate();
     const { state }: { state: { uploadResult: UploadCodesResDTO } } =
         useLocation();
     const { uploadResult: { data = [], totalPositions = 0 } = {} } =
-    state || {};
+        state || {};
 
     const handleUpdateCodeTranslations = async (): Promise<void> => {
         console.log(data);
         const responseData: true | void = await uploadCodesToDB({
             data,
-            totalPositions
+            totalPositions,
         });
         if (!responseData) return;
         //
         setAppData({
-            mainInfo: "Pomyślnie dodano tłumaczenia kodów do słownika.",
+            mainInfo: 'Pomyślnie dodano tłumaczenia kodów do słownika.',
             detailsArr: [],
             callbackClearInfo: () => {
                 cleanAppData();
                 navigate(ClientRoutes.UPLOAD, { replace: true });
             },
-            callbackClearInfoLabel: "OK"
+            callbackClearInfoLabel: 'OK',
         });
     };
 
