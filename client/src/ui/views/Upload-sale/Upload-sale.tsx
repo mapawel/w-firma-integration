@@ -1,18 +1,18 @@
-import { FC, useEffect, useRef, useState } from 'react';
-import Select from 'react-select';
-import NavTemplate from '@/ui/components/templates/Nav-template';
-import { Label } from '@/ui/components/atoms/Label';
-import { upladFileForm } from '@/domains/invoice-upload/actions/upload-file-form';
-import { Input } from '@/ui/views/Upload/Input.enum';
-import { Cur } from './Cur.enum';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { uploadSaleInstruction } from '@/ui/views/Upload/data/upload-sale-instruction.text';
-import { selectStyle } from '@/ui/components/organisms/Table-top-header/select-style';
-import { UploadTypeEnum } from '@/ui/views/Upload/data/Upload-type.enum';
-import { selectStyleInvoiceAddon } from '@/ui/views/Upload-sale/select-style-invoice.addon';
-import { fetchCustomers } from '@/domains/customers/actions/fetch-customers';
-import { CustomersResDTO } from '@/domains/customers/dto/customers-res.dto';
-import { ResponseFromCustomersFetchDto } from '@/domains/customers/dto/response-from-customers-fetch.dto';
+import { FC, useEffect, useRef, useState } from "react";
+import Select from "react-select";
+import NavTemplate from "@/ui/components/templates/Nav-template";
+import { Label } from "@/ui/components/atoms/Label";
+import { upladFileForm } from "@/domains/invoice-upload/actions/upload-file-form";
+import { Input } from "@/ui/views/Upload/Input.enum";
+import { Cur } from "./Cur.enum";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import { uploadSaleInstruction } from "@/ui/views/Upload/data/upload-sale-instruction.text";
+import { selectStyle } from "@/ui/components/organisms/Table-top-headers/select-style";
+import { UploadTypeEnum } from "@/ui/views/Upload/data/Upload-type.enum";
+import { selectStyleInvoiceAddon } from "@/ui/views/Upload-sale/select-style-invoice.addon";
+import { fetchCustomers } from "@/domains/customers/actions/fetch-customers";
+import { CustomersResDTO } from "@/domains/customers/dto/customers-res.dto";
+import { ResponseFromCustomersFetchDto } from "@/domains/customers/dto/response-from-customers-fetch.dto";
 
 const UploadView: FC = () => {
     const formRef = useRef<HTMLFormElement>(null);
@@ -36,7 +36,7 @@ const UploadView: FC = () => {
                     {uploadSaleInstruction.map(
                         (instruction: string, index: number) => (
                             <li key={index}>{instruction}</li>
-                        ),
+                        )
                     )}
                 </ul>
 
@@ -64,14 +64,14 @@ const UploadView: FC = () => {
                             id="customer"
                             options={customers.map((customer) => ({
                                 value: customer.id,
-                                label: customer.name,
+                                label: customer.name
                             }))}
                             className="w-full"
                             name={Input.SUPPLIER}
                             placeholder="Klient..."
                             styles={{
                                 ...selectStyle,
-                                ...selectStyleInvoiceAddon,
+                                ...selectStyleInvoiceAddon
                             }}
                             onChange={(selected) => {
                                 if (selected?.value) setValid(true);
@@ -120,8 +120,8 @@ const UploadView: FC = () => {
                                 htmlFor={Input.FILE}
                                 className={`block rounded-lg px-5 py-3 font-medium text-white transition sm:w-auto ${
                                     isValid
-                                        ? 'cursor-pointer bg-primary hover:bg-primaryHover focus:outline-none'
-                                        : 'bg-secondary'
+                                        ? "cursor-pointer bg-primary hover:bg-primaryHover focus:outline-none"
+                                        : "bg-secondary"
                                 }`}
                             >
                                 <p>Wybierz plik ...</p>

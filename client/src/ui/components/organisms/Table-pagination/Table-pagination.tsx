@@ -1,19 +1,20 @@
-import { FC } from 'react';
-import Select from 'react-select';
-import { selectStyle } from '../Table-top-header/select-style';
-import PaginationButtons from './Pagination-buttons';
-import usePagination from '@/data-providers/pagination/use-pagination';
+import { FC } from "react";
+import Select from "react-select";
+import PaginationButtons from "./Pagination-buttons";
+import usePagination from "@/data-providers/pagination/use-pagination";
+import { selectStyle } from "@/ui/components/organisms/Table-top-headers/select-style";
 
 export const TablePagination: FC = () => {
     const { range, count, options, records, setRecords } = usePagination();
 
     return (
-        <nav className="flex flex-col items-start justify-between space-y-3 p-4 md:flex-row md:items-center md:space-y-0">
+        <nav
+            className="flex flex-col items-start justify-between space-y-3 p-4 md:flex-row md:items-center md:space-y-0">
             <span className="text-m font-normal text-secondaryLight dark:text-gray-400">
                 <span className="font-semibold text-secondary dark:text-white">
                     {range}
                 </span>
-                {'z '}
+                {"z "}
                 <span className="font-semibold text-secondary dark:text-white">
                     {count}
                 </span>
@@ -27,7 +28,7 @@ export const TablePagination: FC = () => {
                         options={options}
                         value={{
                             value: records,
-                            label: String(records),
+                            label: String(records)
                         }}
                         className="w-full"
                         name="status"

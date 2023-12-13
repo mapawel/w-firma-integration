@@ -1,15 +1,15 @@
-import { PaginationContext } from './Pagination.context';
-import { options } from './pagination-options';
-import { useDataAndDataFilters } from '../filters-data/use-data-and-data-filters';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { PaginationContext } from "./Pagination.context";
+import { options } from "./pagination-options";
+import { FC, useEffect, useMemo, useState } from "react";
 
 interface IProps {
     children: React.ReactNode;
+    useData: () => any;
 }
 
-export const PaginationProvider: FC<IProps> = ({ children }) => {
+export const PaginationProvider: FC<IProps> = ({ children, useData }) => {
     const { records, count, setRecords, skip, setSkip } =
-        useDataAndDataFilters();
+        useData();
     const lastPageNo: number = Math.ceil(count / records);
     const range: string = `${skip + 1} - ${
         skip + records > count ? count : skip + records
@@ -66,7 +66,7 @@ export const PaginationProvider: FC<IProps> = ({ children }) => {
                 setRecords,
                 handleNext,
                 handlePrev,
-                handleSwitchPage,
+                handleSwitchPage
             }}
         >
             {children}
