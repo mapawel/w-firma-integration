@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 export const PaginationSaleContext = createContext<{
     count: number;
@@ -16,16 +16,12 @@ export const PaginationSaleContext = createContext<{
     count: 0,
     records: 0,
     lastPageNo: 0,
-    range: "",
+    range: '',
     options: [],
     activePage: 1,
     pageNumbersAvailable: [],
-    setRecords: () => {
-    },
-    handleNext: () => {
-    },
-    handlePrev: () => {
-    },
-    handleSwitchPage: () => {
-    }
+    setRecords: () => {},
+    handleNext: () => {},
+    handlePrev: () => {},
+    handleSwitchPage: () => {},
 });

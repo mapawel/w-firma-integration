@@ -1,15 +1,15 @@
-import { Supplier } from "@/domains/supplier/supppliers.enum";
-import { ProductResDTO } from "../dto/products-res.dto";
-import { Status } from "../status/status.enum";
+import { Supplier } from '@/domains/supplier/supppliers.enum';
+import { ProductResDTO } from '../dto/products-res.dto';
+import { Status } from '../status/status.enum';
 
 export type ProductQueryParams = {
     productCode?: string;
     currency?: string;
     supplier?: Supplier;
-    status?: Status | "all";
+    status?: Status | 'all';
     invoice?: string;
     sortParam?: keyof ProductResDTO;
-    sortDirect?: "ASC" | "DESC";
+    sortDirect?: 'ASC' | 'DESC';
     records?: string;
     skip?: string;
     addedAt?: string;

@@ -1,7 +1,7 @@
-import { PaginationSaleContext } from "./Pagination-sale.context";
-import { options } from "./pagination-options";
-import { FC, useEffect, useMemo, useState } from "react";
-import { useSaleDataAndDataFilters } from "@/data-providers/filters-data-sale/use-sale-data-and-data-filters";
+import { PaginationSaleContext } from './Pagination-sale.context';
+import { options } from './pagination-options';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { useSaleDataAndDataFilters } from '@/data-providers/filters-data-sale/use-sale-data-and-data-filters';
 
 interface IProps {
     children: React.ReactNode;
@@ -66,7 +66,7 @@ export const PaginationSaleProvider: FC<IProps> = ({ children }) => {
                 setRecords,
                 handleNext,
                 handlePrev,
-                handleSwitchPage
+                handleSwitchPage,
             }}
         >
             {children}

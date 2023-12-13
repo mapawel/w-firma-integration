@@ -1,10 +1,10 @@
-import { FC } from "react";
-import { ReactComponent as CollapseArrow } from "@/assets/icons/collapse-arrow.svg";
-import { TableDropdown } from "@/ui/components/molecules/Table-dropdown";
-import Select from "react-select";
-import { selectStyle } from "./select-style";
-import { statusOptionsForSelect as statusOptions } from "@/domains/products/status/status-options-for-select";
-import { useSaleDataAndDataFilters } from "@/data-providers/filters-data-sale/use-sale-data-and-data-filters";
+import { FC } from 'react';
+import { ReactComponent as CollapseArrow } from '@/assets/icons/collapse-arrow.svg';
+import { TableDropdown } from '@/ui/components/molecules/Table-dropdown';
+import Select from 'react-select';
+import { selectStyle } from './select-style';
+import { statusOptionsForSelect as statusOptions } from '@/domains/products/status/status-options-for-select';
+import { useSaleDataAndDataFilters } from '@/data-providers/filters-data-sale/use-sale-data-and-data-filters';
 
 const SaleTableTopHeader: FC = () => {
     const {
@@ -13,32 +13,31 @@ const SaleTableTopHeader: FC = () => {
         buttonRef,
         setFilterReservationId,
         setFilterStatus,
-        uniqueReservationIds
+        uniqueReservationIds,
     } = useSaleDataAndDataFilters();
 
     return (
-        <div
-            className="mb-10 flex flex-col items-center justify-between space-y-3 rounded-lg border-primary p-4 shadow-md md:flex-row md:space-x-4 md:space-y-0">
+        <div className="mb-10 flex flex-col items-center justify-between space-y-3 rounded-lg border-primary p-4 shadow-md md:flex-row md:space-x-4 md:space-y-0">
             <div className="w-full md:w-3/4">
                 <form className="flex items-center gap-4">
                     <Select
                         id="invoice"
                         options={[
                             {
-                                value: "all",
-                                label: "all"
+                                value: 'all',
+                                label: 'all',
                             },
                             ...uniqueReservationIds.map((resId) => ({
                                 value: resId,
-                                label: resId
-                            }))
+                                label: resId,
+                            })),
                         ]}
                         className="w-full"
                         name="invoice"
                         placeholder="Rezerwacja..."
                         styles={selectStyle}
                         onChange={(selected) =>
-                            setFilterReservationId(selected?.value || "all")
+                            setFilterReservationId(selected?.value || 'all')
                         }
                     />
                     <Select
@@ -49,13 +48,12 @@ const SaleTableTopHeader: FC = () => {
                         placeholder="Status..."
                         styles={selectStyle}
                         onChange={(selected) =>
-                            setFilterStatus(selected?.value || "all")
+                            setFilterStatus(selected?.value || 'all')
                         }
                     />
                 </form>
             </div>
-            <div
-                className="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0">
+            <div className="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0">
                 <div className="relative flex w-full items-center space-x-3 md:w-auto">
                     <button
                         ref={buttonRef}

@@ -1,4 +1,4 @@
-import { Status } from "../status/status.enum";
+import { Status } from '../status/status.enum';
 
 export type SaleProductResDTO = {
     id: number;
