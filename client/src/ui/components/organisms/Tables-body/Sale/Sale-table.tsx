@@ -9,6 +9,7 @@ import { useCheckboxes } from "@/data-providers/check-boxes-provider/use-check-b
 import { patchProductCode } from "@/domains/products/actions/patch-product-code";
 import { setAppData } from "@/data-providers/app-status/use-app-status";
 import { useSaleDataAndDataFilters } from "@/data-providers/filters-data-sale/use-sale-data-and-data-filters";
+import { APIRoutes } from "@/navigation/routes/api.routes";
 
 const SaleTable: FC = () => {
     const { data, mutate, sortParam, sortDirect, handleSort, skip } =
@@ -28,6 +29,7 @@ const SaleTable: FC = () => {
             if (!updatingId || !target.productCode) return;
 
             const patchResult: { info: string } = await patchProductCode(
+                APIRoutes.UPLOAD_FETCH_DELETE_SALEPRODUCTS,
                 updatingId,
                 target.productCode.value
             );
@@ -127,7 +129,7 @@ const SaleTable: FC = () => {
                                     {customerId}
                                 </td>
                                 <td className=" border border-primary px-5 py-1">
-                                    {reservationId || "in press"}
+                                    {reservationId || <StatusBadge status={Status.NEW} />}
                                 </td>
                                 <td className=" border border-primary px-5 py-1">
                                     {productCode || (

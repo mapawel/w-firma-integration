@@ -5,7 +5,7 @@ import {
     stopLoading,
 } from '@/data-providers/app-status/use-app-status';
 import { APIRoutes } from '@/navigation/routes/api.routes';
-import { BulkSaleUploadResDTO } from '@/domains/sale-upload/types/bulk-sale-upload-res.dto';
+import { BulkSaleUploadResDTO } from '@/domains/sale-and-sale-upload/types/bulk-sale-upload-res.dto';
 import { UploadSaleResDTO } from '@/ui/views/Upload-result/Upload-sale-result.type';
 
 export const uploadSaleProductToDB = async (

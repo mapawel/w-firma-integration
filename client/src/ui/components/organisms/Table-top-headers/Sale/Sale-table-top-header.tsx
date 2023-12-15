@@ -5,6 +5,7 @@ import Select from "react-select";
 import { selectStyle } from "@/ui/components/organisms/Table-top-headers/select-style";
 import { statusOptionsForSelect as statusOptions } from "@/domains/products/status/status-options-for-select";
 import { useSaleDataAndDataFilters } from "@/data-providers/filters-data-sale/use-sale-data-and-data-filters";
+import { APIRoutes } from "@/navigation/routes/api.routes";
 
 const SaleTableTopHeader: FC = () => {
     const {
@@ -68,7 +69,10 @@ const SaleTableTopHeader: FC = () => {
                         Actions
                     </button>
 
-                    <TableDropdown isDropdownOpen={isDropdownOpen} />
+                    <TableDropdown isDropdownOpen={isDropdownOpen} dropdownRoutes={{
+                        handleProductsDelete: APIRoutes.UPLOAD_FETCH_DELETE_SALEPRODUCTS,
+                        handleProductsAction: APIRoutes.UPLOAD_FETCH_DELETE_SALEPRODUCTS
+                    }} useData={useSaleDataAndDataFilters} />
                 </div>
             </div>
         </div>

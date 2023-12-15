@@ -1,6 +1,6 @@
-import { PaginationContext } from "./Pagination.context";
-import { options } from "./pagination-options";
-import { FC, useEffect, useMemo, useState } from "react";
+import { PaginationContext } from './Pagination.context';
+import { options } from './pagination-options';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 interface IProps {
     children: React.ReactNode;
@@ -8,8 +8,7 @@ interface IProps {
 }
 
 export const PaginationProvider: FC<IProps> = ({ children, useData }) => {
-    const { records, count, setRecords, skip, setSkip } =
-        useData();
+    const { records, count, setRecords, skip, setSkip } = useData();
     const lastPageNo: number = Math.ceil(count / records);
     const range: string = `${skip + 1} - ${
         skip + records > count ? count : skip + records
@@ -66,7 +65,7 @@ export const PaginationProvider: FC<IProps> = ({ children, useData }) => {
                 setRecords,
                 handleNext,
                 handlePrev,
-                handleSwitchPage
+                handleSwitchPage,
             }}
         >
             {children}

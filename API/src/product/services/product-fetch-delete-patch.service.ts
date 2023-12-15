@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Code, In, IsNull, Repository } from 'typeorm';
+import { In, IsNull, Repository } from 'typeorm';
 import { Product } from '../entity/Product.entity';
 import { productResDtoMapper } from '../dto/product-res-dto.mapper';
 import { ProductQueryParamsDTO } from '../dto/product-query-params.dto';
 import { ProductException } from '../exceptions/product.exception';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
 import { Status } from '../status/status.enum';
-import { ProductPatchOrDeleteResDTO } from '../dto/product-delete-res.dto';
+import { ProductPatchOrDeleteResDTO } from '../dto/product-patch-delete-res.dto';
 import { ProductPatchDTO } from '../dto/product-patch.dto';
 import { CodeTranslation } from 'src/code-translation/entity/Code-translation.entity';
 import { CodeTranslationService } from 'src/code-translation/service/code-translation.service';

@@ -2,11 +2,11 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { Status } from '@/domains/products/status/status.enum';
 import useSWR, { SWRResponse } from 'swr';
 import { APIRoutes } from '@/navigation/routes/api.routes';
-import { fetchSaleProducts } from '@/domains/sale-upload/actions/fetch-sale-products';
-import { ResponseFromSaleProductFetchDto } from '@/domains/sale-upload/dto/response-from-sale-product-fetch.dto';
-import { SaleProductResDTO } from '@/domains/sale-upload/dto/sale-products-res.dto';
+import { fetchSaleProducts } from '@/domains/sale-and-sale-upload/actions/fetch-sale-products';
+import { ResponseFromSaleProductFetchDto } from '@/domains/sale-and-sale-upload/dto/response-from-sale-product-fetch.dto';
+import { SaleProductResDTO } from '@/domains/sale-and-sale-upload/dto/sale-products-res.dto';
 import { SaleDataAndDataFiltersCtx } from '@/data-providers/filters-data-sale/filters-sale-data.context';
-import { SaleProductQueryParams } from '@/domains/sale-upload/queries/sale-product-query-params.type';
+import { SaleProductQueryParams } from '@/domains/sale-and-sale-upload/queries/sale-product-query-params.type';
 
 interface IProps {
     children: React.ReactNode;

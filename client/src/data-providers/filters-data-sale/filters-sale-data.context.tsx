@@ -1,6 +1,6 @@
 import { Status } from '@/domains/products/status/status.enum';
 import { createContext, Dispatch, SetStateAction } from 'react';
-import { SaleProductResDTO } from '@/domains/sale-upload/dto/sale-products-res.dto';
+import { SaleProductResDTO } from '@/domains/sale-and-sale-upload/dto/sale-products-res.dto';
 
 export const SaleDataAndDataFiltersCtx = createContext<{
     data: SaleProductResDTO[];

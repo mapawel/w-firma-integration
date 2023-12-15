@@ -1,5 +1,5 @@
 import { BulkUploadResDTO } from '../../../../domains/invoice-upload/types/bulk-upload-res.dto';
-import { BulkSaleUploadResDTO } from '@/domains/sale-upload/types/bulk-sale-upload-res.dto';
+import { BulkSaleUploadResDTO } from '@/domains/sale-and-sale-upload/types/bulk-sale-upload-res.dto';
 
 export const buildFeedbackModalDetails = (
     responseData: BulkUploadResDTO | BulkSaleUploadResDTO,

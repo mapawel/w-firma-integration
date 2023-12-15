@@ -9,6 +9,7 @@ import { StatusBadge } from "../../../atoms/Status-badge";
 import { useCheckboxes } from "@/data-providers/check-boxes-provider/use-check-boxes";
 import { patchProductCode } from "@/domains/products/actions/patch-product-code";
 import { setAppData } from "@/data-providers/app-status/use-app-status";
+import { APIRoutes } from "@/navigation/routes/api.routes";
 
 const InvoiceTable: FC = () => {
     const { data, mutate, sortParam, sortDirect, handleSort, skip } =
@@ -28,6 +29,7 @@ const InvoiceTable: FC = () => {
             if (!updatingId || !target.productCode) return;
 
             const patchResult: { info: string } = await patchProductCode(
+                APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS,
                 updatingId,
                 target.productCode.value
             );

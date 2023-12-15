@@ -1,4 +1,4 @@
-import { SaleProductResDTO } from '@/domains/sale-upload/dto/sale-products-res.dto';
+import { SaleProductResDTO } from '@/domains/sale-and-sale-upload/dto/sale-products-res.dto';
 
 export const columns: { heading: string; accessor: keyof SaleProductResDTO }[] =
     [

@@ -4,8 +4,8 @@ import {
     startLoading,
     stopLoading,
 } from '@/data-providers/app-status/use-app-status';
-import { ResponseFromSaleProductFetchDto } from '@/domains/sale-upload/dto/response-from-sale-product-fetch.dto';
-import { SaleProductQueryParams } from '@/domains/sale-upload/queries/sale-product-query-params.type';
+import { ResponseFromSaleProductFetchDto } from '@/domains/sale-and-sale-upload/dto/response-from-sale-product-fetch.dto';
+import { SaleProductQueryParams } from '@/domains/sale-and-sale-upload/queries/sale-product-query-params.type';
 
 export const fetchSaleProducts = async (
     url: string,

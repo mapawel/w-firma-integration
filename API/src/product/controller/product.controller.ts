@@ -14,7 +14,7 @@ import { ProductUploadService } from '../services/product-upload.service';
 import { ProductQueryParamsDTO } from '../dto/product-query-params.dto';
 import { BulkUploadResDTO } from '../dto/bulk-upload-res-dto';
 import { CompleteResponseDTO } from '../dto/complete-response.dto';
-import { ProductPatchOrDeleteResDTO } from '../dto/product-delete-res.dto';
+import { ProductPatchOrDeleteResDTO } from '../dto/product-patch-delete-res.dto';
 import { ProductCreatePayloadDTO } from '../dto/product-create-payload.dto';
 import { ProductPatchDTO } from '../dto/product-patch.dto';
 import { UserId } from '../../decorators/user-id.decorator';
@@ -60,7 +60,8 @@ export class ProductController {
     ): Promise<ProductPatchOrDeleteResDTO> {
         return await this.productFetchAndDeleteAndPatchService.updateProductCode(
             patchData,
-            userId,
+            'mockedUser',
+            // userId,
         );
     }
 
