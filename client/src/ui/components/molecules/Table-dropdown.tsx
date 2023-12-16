@@ -2,45 +2,58 @@ import { FC, useCallback } from "react";
 import { useCheckboxes } from "@/data-providers/check-boxes-provider/use-check-boxes";
 import { deleteProducts } from "@/domains/products/actions/delete-products";
 import { useNavigate } from "react-router-dom";
-import { upladProductsForOrders } from "@/domains/order/actions/upload-product-for-orders";
-import { CreateOrderResDTO } from "@/domains/order/dto/create-order-res.dto";
+import { ProductActionResDTO } from "@/domains/order/dto/product-action-res-d-t.o";
 import { refreshCodeIds } from "@/domains/invoice-upload/actions/refresh-code-ids";
 import { cleanAppData, setAppData } from "@/data-providers/app-status/use-app-status";
 import { ClientRoutes } from "@/navigation/routes/client.routes";
 import { DeleteProductsResDTO } from "@/domains/products/dto/delete-products-res.dto";
 import { APIRoutes } from "@/navigation/routes/api.routes";
+import { dispatchProductAction } from "@/domains/order/actions/upload-product-for-orders";
 
 interface IdropdownApiRoutes {
-    handleProductsAction: APIRoutes,
-    handleProductsDelete: APIRoutes
+    handleProductsAction: APIRoutes;
+    handleProductsDelete: APIRoutes;
+    redirectOnFail: ClientRoutes;
+}
+
+interface IdropdownLabels {
+    resultInformation: string;
+    actionCreate: string;
+    actionDelete: string;
 }
 
 interface IProps {
     isDropdownOpen: boolean;
     dropdownRoutes: IdropdownApiRoutes;
+    dropdownLabels: IdropdownLabels;
     useData: () => any;
 }
 
-export const TableDropdown: FC<IProps> = ({ isDropdownOpen, dropdownRoutes, useData }) => {
-    const { checked, setChecked } = useCheckboxes();
+export const TableDropdown: FC<IProps> = ({
+                                              isDropdownOpen,
+                                              dropdownRoutes,
+                                              dropdownLabels,
+                                              useData
+                                          }) => {
+    const { checked, setChecked, turnOffAllChecked } = useCheckboxes();
     const navigate = useNavigate();
     const { mutate } = useData();
 
-    const handleCreateOrder = useCallback(async () => {
+    const handleProductAction = useCallback(async () => {
         await refreshCodeIds();
-        const createOrdersInfo: CreateOrderResDTO | void =
-            await upladProductsForOrders(checked, navigate);
-        if (!createOrdersInfo) return;
+        const actionResultInfo: ProductActionResDTO | void =
+            await dispatchProductAction(dropdownRoutes.handleProductsAction, checked, navigate, dropdownRoutes.redirectOnFail);
+        if (!actionResultInfo) return;
         setAppData({
-            mainInfo: "Informacja o statusie dodawania zamówień do W-Firma:",
-            detailsArr: createOrdersInfo.info,
+            mainInfo: dropdownLabels.resultInformation,
+            detailsArr: actionResultInfo.info,
             callbackClearInfo: () => {
                 cleanAppData();
                 navigate(ClientRoutes.INVOICES, { replace: true });
             },
             callbackClearInfoLabel: "OK"
         });
-        setChecked([]);
+        turnOffAllChecked();
         mutate();
     }, [checked, mutate, navigate, setChecked]);
 
@@ -54,7 +67,7 @@ export const TableDropdown: FC<IProps> = ({ isDropdownOpen, dropdownRoutes, useD
             detailsArr: []
         });
 
-        setChecked([]);
+        turnOffAllChecked();
         mutate();
     }, [checked, mutate, setChecked]);
 
@@ -72,10 +85,10 @@ export const TableDropdown: FC<IProps> = ({ isDropdownOpen, dropdownRoutes, useD
                 >
                     <li>
                         <button
-                            onClick={handleCreateOrder}
+                            onClick={handleProductAction}
                             className="w-full border-none bg-transparent px-4 py-2 uppercase hover:bg-secondaryLight hover:text-white dark:hover:bg-secondary"
                         >
-                            Stwórz zamówienie
+                            {dropdownLabels.actionCreate}
                         </button>
                     </li>
                     <li>
@@ -83,7 +96,7 @@ export const TableDropdown: FC<IProps> = ({ isDropdownOpen, dropdownRoutes, useD
                             onClick={handleDelete}
                             className="w-full border-none bg-transparent px-4 py-2 uppercase hover:bg-secondaryLight hover:text-white dark:hover:bg-secondary"
                         >
-                            Usuń zaznaczone
+                            {dropdownLabels.actionDelete}
                         </button>
                     </li>
                 </ul>

@@ -10,6 +10,9 @@ import { BulkSaleUploadResDTO } from "@/domains/sale-and-sale-upload/types/bulk-
 import { uploadSaleProductToDB } from "@/domains/sale-and-sale-upload/actions/upload-sale-products-to-db";
 import { UploadSaleResDTO } from "@/ui/views/Upload-result/Upload-sale-result.type";
 import { CustomersResDTO } from "@/domains/customers/dto/customers-res.dto";
+import { ProductActionResDTO } from "@/domains/order/dto/product-action-res-d-t.o";
+import { dispatchProductAction } from "@/domains/order/actions/upload-product-for-orders";
+import { APIRoutes } from "@/navigation/routes/api.routes";
 
 const ResultSaleView: FC = () => {
     const navigate = useNavigate();
@@ -50,28 +53,28 @@ const ResultSaleView: FC = () => {
         });
     };
 
-    const handleCreateOrders = async (): Promise<void> => {
-        // const responseData: BulkUploadResDTO | void = await upladProductdToDB({
-        //     data,
-        //     totalPositions,
-        //     totalQty,
-        //     totalValue
-        // });
-        // if (!responseData) return;
-        //
-        // const createOrdersInfo: CreateOrderResDTO | void =
-        //     await upladProductsForOrders(responseData.productIds, navigate);
-        // if (!createOrdersInfo) return;
-        //
-        // setAppData({
-        //     mainInfo: "Informacja o statusie dodawania rezerwacji do W-Firma:",
-        //     detailsArr: createOrdersInfo.info,
-        //     callbackClearInfo: () => {
-        //         cleanAppData();
-        //         navigate("/", { replace: true });
-        //     },
-        //     callbackClearInfoLabel: "Wróć do strony głównej"
-        // });
+    const handleCreateReservation = async (): Promise<void> => {
+        const responseData: BulkSaleUploadResDTO | void = await uploadSaleProductToDB({
+            data,
+            totalPositions,
+            totalQty,
+            totalValue
+        });
+        if (!responseData) return;
+
+        const createOrdersInfo: ProductActionResDTO | void =
+            await dispatchProductAction(APIRoutes.UPLOAD_FETCH_DELETE_SALEPRODUCTS, responseData.productIds, navigate, ClientRoutes.SALE);
+        if (!createOrdersInfo) return;
+
+        setAppData({
+            mainInfo: "Informacja o statusie dodawania rezerwacji do W-Firma:",
+            detailsArr: createOrdersInfo.info,
+            callbackClearInfo: () => {
+                cleanAppData();
+                navigate("/", { replace: true });
+            },
+            callbackClearInfoLabel: "Wróć do strony głównej"
+        });
     };
 
     const handleCancel = (): void =>
@@ -85,7 +88,7 @@ const ResultSaleView: FC = () => {
                 <UploadResultInside
                     uploadResult={state.uploadResult}
                     handleCancel={handleCancel}
-                    handleCreateOrders={handleCreateOrders}
+                    handleCreateOrders={handleCreateReservation}
                     handleSaveToDB={handleSaveToDB}
                     viewType={UploadTypeEnum.SALE}
                     customers={customers}

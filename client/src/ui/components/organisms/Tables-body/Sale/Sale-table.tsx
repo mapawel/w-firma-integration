@@ -129,7 +129,9 @@ const SaleTable: FC = () => {
                                     {customerId}
                                 </td>
                                 <td className=" border border-primary px-5 py-1">
-                                    {reservationId || <StatusBadge status={Status.NEW} />}
+                                    {reservationId || (
+                                        <StatusBadge status={Status.NEW} />
+                                    )}
                                 </td>
                                 <td className=" border border-primary px-5 py-1">
                                     {productCode || (

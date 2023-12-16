@@ -6,6 +6,7 @@ import { selectStyle } from "../select-style";
 import { statusOptionsForSelect as statusOptions } from "@/domains/products/status/status-options-for-select";
 import { useDataAndDataFilters } from "@/data-providers/filters-data/use-data-and-data-filters";
 import { APIRoutes } from "@/navigation/routes/api.routes";
+import { ClientRoutes } from "@/navigation/routes/client.routes";
 
 const InvoicesTableTopHeader: FC = () => {
     const {
@@ -69,10 +70,22 @@ const InvoicesTableTopHeader: FC = () => {
                         Actions
                     </button>
 
-                    <TableDropdown isDropdownOpen={isDropdownOpen} dropdownRoutes={{
-                        handleProductsDelete: APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS,
-                        handleProductsAction: APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS
-                    }} useData={useDataAndDataFilters} />
+                    <TableDropdown
+                        isDropdownOpen={isDropdownOpen}
+                        dropdownRoutes={{
+                            handleProductsDelete:
+                            APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS,
+                            handleProductsAction:
+                            APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS,
+                            redirectOnFail: ClientRoutes.INVOICES
+                        }}
+                        dropdownLabels={{
+                            resultInformation: "Informacja o statusie dodawania zamówień do W-Firma:",
+                            actionCreate: "Stwórz zamówienie",
+                            actionDelete: "Usuń z tabeli"
+                        }}
+                        useData={useDataAndDataFilters}
+                    />
                 </div>
             </div>
         </div>

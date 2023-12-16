@@ -6,6 +6,7 @@ import { selectStyle } from "@/ui/components/organisms/Table-top-headers/select-
 import { statusOptionsForSelect as statusOptions } from "@/domains/products/status/status-options-for-select";
 import { useSaleDataAndDataFilters } from "@/data-providers/filters-data-sale/use-sale-data-and-data-filters";
 import { APIRoutes } from "@/navigation/routes/api.routes";
+import { ClientRoutes } from "@/navigation/routes/client.routes";
 
 const SaleTableTopHeader: FC = () => {
     const {
@@ -69,10 +70,22 @@ const SaleTableTopHeader: FC = () => {
                         Actions
                     </button>
 
-                    <TableDropdown isDropdownOpen={isDropdownOpen} dropdownRoutes={{
-                        handleProductsDelete: APIRoutes.UPLOAD_FETCH_DELETE_SALEPRODUCTS,
-                        handleProductsAction: APIRoutes.UPLOAD_FETCH_DELETE_SALEPRODUCTS
-                    }} useData={useSaleDataAndDataFilters} />
+                    <TableDropdown
+                        isDropdownOpen={isDropdownOpen}
+                        dropdownRoutes={{
+                            handleProductsDelete:
+                            APIRoutes.UPLOAD_FETCH_DELETE_SALEPRODUCTS,
+                            handleProductsAction:
+                            APIRoutes.UPLOAD_FETCH_DELETE_SALEPRODUCTS,
+                            redirectOnFail: ClientRoutes.SALE
+                        }}
+                        dropdownLabels={{
+                            resultInformation: "Informacja o statusie dodawania rezerwacji do W-Firma:",
+                            actionCreate: "Stwórz rezerwację",
+                            actionDelete: "Usuń z tabeli"
+                        }}
+                        useData={useSaleDataAndDataFilters}
+                    />
                 </div>
             </div>
         </div>

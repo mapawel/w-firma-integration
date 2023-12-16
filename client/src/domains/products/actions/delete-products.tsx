@@ -1,22 +1,24 @@
-import axios from "axios";
-import { setAppData, startLoading, stopLoading } from "@/data-providers/app-status/use-app-status";
-import { APIRoutes } from "@/navigation/routes/api.routes";
+import axios from 'axios';
+import {
+    setAppData,
+    startLoading,
+    stopLoading,
+} from '@/data-providers/app-status/use-app-status';
+import { APIRoutes } from '@/navigation/routes/api.routes';
 
 export const deleteProducts = async (
     route: APIRoutes,
-    productIds: number[]) => {
+    productIds: number[],
+) => {
     const timer = startLoading();
 
     try {
-        const { data }: { data: any } = await axios.delete(
-            route,
-            {
-                data: productIds,
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-        );
+        const { data }: { data: any } = await axios.delete(route, {
+            data: productIds,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
         stopLoading(timer);
 
         return data;
@@ -26,17 +28,17 @@ export const deleteProducts = async (
         if (err.response.status === 404)
             return setAppData({
                 mainInfo: err.response.data.message,
-                detailsArr: []
+                detailsArr: [],
             });
 
         if (err.response.status === 400)
             return setAppData({
-                mainInfo: "Coś nie tak z wysłanymi danymi. Wskazówki:",
-                detailsArr: err.response.data.message
+                mainInfo: 'Coś nie tak z wysłanymi danymi. Wskazówki:',
+                detailsArr: err.response.data.message,
             });
         return setAppData({
-            mainInfo: "Ups, coś poszło nie tak. Spróbuj ponownie.",
-            detailsArr: []
+            mainInfo: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
+            detailsArr: [],
         });
     }
 };

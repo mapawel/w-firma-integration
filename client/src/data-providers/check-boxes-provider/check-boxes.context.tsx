@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext } from "react";
 
 export const CheckboxesContext = createContext<{
     checked: number[];
@@ -6,10 +6,16 @@ export const CheckboxesContext = createContext<{
     areAllChecked: boolean;
     handleCheckboxChange: (id: number) => void;
     handleCheckAll: () => void;
+    turnOffAllChecked: () => void;
 }>({
     checked: [],
-    setChecked: (ids: number[]) => {},
+    setChecked: (ids: number[]) => {
+    },
     areAllChecked: false,
-    handleCheckboxChange: () => {},
-    handleCheckAll: () => {},
+    handleCheckboxChange: () => {
+    },
+    handleCheckAll: () => {
+    },
+    turnOffAllChecked: () => {
+    }
 });
