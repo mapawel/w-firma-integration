@@ -1,14 +1,14 @@
-import { FC, useEffect, useRef } from "react";
-import NavTemplate from "@/ui/components/templates/Nav-template";
-import { Label } from "@/ui/components/atoms/Label";
-import { upladFileForm } from "@/domains/invoice-upload/actions/upload-file-form";
-import { Input } from "@/ui/views/Upload/Input.enum";
-import { Supplier } from "@/ui/views/Upload/Supplier.enum";
-import { Cur } from "./Cur.enum";
-import { uploadInstruction } from "@/ui/views/Upload/data/upload-instruction.text";
-import { NavigateFunction, useNavigate } from "react-router-dom";
-import { refreshCodeIds } from "@/domains/invoice-upload/actions/refresh-code-ids";
-import { UploadTypeEnum } from "@/ui/views/Upload/data/Upload-type.enum";
+import { FC, useEffect, useRef } from 'react';
+import NavTemplate from '@/ui/components/templates/Nav-template';
+import { Label } from '@/ui/components/atoms/Label';
+import { upladFileForm } from '@/domains/invoice-upload/actions/upload-file-form';
+import { Input } from '@/ui/views/Upload/Input.enum';
+import { Supplier } from '@/ui/views/Upload/Supplier.enum';
+import { Cur } from './Cur.enum';
+import { uploadInstruction } from '@/ui/views/Upload/data/upload-instruction.text';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { refreshCodeIds } from '@/domains/invoice-upload/actions/refresh-code-ids';
+import { UploadTypeEnum } from '@/ui/views/Upload/data/Upload-type.enum';
 
 const UploadView: FC = () => {
     const formRef = useRef<HTMLFormElement>(null);
@@ -25,7 +25,7 @@ const UploadView: FC = () => {
                     {uploadInstruction.map(
                         (instruction: string, index: number) => (
                             <li key={index}>{instruction}</li>
-                        )
+                        ),
                     )}
                 </ul>
 

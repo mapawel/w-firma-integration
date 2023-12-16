@@ -1,6 +1,6 @@
-import { Status } from "@/domains/products/status/status.enum";
-import { FC, useMemo, useState } from "react";
-import { CheckboxesContext } from "./check-boxes.context";
+import { Status } from '@/domains/products/status/status.enum';
+import { FC, useMemo, useState } from 'react';
+import { CheckboxesContext } from './check-boxes.context';
 
 interface IProps {
     children: React.ReactNode;
@@ -14,10 +14,10 @@ export const CheckboxesProvider: FC<IProps> = ({ children, useData }) => {
         () =>
             data
                 .map(({ id, status }: { id: number; status: Status }) =>
-                    status !== Status.SUCCESS ? id : null
+                    status !== Status.SUCCESS ? id : null,
                 )
                 .filter((item: number | null) => item !== null) as number[],
-        [data]
+        [data],
     );
 
     const [checked, setChecked] = useState<number[]>([]);
@@ -55,7 +55,7 @@ export const CheckboxesProvider: FC<IProps> = ({ children, useData }) => {
                 areAllChecked,
                 handleCheckboxChange,
                 handleCheckAll,
-                turnOffAllChecked
+                turnOffAllChecked,
             }}
         >
             {children}

@@ -1,21 +1,21 @@
-import { ClientRoutes } from "@/navigation/routes/client.routes";
-import HomeView from "@/ui/views/Home/Home";
-import UploadView from "@/ui/views/Upload/Upload";
-import UploadSaleView from "@/ui/views/Upload-sale/Upload-sale";
-import ResultView from "@/ui/views/Upload-result/Result";
-import InvoicesView from "@/ui/views/Invoices/Invoices";
-import SettingsView from "@/ui/views/Settings/Settings";
-import ResultViewCodes from "@/ui/views/Upload-result/Result-codes";
-import { NavigationDataItem } from "../types/navigation-item.type";
+import { ClientRoutes } from '@/navigation/routes/client.routes';
+import HomeView from '@/ui/views/Home/Home';
+import UploadView from '@/ui/views/Upload/Upload';
+import UploadSaleView from '@/ui/views/Upload-sale/Upload-sale';
+import ResultView from '@/ui/views/Upload-result/Result';
+import InvoicesView from '@/ui/views/Invoices/Invoices';
+import SettingsView from '@/ui/views/Settings/Settings';
+import ResultViewCodes from '@/ui/views/Upload-result/Result-codes';
+import { NavigationDataItem } from '../types/navigation-item.type';
 import {
     invoicesCardData,
     loaderCardData,
     loaderSaleCardData,
     saleCardData,
-    settingsCardData
-} from "@/navigation/data/navigation-cards.data";
-import ResultSaleView from "@/ui/views/Upload-result/Result-sale";
-import Sale from "@/ui/views/Sale/Sale";
+    settingsCardData,
+} from '@/navigation/data/navigation-cards.data';
+import ResultSaleView from '@/ui/views/Upload-result/Result-sale';
+import Sale from '@/ui/views/Sale/Sale';
 
 export const navigationData: NavigationDataItem[] = [
     {
@@ -23,7 +23,7 @@ export const navigationData: NavigationDataItem[] = [
         path: ClientRoutes.HOME,
         restrictedForLogged: true,
         restrictedForRoles: null,
-        element: <HomeView />
+        element: <HomeView />,
     },
     {
         cardData: loaderCardData,
@@ -31,7 +31,7 @@ export const navigationData: NavigationDataItem[] = [
         restrictedForLogged: false,
         restrictedForRoles: null,
         element: <UploadView />,
-        title: "Ładowanie zleceń zakupu do W-Firmy"
+        title: 'Ładowanie zleceń zakupu do W-Firmy',
     },
     {
         cardData: invoicesCardData,
@@ -39,7 +39,7 @@ export const navigationData: NavigationDataItem[] = [
         restrictedForLogged: false,
         restrictedForRoles: null,
         element: <InvoicesView />,
-        title: "Przegląd zleceń zakupu w bazie i W-Firmie"
+        title: 'Przegląd zleceń zakupu w bazie i W-Firmie',
     },
     {
         cardData: loaderSaleCardData,
@@ -47,7 +47,7 @@ export const navigationData: NavigationDataItem[] = [
         restrictedForLogged: false,
         restrictedForRoles: null,
         element: <UploadSaleView />,
-        title: "Ładowanie rezerwacji do W-Firmy"
+        title: 'Ładowanie rezerwacji do W-Firmy',
     },
     {
         cardData: saleCardData,
@@ -55,7 +55,7 @@ export const navigationData: NavigationDataItem[] = [
         restrictedForLogged: false,
         restrictedForRoles: null,
         element: <Sale />,
-        title: "Przegląd rezerwacji w bazie i W-Firmie"
+        title: 'Przegląd rezerwacji w bazie i W-Firmie',
     },
     {
         cardData: settingsCardData,
@@ -63,7 +63,7 @@ export const navigationData: NavigationDataItem[] = [
         restrictedForLogged: false,
         restrictedForRoles: null,
         element: <SettingsView />,
-        title: "Ustawienia systemu CRM"
+        title: 'Ustawienia systemu CRM',
     },
     {
         cardData: null,
@@ -71,7 +71,7 @@ export const navigationData: NavigationDataItem[] = [
         restrictedForLogged: false,
         restrictedForRoles: null,
         element: <ResultView />,
-        title: "Podsumowanie ładowania zleceń zakupu do W-Firmy"
+        title: 'Podsumowanie ładowania zleceń zakupu do W-Firmy',
     },
     {
         cardData: null,
@@ -79,7 +79,7 @@ export const navigationData: NavigationDataItem[] = [
         restrictedForLogged: false,
         restrictedForRoles: null,
         element: <ResultViewCodes />,
-        title: "Podsumowanie ładowania tłumaczeń kodów dostawcy W-Firmy"
+        title: 'Podsumowanie ładowania tłumaczeń kodów dostawcy W-Firmy',
     },
     {
         cardData: null,
@@ -87,6 +87,6 @@ export const navigationData: NavigationDataItem[] = [
         restrictedForLogged: false,
         restrictedForRoles: null,
         element: <ResultSaleView />,
-        title: "Podsumowanie ładowania rezerwacji do W-Firmy"
-    }
+        title: 'Podsumowanie ładowania rezerwacji do W-Firmy',
+    },
 ];

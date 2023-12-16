@@ -1,14 +1,12 @@
-import React, { FC, useEffect, useRef, useState } from "react";
-import { Status } from "@/domains/products/status/status.enum";
-import useSWR, { SWRResponse } from "swr";
-import { APIRoutes } from "@/navigation/routes/api.routes";
-import { fetchSaleProducts } from "@/domains/sale-and-sale-upload/actions/fetch-sale-products";
-import {
-    ResponseFromSaleProductFetchDto
-} from "@/domains/sale-and-sale-upload/dto/response-from-sale-product-fetch.dto";
-import { SaleProductResDTO } from "@/domains/sale-and-sale-upload/dto/sale-products-res.dto";
-import { SaleDataAndDataFiltersCtx } from "@/data-providers/filters-data-sale/filters-sale-data.context";
-import { SaleProductQueryParams } from "@/domains/sale-and-sale-upload/queries/sale-product-query-params.type";
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { Status } from '@/domains/products/status/status.enum';
+import useSWR, { SWRResponse } from 'swr';
+import { APIRoutes } from '@/navigation/routes/api.routes';
+import { fetchSaleProducts } from '@/domains/sale-and-sale-upload/actions/fetch-sale-products';
+import { ResponseFromSaleProductFetchDto } from '@/domains/sale-and-sale-upload/dto/response-from-sale-product-fetch.dto';
+import { SaleProductResDTO } from '@/domains/sale-and-sale-upload/dto/sale-products-res.dto';
+import { SaleDataAndDataFiltersCtx } from '@/data-providers/filters-data-sale/filters-sale-data.context';
+import { SaleProductQueryParams } from '@/domains/sale-and-sale-upload/queries/sale-product-query-params.type';
 
 interface IProps {
     children: React.ReactNode;
@@ -18,13 +16,13 @@ export const SaleDataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const [sortParam, setSortParam] =
-        useState<keyof SaleProductResDTO>("addedAt");
-    const [sortDirect, setSortDirect] = useState<"ASC" | "DESC">("DESC");
+        useState<keyof SaleProductResDTO>('addedAt');
+    const [sortDirect, setSortDirect] = useState<'ASC' | 'DESC'>('DESC');
     const [records, setRecords] = useState<number>(50);
     const [skip, setSkip] = useState<number>(0);
-    const [filterStatus, setFilterStatus] = useState<Status | "all">("all");
+    const [filterStatus, setFilterStatus] = useState<Status | 'all'>('all');
     const [filterReservationId, setFilterReservationId] =
-        useState<string>("all");
+        useState<string>('all');
 
     const queryParams: SaleProductQueryParams = {
         status: filterStatus,
@@ -32,23 +30,23 @@ export const SaleDataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
         sortParam,
         sortDirect,
         records: String(records),
-        skip: String(skip)
+        skip: String(skip),
     };
 
     const {
         data,
-        mutate
+        mutate,
     }: SWRResponse<ResponseFromSaleProductFetchDto | void> = useSWR(
         [APIRoutes.UPLOAD_FETCH_DELETE_SALEPRODUCTS, queryParams],
-        ([url, params]) => fetchSaleProducts(url, params)
+        ([url, params]) => fetchSaleProducts(url, params),
     );
 
     const handleSort = (param: keyof SaleProductResDTO) => {
         if (param === sortParam) {
-            setSortDirect(sortDirect === "ASC" ? "DESC" : "ASC");
+            setSortDirect(sortDirect === 'ASC' ? 'DESC' : 'ASC');
         } else {
             setSortParam(param);
-            setSortDirect("ASC");
+            setSortDirect('ASC');
         }
     };
 
@@ -58,10 +56,10 @@ export const SaleDataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
                 setDropdownOpen(false);
         };
 
-        document.addEventListener("click", handleClickOutside);
+        document.addEventListener('click', handleClickOutside);
 
         return () => {
-            document.removeEventListener("click", handleClickOutside);
+            document.removeEventListener('click', handleClickOutside);
         };
     });
 
@@ -89,7 +87,7 @@ export const SaleDataAndDataFiltersProvider: FC<IProps> = ({ children }) => {
                 setRecords,
                 skip,
                 setSkip,
-                mutate
+                mutate,
             }}
         >
             {children}
