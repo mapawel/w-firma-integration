@@ -75,9 +75,8 @@ const InvoicesTableTopHeader: FC = () => {
                         dropdownRoutes={{
                             handleProductsDelete:
                             APIRoutes.UPLOAD_FETCH_DELETE_PRODUCTS,
-                            handleProductsAction:
-                            APIRoutes.UPLOAD_ORDERS,
-                            redirectOnFail: ClientRoutes.INVOICES
+                            handleProductsAction: APIRoutes.UPLOAD_ORDERS,
+                            redirectAfterAction: ClientRoutes.INVOICES
                         }}
                         dropdownLabels={{
                             resultInformation:

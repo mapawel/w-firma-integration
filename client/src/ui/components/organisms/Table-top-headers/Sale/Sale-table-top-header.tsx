@@ -75,9 +75,8 @@ const SaleTableTopHeader: FC = () => {
                         dropdownRoutes={{
                             handleProductsDelete:
                             APIRoutes.UPLOAD_FETCH_DELETE_SALEPRODUCTS,
-                            handleProductsAction:
-                            APIRoutes.UPLOAD_RESERVATIONS,
-                            redirectOnFail: ClientRoutes.SALE
+                            handleProductsAction: APIRoutes.UPLOAD_RESERVATIONS,
+                            redirectAfterAction: ClientRoutes.SALE
                         }}
                         dropdownLabels={{
                             resultInformation:

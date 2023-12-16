@@ -1,4 +1,11 @@
-import { Body, Controller, Inject, ParseArrayPipe, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Inject,
+    ParseArrayPipe,
+    Post,
+} from '@nestjs/common';
 import { Routes } from '../../../routes/Routes.enum';
 import { CreateReservationBaseClass } from '../interface/create-reservation.base-class';
 import { CreateOrderResDTO } from '../../../integrated-systems/wfirma/create-order/dto/create-order-res.dto';
@@ -12,10 +19,10 @@ export class CreateReservationController {
 
     // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
     // @Permissions([PermissionsEnum.ADD_PRODUCTS])
-    // @Get(Routes.ORDERS_ROUTE_REFRESH) //todo !!!!
-    // public async refreshProductsFromSystem(): Promise<boolean> {
-    //     return await this.createOrderService.refreshProductsFromSystem();
-    // }
+    @Get(Routes.PRODUCTS_ROUTE_REFRESH)
+    public async refreshProductsFromSystem(): Promise<boolean> {
+        return await this.createOrderService.refreshProductsFromSystem();
+    }
 
     // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
     // @Permissions([PermissionsEnum.ADD_PRODUCTS])

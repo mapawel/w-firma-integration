@@ -19,7 +19,7 @@ export class CreateOrderController {
 
     // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
     // @Permissions([PermissionsEnum.ADD_PRODUCTS])
-    @Get(Routes.ORDERS_ROUTE_REFRESH)
+    @Get(Routes.PRODUCTS_ROUTE_REFRESH)
     public async refreshProductsFromSystem(): Promise<boolean> {
         return await this.createOrderService.refreshProductsFromSystem();
     }

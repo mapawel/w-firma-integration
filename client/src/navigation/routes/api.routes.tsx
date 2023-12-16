@@ -8,6 +8,5 @@ export enum APIRoutes {
     FETCH_CUSTOMERS = "/api/customers",
     UPLOAD_ORDERS = "/api/orders",
     UPLOAD_RESERVATIONS = "/api/reservations",
-    REFRESH_CODE_IDS = "/api/orders/refresh",
     UPLOAD_CODE_TRANSLATIONS = "/api/code-translations",
 }

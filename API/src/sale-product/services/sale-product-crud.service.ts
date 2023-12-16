@@ -80,30 +80,31 @@ export class SaleProductCrudService {
             }
 
             const saleProducts: SaleProduct[] = await queryBuilder.getMany();
-            const totalSaleProducts = await queryBuilder.getCount();
-            // const [totalSaleProducts, uniqueReservations: [
-            //     number,
-            //     { invoice_number: string }[],
-            // ] = await Promise.all([
-            //     queryBuilder.getCount(),
-            //     await queryBuilder
-            //         .orderBy('invoice.number')
-            //         .distinctOn(['invoice.number'])
-            //         .select('invoice.number')
-            //         .where({})
-            //         .getRawMany(),
-            // ]);
 
-            // const uniqueReservationIds = uniqueReservations.map(
-            //     (item: { invoice_number: string }) => item.invoice_number,
-            // );
+            const [totalSaleProducts, uniqueReservations]: [
+                number,
+                { saleProduct_reservationId: string }[],
+            ] = await Promise.all([
+                queryBuilder.getCount(),
+                queryBuilder
+                    .orderBy('saleProduct.reservationId')
+                    .distinctOn(['saleProduct.reservationId'])
+                    .select('saleProduct.reservationId')
+                    .where({})
+                    .getRawMany(),
+            ]);
+
+            const uniqueReservationIds = uniqueReservations.map(
+                (item: { saleProduct_reservationId: string }) =>
+                    item.saleProduct_reservationId,
+            );
 
             return {
                 saleProducts: saleProducts.map((product: SaleProduct) =>
                     saleProductResDtoMapper(product),
                 ),
                 totalSaleProducts,
-                uniqueReservationIds: ['a', 'bb'],
+                uniqueReservationIds,
             };
         } catch (err) {
             throw new SaleProductException(

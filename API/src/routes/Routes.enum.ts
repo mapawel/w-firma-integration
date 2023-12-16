@@ -12,5 +12,5 @@ export enum Routes {
     CODE_TRANSLATIONS_ROUTE = '/code-translations',
     ORDERS_ROUTE = '/orders',
     RESERVATIONS_ROUTE = '/reservations',
-    ORDERS_ROUTE_REFRESH = '/refresh',
+    PRODUCTS_ROUTE_REFRESH = '/refresh',
 }
