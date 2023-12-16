@@ -1,13 +1,16 @@
-import { FC, useCallback } from "react";
-import { useCheckboxes } from "@/data-providers/check-boxes-provider/use-check-boxes";
-import { deleteProducts } from "@/domains/products/actions/delete-products";
-import { useNavigate } from "react-router-dom";
-import { ProductActionResDTO } from "@/domains/order/dto/product-action-res-d-t.o";
-import { cleanAppData, setAppData } from "@/data-providers/app-status/use-app-status";
-import { ClientRoutes } from "@/navigation/routes/client.routes";
-import { DeleteProductsResDTO } from "@/domains/products/dto/delete-products-res.dto";
-import { APIRoutes } from "@/navigation/routes/api.routes";
-import { dispatchProductAction } from "@/domains/order/actions/upload-product-for-orders";
+import { FC, useCallback } from 'react';
+import { useCheckboxes } from '@/data-providers/check-boxes-provider/use-check-boxes';
+import { deleteProducts } from '@/domains/products/actions/delete-products';
+import { useNavigate } from 'react-router-dom';
+import { ProductActionResDTO } from '@/domains/order/dto/product-action-res-d-t.o';
+import {
+    cleanAppData,
+    setAppData,
+} from '@/data-providers/app-status/use-app-status';
+import { ClientRoutes } from '@/navigation/routes/client.routes';
+import { DeleteProductsResDTO } from '@/domains/products/dto/delete-products-res.dto';
+import { APIRoutes } from '@/navigation/routes/api.routes';
+import { dispatchProductAction } from '@/domains/order/actions/upload-product-for-orders';
 
 interface IdropdownApiRoutes {
     handleProductsAction: APIRoutes;
@@ -29,11 +32,11 @@ interface IProps {
 }
 
 export const TableDropdown: FC<IProps> = ({
-                                              isDropdownOpen,
-                                              dropdownRoutes,
-                                              dropdownLabels,
-                                              useData
-                                          }) => {
+    isDropdownOpen,
+    dropdownRoutes,
+    dropdownLabels,
+    useData,
+}) => {
     const { checked, setChecked, turnOffAllChecked } = useCheckboxes();
     const navigate = useNavigate();
     const { mutate } = useData();
@@ -44,7 +47,7 @@ export const TableDropdown: FC<IProps> = ({
                 dropdownRoutes.handleProductsAction,
                 checked,
                 navigate,
-                dropdownRoutes.redirectAfterAction
+                dropdownRoutes.redirectAfterAction,
             );
         if (!actionResultInfo) return;
         setAppData({
@@ -54,7 +57,7 @@ export const TableDropdown: FC<IProps> = ({
                 cleanAppData();
                 navigate(dropdownRoutes.redirectAfterAction, { replace: true });
             },
-            callbackClearInfoLabel: "OK"
+            callbackClearInfoLabel: 'OK',
         });
         turnOffAllChecked();
         mutate();
@@ -67,7 +70,7 @@ export const TableDropdown: FC<IProps> = ({
         if (!deleteProductsInfo) return;
         setAppData({
             mainInfo: deleteProductsInfo.info,
-            detailsArr: []
+            detailsArr: [],
         });
 
         turnOffAllChecked();
@@ -78,7 +81,7 @@ export const TableDropdown: FC<IProps> = ({
         <div
             id="actionsDropdown"
             className={`absolute right-0 top-full z-10 mt-2 w-72 divide-y rounded bg-white shadow dark:bg-black ${
-                !isDropdownOpen && "hidden"
+                !isDropdownOpen && 'hidden'
             }`}
         >
             {checked.length > 0 ? (

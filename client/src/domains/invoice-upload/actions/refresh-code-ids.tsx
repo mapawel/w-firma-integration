@@ -1,12 +1,18 @@
-import axios from "axios";
-import { setAppData, startLoading, stopLoading } from "@/data-providers/app-status/use-app-status";
+import axios from 'axios';
+import {
+    setAppData,
+    startLoading,
+    stopLoading,
+} from '@/data-providers/app-status/use-app-status';
 
-export const refreshCodeIds = async (route: string): Promise<boolean | void> => {
+export const refreshCodeIds = async (
+    route: string,
+): Promise<boolean | void> => {
     const timer = startLoading();
 
     try {
         const { data: responseData }: { data: boolean } = await axios.get(
-            route
+            route,
         );
 
         stopLoading(timer);
@@ -14,8 +20,8 @@ export const refreshCodeIds = async (route: string): Promise<boolean | void> => 
     } catch (err: any) {
         stopLoading(timer);
         return setAppData({
-            mainInfo: "Ups, coś poszło nie tak. Spróbuj ponownie.",
-            detailsArr: []
+            mainInfo: 'Ups, coś poszło nie tak. Spróbuj ponownie.',
+            detailsArr: [],
         });
     }
 };
