@@ -18,13 +18,12 @@ const ResultViewCodes: FC = () => {
         state || {};
 
     const handleUpdateCodeTranslations = async (): Promise<void> => {
-        console.log(data);
         const responseData: true | void = await uploadCodesToDB({
             data,
             totalPositions,
         });
         if (!responseData) return;
-        //
+
         setAppData({
             mainInfo: 'Pomyślnie dodano tłumaczenia kodów do słownika.',
             detailsArr: [],

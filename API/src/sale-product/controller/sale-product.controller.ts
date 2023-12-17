@@ -7,6 +7,7 @@ import {
     Patch,
     Post,
     Query,
+    UseGuards,
 } from '@nestjs/common';
 import { Routes } from '../../routes/Routes.enum';
 import { SaleProductUploadService } from '../services/sale-product-upload.service';
@@ -18,6 +19,10 @@ import { SaleProductQueryParamsDTO } from '../dto/sale-product-query-params.dto'
 import { SaleProductGetResponseDTO } from '../dto/sale-product-get-response.dto';
 import { SaleProductPatchDto } from '../dto/sale-product-patch.dto';
 import { SaleProductPatchOrDeleteResDTO } from '../dto/sale-product-patch-delete-res.dto';
+import { PermissionsGuard } from '../../auth/permissions/permissions.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { PermissionsEnum } from '../../auth/permissions/permissions.enum';
+import { Permissions } from '../../auth/permissions/permissions.decorator';
 
 @Controller(`${Routes.BASE_API_ROUTE}${Routes.SALE_PRODUCTS_ROUTE}`)
 export class SaleProductController {
@@ -26,8 +31,8 @@ export class SaleProductController {
         private readonly saleProductCrudService: SaleProductCrudService,
     ) {}
 
-    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    // @Permissions([PermissionsEnum.ADD_PRODUCTS])
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions([PermissionsEnum.ADD_PRODUCTS])
     @Post()
     public async createSaleProducts(
         @Body() createProductsPayload: SaleProductCreatePayloadDto,
@@ -35,13 +40,12 @@ export class SaleProductController {
     ): Promise<BulkSaleUploadResDto> {
         return await this.saleProductUploadService.uploadBulkSaleProducts(
             createProductsPayload.productsArray,
-            // userId,
-            'mockedUserId', //todo
+            userId,
         );
     }
 
-    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    // @Permissions([PermissionsEnum.READ_PRODUCTS])
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions([PermissionsEnum.READ_PRODUCTS])
     @Get()
     public async getProducts(
         @Query() saleProductQueryParams: SaleProductQueryParamsDTO,
@@ -51,22 +55,21 @@ export class SaleProductController {
         );
     }
 
-    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    // @Permissions([PermissionsEnum.UPDATE_PRODUCTS])
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions([PermissionsEnum.UPDATE_PRODUCTS])
     @Patch()
     public async updateProductCode(
         @Body() patchData: SaleProductPatchDto,
-        // @UserId() userId: string,
+        @UserId() userId: string,
     ): Promise<SaleProductPatchOrDeleteResDTO> {
         return await this.saleProductCrudService.updateSaleProductCode(
             patchData,
-            'mockedUser',
-            // userId,
+            userId,
         );
     }
 
-    // @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    // @Permissions([PermissionsEnum.REMOVE_PRODUCTS])
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions([PermissionsEnum.REMOVE_PRODUCTS])
     @Delete()
     public async deleteProducts(
         @Body(new ParseArrayPipe({ items: Number, separator: ',' }))

@@ -1,6 +1,6 @@
 {
     "name": "w-firma-integration-app",
-    "version": "0.0.1",
+    "version": "1.0.1",
     "description": "a fullstack app integration with w-firma",
     "author": "mapawel www.devdefer.com",
     "private": false,

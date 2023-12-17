@@ -63,7 +63,7 @@ export class CreateReservationService extends CreateReservationBaseClass {
                         },
                     },
                 );
-            //TODO validation of data status if not OK (check with w-firma docs)
+
             return mapToSystemProductResDto(data);
         } catch (err) {
             throw new CreateReservationException(
@@ -321,11 +321,6 @@ export class CreateReservationService extends CreateReservationBaseClass {
     }
 
     private buildRequestData(products: SaleProduct[]): string {
-        console.log(
-            '===================================>!!!!!!!!!!!!!!!!!!! products > ',
-            products,
-        );
-
         return `
         {
             "api": {

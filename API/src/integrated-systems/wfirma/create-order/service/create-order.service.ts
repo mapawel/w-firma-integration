@@ -19,6 +19,10 @@ import { CreateOrderException } from '../../../../integrations/create-order/exce
 
 @Injectable()
 export class CreateOrderService extends CreateOrderBaseClass {
+    private currentInvoiceNumber: string | null = null;
+    private currentInvoiceProducts: Product[] = [];
+    private uploadInvoiceStatus: string[] = [];
+
     constructor(
         private readonly configService: ConfigService,
         @InjectRepository(Product)
@@ -26,9 +30,6 @@ export class CreateOrderService extends CreateOrderBaseClass {
     ) {
         super();
     }
-    private currentInvoiceNumber: string | null = null;
-    private currentInvoiceProducts: Product[] = [];
-    private uploadInvoiceStatus: string[] = [];
 
     public async refreshProductsFromSystem(): Promise<boolean> {
         try {
@@ -59,7 +60,7 @@ export class CreateOrderService extends CreateOrderBaseClass {
                         },
                     },
                 );
-            //TODO validation of data status if not OK (check with w-firma docs)
+
             return mapToSystemProductResDto(data);
         } catch (err) {
             throw new CreateOrderException(

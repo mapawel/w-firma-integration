@@ -27,7 +27,7 @@ const SaleTableTopHeader: FC = () => {
                         options={[
                             {
                                 value: 'all',
-                                label: 'all',
+                                label: 'WSZYSTKIE',
                             },
                             ...uniqueReservationIds.map((resId) => ({
                                 value: resId,

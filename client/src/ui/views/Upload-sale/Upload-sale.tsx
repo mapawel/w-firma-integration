@@ -6,7 +6,7 @@ import { upladFileForm } from '@/domains/invoice-upload/actions/upload-file-form
 import { Input } from '@/ui/views/Upload/Input.enum';
 import { Cur } from './Cur.enum';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { uploadSaleInstruction } from '@/ui/views/Upload/data/upload-sale-instruction.text';
+import { uploadSaleInstruction } from '@/ui/views/Upload-sale/data/upload-sale-instruction.text';
 import { selectStyle } from '@/ui/components/organisms/Table-top-headers/select-style';
 import { UploadTypeEnum } from '@/ui/views/Upload/data/Upload-type.enum';
 import { selectStyleInvoiceAddon } from '@/ui/views/Upload-sale/select-style-invoice.addon';

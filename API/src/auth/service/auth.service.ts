@@ -66,10 +66,7 @@ export class AuthService {
             scope: this.AUTH0_SCOPE,
             state: signedNonce,
         });
-        console.log(
-            'redirect url: ',
-            `${this.BASE_URL}${Routes.BASE_API_ROUTE}${Routes.AUTH_ROUTE}${Routes.AUTH_CALLBACK_ROUTE}`,
-        );
+
         return `${this.AUTH0_BASE_URL}${this.AUTH0_AUTHORIZE_ROUTE}?${queryParams}`;
     }
 
