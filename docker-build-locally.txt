@@ -1,6 +1,6 @@
 //locally
 docker buildx build --platform linux/amd64 -t w-firma-externally-20122023:latest -f Dockerfile .
-docker save w-firma-externally-122023:latest > wfirmaexternally.tar
+docker save w-firma-externally-20122023:latest > wfirmaexternally20122023.tar
 
 //server
 docker load < wfirmaexternally.tar
