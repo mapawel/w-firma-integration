@@ -34,7 +34,7 @@ import { CreateReservationModule } from './integrations/create-reservation/creat
                 password: configService.get('POSTGRES_PASSWORD'),
                 database: configService.get('POSTGRES_DB'),
                 entities: [__dirname + '/**/*.entity{.ts,.js}'],
-                synchronize: true, // todo
+                synchronize: false, // todo for dev to true
                 logNotifications: true,
             }),
             inject: [ConfigService],

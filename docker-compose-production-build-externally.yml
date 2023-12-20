@@ -1,0 +1,24 @@
+services:
+
+  app:
+    image: w-firma-externally-20122023:latest
+    ports:
+      - 239:3005
+    depends_on:
+      - postgres
+    env_file:
+      - ./API/.env
+      - ./API/.env.auth
+      - ./API/.env.wfirma
+    restart: always
+
+  postgres:
+    image: postgres:15
+    env_file:
+      - ./API/.env
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+  postgres:

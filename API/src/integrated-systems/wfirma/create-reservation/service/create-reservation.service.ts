@@ -339,9 +339,6 @@ export class CreateReservationService extends CreateReservationBaseClass {
                                     (product: SaleProduct, index: number) => `
                                 "${index}": {
                                     "warehouse_document_content": {
-                                        "name": "${product.productCode?.PN} / ${
-                                        product.supplierCode
-                                    }",
                                         "unit_count": ${product.quantity},
                                         "price": ${product.netPrice},
                                         "good": {

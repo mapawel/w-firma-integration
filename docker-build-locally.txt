@@ -1,0 +1,10 @@
+//locally
+docker buildx build --platform linux/amd64 -t w-firma-externally-20122023:latest -f Dockerfile .
+docker save w-firma-externally-122023:latest > wfirmaexternally.tar
+
+//server
+docker load < wfirmaexternally.tar
+docker compose -f docker-compose-production-build-externally.yml up -d
+
+//in docker-compose-production-build-externally.yml:
+image: w-firma-externally-20122023:latest
